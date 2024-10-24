@@ -63,6 +63,9 @@ def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
         with open(version_file, "w", encoding="utf-8") as file:
             file.write(details[0])
     if not loader_js.exists():
+        LOG.error("Monaco editor files not found.")
+        LOG.info("Path: %s", static_root_path)
+        LOG.info("Files: %s", os.listdir(static_root_path))
         raise RuntimeError("Failed to download monaco editor files.")
     LOG.info("Monaco editor files are up-to-date.")
 

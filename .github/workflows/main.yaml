@@ -1,5 +1,5 @@
 ---
-name: Lint, test, and docs
+name: Lint, test
 
 # yamllint disable rule:truthy
 on:
@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - main
-  
+
 permissions:
   contents: write
   pages: write
@@ -64,6 +64,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt
+          pip install -e .
       - name: Run tests
         run: |
           python -m pytest \
@@ -74,11 +75,11 @@ jobs:
             --cov-report xml:reports/coverage.xml \
             --cov-report lcov:reports/lcov.info \
             --junitxml=reports/xunit.xml
-      # - name: Report to Coveralls # we must add it first
-      #   uses: coverallsapp/github-action@v2
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     path-to-lcov: ./reports/lcov.info
+      - name: Report to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./reports/lcov.info
 
       # we suld add lint-js and test-js jobs here (or maybe in a separate file)
 

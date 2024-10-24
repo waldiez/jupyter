@@ -1,5 +1,7 @@
 # @waldiez/jupyter
 
+![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter)
+
 A Waldiez JupyterLab extension.
 
 This extension is composed of a Python package named `waldiez_jupyter`
