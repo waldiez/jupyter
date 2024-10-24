@@ -1,5 +1,5 @@
 ---
-name: Lint, test, and docs
+name: Lint, test
 
 # yamllint disable rule:truthy
 on:
