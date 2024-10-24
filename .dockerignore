@@ -1,0 +1,23 @@
+# ignore everything
+**/*
+# but not these files...
+!src/
+!scripts
+scripts/dev/*
+**/__pycache__/
+src/**/*.py[cod]
+!style/
+!schema/
+!jupyter-config/
+!waldiez_jupyter
+waldiez_jupyter/labextension/*
+!package.json
+!install.json
+!yarn.lock
+!.yarnrc.yml
+!pyproject.toml
+!setup.py
+!tsconfig.json
+!requirements/main.txt
+!LICENSE
+!README.md

@@ -1,0 +1,85 @@
+---
+name: Lint, test, and docs
+
+# yamllint disable rule:truthy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  lint-py:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt
+      - name: pylint
+        run: pylint --rcfile=pyproject.toml .
+      - name: isort
+        run: isort --check-only .
+      - name: black
+        run: black --check --config pyproject.toml .
+      - name: mypy
+        run: mypy --config pyproject.toml .
+      - name: flake8
+        run: flake8 --config=.flake8
+      - name: pydocstyle
+        run: pydocstyle --config pyproject.toml .
+      - name: bandit
+        run: bandit -r -c pyproject.toml .
+      - name: yamllint
+        run: yamllint -c .yamllint.yaml .
+      - name: ruff
+        run: ruff check --config pyproject.toml .
+
+  test-py:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt
+      - name: Run tests
+        run: |
+          python -m pytest \
+            -c pyproject.toml \
+            --cov=waldiez_jupyter \
+            --cov-report=term-missing:skip-covered \
+            --cov-report html:reports/html \
+            --cov-report xml:reports/coverage.xml \
+            --cov-report lcov:reports/lcov.info \
+            --junitxml=reports/xunit.xml
+      # - name: Report to Coveralls # we must add it first
+      #   uses: coverallsapp/github-action@v2
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     path-to-lcov: ./reports/lcov.info
+
+      # we suld add lint-js and test-js jobs here (or maybe in a separate file)
+
+      # and maybe build (and upload) the docker image

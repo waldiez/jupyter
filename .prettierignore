@@ -1,0 +1,9 @@
+node_modules
+**/node_modules
+**/lib
+.venv/
+**/package.json
+!/package.json
+static/
+**/vs/
+@waldiez/jupyter
