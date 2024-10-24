@@ -307,7 +307,7 @@ line-ending = "lf"
 # asyncio_mode = 'auto'
 # asyncio_default_fixture_loop_scope='session'
 addopts = """
-  -n auto \
+  -n 1 \
   --exitfirst \
   --capture=sys \
   --color=yes"""

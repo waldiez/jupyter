@@ -66,6 +66,7 @@ def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
         LOG.error("Monaco editor files not found.")
         LOG.error("Path: %s", static_root_path)
         LOG.error("Files: %s", os.listdir(static_root_path))
+        LOG.error("vs folder: %s", os.listdir(static_root_path / "vs"))
         raise RuntimeError("Failed to download monaco editor files.")
     LOG.info("Monaco editor files are up-to-date.")
 
