@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - main
-  
+
 permissions:
   contents: write
   pages: write
@@ -74,11 +74,11 @@ jobs:
             --cov-report xml:reports/coverage.xml \
             --cov-report lcov:reports/lcov.info \
             --junitxml=reports/xunit.xml
-      # - name: Report to Coveralls # we must add it first
-      #   uses: coverallsapp/github-action@v2
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     path-to-lcov: ./reports/lcov.info
+      - name: Report to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./reports/lcov.info
 
       # we suld add lint-js and test-js jobs here (or maybe in a separate file)
 
