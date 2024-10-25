@@ -50,6 +50,17 @@ JUPYTER_TOKEN=
 To install the extension, execute:
 
 ```shell
+## if not already, install jupyter:
+# pip install jupyter
+pip install waldiez_jupyter
+## you can now start jupyter lab:
+# jupyter lab
+```
+
+Or from the repository:
+
+```shell
+# Note: node js and yarn are required to build the extension
 pip install git+https://github.com/waldiez/jupyter
 ```
 
