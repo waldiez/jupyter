@@ -3,9 +3,6 @@ name: Lint, test
 
 # yamllint disable rule:truthy
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
