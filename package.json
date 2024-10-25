@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -15,12 +15,12 @@
     "license": "MIT",
     "contributors": [
         {
-            "name": "Lazaros Toumanidis",
-            "email": "laztoum@protonmail.com"
-        },
-        {
             "name": "Panagiotis Kasnesis",
             "email": "pkasnesis@thingenious.io"
+        },
+        {
+            "name": "Lazaros Toumanidis",
+            "email": "laztoum@protonmail.com"
         }
     ],
     "files": [
