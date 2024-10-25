@@ -1,6 +1,6 @@
 # @waldiez/jupyter
 
-![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter)
+![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter) [![PyPI version](https://badge.fury.io/py/waldiez_jupyter.svg)](https://badge.fury.io/py/waldiez_jupyter)
 
 A Waldiez JupyterLab extension.
 
