@@ -45,6 +45,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
+          file: Containerfile
           push: true
           tags: |
             ${{ github.repository_owner }}/jupyter:${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
