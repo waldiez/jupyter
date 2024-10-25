@@ -332,13 +332,13 @@ __metadata:
   linkType: hard
 
 "@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.20.5, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.23.0, @babel/parser@npm:^7.23.9, @babel/parser@npm:^7.25.9, @babel/parser@npm:^7.26.0":
-  version: 7.26.0
-  resolution: "@babel/parser@npm:7.26.0"
+  version: 7.26.1
+  resolution: "@babel/parser@npm:7.26.1"
   dependencies:
     "@babel/types": ^7.26.0
   bin:
     parser: ./bin/babel-parser.js
-  checksum: ea7688cd20c06a6d60cb479879936cd2b8de2797a6578b29d116a59641cb845251ab59442adedfef0e49b44a21726d6d0fc8fef121d8feb1f167623d60afd951
+  checksum: 354320d1a0a7102b2f25620ceea1bbc809f5225432a73e8a8874009d2f82ed29e2b035fe68fb6d18bb7eafed78df1ec0fa12e8d8226b295d7a020f9b852de653
   languageName: node
   linkType: hard
 
@@ -1649,9 +1649,9 @@ __metadata:
   linkType: hard
 
 "@csstools/css-tokenizer@npm:^3.0.1":
-  version: 3.0.2
-  resolution: "@csstools/css-tokenizer@npm:3.0.2"
-  checksum: 9de1fd84a0e04e709788c48d1a0692e3495a321245970ed857c7c2198307bf51d3955bec720bea19f41557792ebeccaa5a694b5ceae63a84a0d31ad256789d53
+  version: 3.0.3
+  resolution: "@csstools/css-tokenizer@npm:3.0.3"
+  checksum: 6b300beba1b29c546b720887be18a40bafded5dc96550fb87d61fbc2c550e9632e7baafa2bf34a66e0f25fb6b70558ee67ef3b45856aa5e621febc2124cf5039
   languageName: node
   linkType: hard
 
@@ -1806,20 +1806,20 @@ __metadata:
   linkType: hard
 
 "@eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "@eslint-community/eslint-utils@npm:4.4.0"
+  version: 4.4.1
+  resolution: "@eslint-community/eslint-utils@npm:4.4.1"
   dependencies:
-    eslint-visitor-keys: ^3.3.0
+    eslint-visitor-keys: ^3.4.3
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-  checksum: cdfe3ae42b4f572cbfb46d20edafe6f36fc5fb52bf2d90875c58aefe226892b9677fef60820e2832caf864a326fe4fc225714c46e8389ccca04d5f9288aabd22
+  checksum: a7ffc838eb6a9ef594cda348458ccf38f34439ac77dc090fa1c120024bcd4eb911dfd74d5ef44d42063e7949fa7c5123ce714a015c4abb917d4124be1bd32bfe
   languageName: node
   linkType: hard
 
 "@eslint-community/regexpp@npm:^4.10.0, @eslint-community/regexpp@npm:^4.11.0":
-  version: 4.11.1
-  resolution: "@eslint-community/regexpp@npm:4.11.1"
-  checksum: 6986685529d30e33c2640973c3d8e7ddd31bef3cc8cb10ad54ddc1dea12680779a2c23a45562aa1462c488137a3570e672d122fac7da22d82294382d915cec70
+  version: 4.11.2
+  resolution: "@eslint-community/regexpp@npm:4.11.2"
+  checksum: a3e4e0269f89e214665c15febecbeafd72969f24d4578d2bd694d0a5e4e4209b43095b339c29664412fb18af5e98749867d579d61caef61f273f3694642295f0
   languageName: node
   linkType: hard
 
@@ -3922,11 +3922,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:^22.8.0":
-  version: 22.8.0
-  resolution: "@types/node@npm:22.8.0"
+  version: 22.8.1
+  resolution: "@types/node@npm:22.8.1"
   dependencies:
     undici-types: ~6.19.8
-  checksum: 447ef225829ad7840d59a6d7ab2ecd48ae26632c84ed10f9032c1ed36dd08c636c6cfb268111eee58592530af2bdfd6998a8bea745eed9e24fb39969927263ed
+  checksum: 2fc10ff364690f7962659d163cf9a9b71d46a2414f15ceeb5ea9fb6a1e81d2b04f550d0dfd9156576b192d76e886b24d13932d8eb5447075d455481c70fd2ad1
   languageName: node
   linkType: hard
 
@@ -4187,7 +4187,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.11.0
     "@typescript-eslint/parser": ^8.11.0
-    "@waldiez/react": ^0.1.5
+    "@waldiez/react": ^0.1.6
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4216,9 +4216,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@waldiez/react@npm:0.1.5"
+"@waldiez/react@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@waldiez/react@npm:0.1.6"
   dependencies:
     "@monaco-editor/react": ^4.6.0
     "@xyflow/react": ^12.3.2
@@ -4230,7 +4230,7 @@ __metadata:
     react-icons: ^5.3.0
     react-select: ^5.8.1
     zustand: ^5.0.0
-  checksum: e37414842c2dbac688f277c2a7352148e506db98aad5666a8cc0b7cd41e3e6208cc1f38a71df99d475c407d31ca3e63a2c7e187ddac36b03388dab70345066d0
+  checksum: 02fd90a39a5f6f4798cb346d3ba302babf43742eed8abde1384e7d33d20f7ee6fbe6a584f2b4a591134ad62bea8d12ebc2e7ac2878bbae8e96e7a8f8b2c190eb
   languageName: node
   linkType: hard
 
@@ -5050,9 +5050,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001669":
-  version: 1.0.30001669
-  resolution: "caniuse-lite@npm:1.0.30001669"
-  checksum: 8ed0c69d0c6aa3b1cbc5ba4e5f5330943e7b7165e257f6955b8b73f043d07ad922265261f2b54d9bbaf02886bbdba5e6f5b16662310a13f91f17035af3212de1
+  version: 1.0.30001671
+  resolution: "caniuse-lite@npm:1.0.30001671"
+  checksum: a90b4a55e05135ebf9fa31473a7db0285a6fd472d2d96b01723fe566b6d1412d6f05179ded5a265e831da9b2adb3412f7bbbfa334869c2af0bafe34a894625bb
   languageName: node
   linkType: hard
 
@@ -6158,7 +6158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.3":
+"eslint-visitor-keys@npm:^3.4.3":
   version: 3.4.3
   resolution: "eslint-visitor-keys@npm:3.4.3"
   checksum: 36e9ef87fca698b6fd7ca5ca35d7b2b6eeaaf106572e2f7fd31c12d3bfdaccdb587bba6d3621067e5aece31c8c3a348b93922ab8f7b2cbc6aaab5e1d89040c60
