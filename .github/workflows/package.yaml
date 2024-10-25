@@ -34,7 +34,7 @@
         - name: Build frontend
           run: |
             touch yarn.lock
-            jlpm instal
+            jlpm install
             jlpm build:lib:prod
             jlpmb build:prod
         - name: Build package
