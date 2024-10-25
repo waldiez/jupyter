@@ -1,6 +1,6 @@
 # @waldiez/jupyter
 
-![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter)
+![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter) [![PyPI version](https://badge.fury.io/py/waldiez_jupyter.svg)](https://badge.fury.io/py/waldiez_jupyter)
 
 A Waldiez JupyterLab extension.
 
@@ -50,6 +50,17 @@ JUPYTER_TOKEN=
 To install the extension, execute:
 
 ```shell
+## if not already, install jupyter:
+# pip install jupyter
+pip install waldiez_jupyter
+## you can now start jupyter lab:
+# jupyter lab
+```
+
+Or from the repository:
+
+```shell
+# Note: node js and yarn are required to build the extension
 pip install git+https://github.com/waldiez/jupyter
 ```
 

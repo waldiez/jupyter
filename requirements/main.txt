@@ -18,7 +18,7 @@ attrs==24.2.0
     #   jsonschema
     #   referencing
     #   twisted
-autogen-agentchat==0.2.36
+autogen-agentchat==0.2.37
     # via waldiez
 automat==24.8.1
     # via twisted
@@ -271,7 +271,7 @@ urllib3==2.2.2
     # via
     #   docker
     #   requests
-waldiez @ git+https://github.com/waldiez/py.git@17e2b40c86ce6f5bbdc268b6bc4a74f0d33fd124
+waldiez==0.1.0
     # via waldiez-jupyter (pyproject.toml)
 webcolors==24.8.0
     # via jsonschema
