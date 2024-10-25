@@ -3928,15 +3928,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:~20.12.8":
-  version: 20.12.14
-  resolution: "@types/node@npm:20.12.14"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: f6071bcf87f04f9bcc04d50f5ae2b29bf7d45410390e3ce0a29ed78b2d7420de710f3416f8432541b9f297a344b80c9d570de2848fefe3f801688270fd8ee5a5
-  languageName: node
-  linkType: hard
-
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -4023,15 +4014,6 @@ __metadata:
     "@types/source-list-map": "npm:*"
     source-map: "npm:^0.6.1"
   checksum: 75342659a9889478969f7bb7360b998aa084ba11ab523c172ded6a807dac43ab2a9e1212078ef8bbf0f33e4fadd2c8a91b75d38184d8030d96a32fe819c9bb57
-  languageName: node
-  linkType: hard
-
-"@types/ws@npm:~8.5.10":
-  version: 8.5.12
-  resolution: "@types/ws@npm:8.5.12"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: ddefb6ad1671f70ce73b38a5f47f471d4d493864fca7c51f002a86e5993d031294201c5dced6d5018fb8905ad46888d65c7f20dd54fc165910b69f42fba9a6d0
   languageName: node
   linkType: hard
 
@@ -4203,7 +4185,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.11.0
     "@typescript-eslint/parser": ^8.11.0
-    "@waldiez/react": ^0.1.4
+    "@waldiez/react": ^0.1.5
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4232,22 +4214,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@waldiez/react@npm:0.1.4"
+"@waldiez/react@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@waldiez/react@npm:0.1.5"
   dependencies:
-    "@monaco-editor/react": "npm:^4.6.0"
-    "@xyflow/react": "npm:^12.3.2"
-    bun-types: "npm:^1.1.32"
-    nanoid: "npm:^5.0.7"
-    rc-slider: "npm:^11.1.7"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-error-boundary: "npm:^4.1.2"
-    react-icons: "npm:^5.3.0"
-    react-select: "npm:^5.8.1"
-    zustand: "npm:^5.0.0"
-  checksum: 77821976e94b4da42f496d073bc8cbf7d56bd7f32cf24f92bad45797afea0bd3ccc67c457d3f369ca6589220834726bd42a4a9e6d471ae8941fb9c036f64c289
+    "@monaco-editor/react": ^4.6.0
+    "@xyflow/react": ^12.3.2
+    nanoid: ^5.0.7
+    rc-slider: ^11.1.7
+    react: ^18.3.1
+    react-dom: ^18.3.1
+    react-error-boundary: ^4.1.2
+    react-icons: ^5.3.0
+    react-select: ^5.8.1
+    zustand: ^5.0.0
+  checksum: e37414842c2dbac688f277c2a7352148e506db98aad5666a8cc0b7cd41e3e6208cc1f38a71df99d475c407d31ca3e63a2c7e187ddac36b03388dab70345066d0
   languageName: node
   linkType: hard
 
@@ -5009,16 +4990,6 @@ __metadata:
   version: 1.1.2
   resolution: "buffer-from@npm:1.1.2"
   checksum: 0448524a562b37d4d7ed9efd91685a5b77a50672c556ea254ac9a6d30e3403a517d8981f10e565db24e8339413b43c97ca2951f10e399c6125a0d8911f5679bb
-  languageName: node
-  linkType: hard
-
-"bun-types@npm:^1.1.32":
-  version: 1.1.32
-  resolution: "bun-types@npm:1.1.32"
-  dependencies:
-    "@types/node": "npm:~20.12.8"
-    "@types/ws": "npm:~8.5.10"
-  checksum: e450c39288d5a98cce288d954f3c4048923e5482df8ad0a809246a92bdef52461bdac5ad6358be3194880681a7e0b0af29406247522e6583035f95e7fccd8d5b
   languageName: node
   linkType: hard
 
@@ -11004,13 +10975,6 @@ __metadata:
   version: 1.13.7
   resolution: "underscore@npm:1.13.7"
   checksum: 174b011af29e4fbe2c70eb2baa8bfab0d0336cf2f5654f364484967bc6264a86224d0134b9176e4235c8cceae00d11839f0fd4824268de04b11c78aca1241684
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 
