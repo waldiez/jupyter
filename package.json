@@ -8,7 +8,7 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://waldiez.github.io/jupyter",
+    "homepage": "https://waldiez.github.io/py",
     "bugs": {
         "url": "https://github.com/waldiez/jupyter/issues"
     },
