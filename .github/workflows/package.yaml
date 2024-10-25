@@ -36,7 +36,7 @@
             touch yarn.lock
             jlpm install
             jlpm build:lib:prod
-            jlpmb build:prod
+            jlpm build:prod
         - name: Build package
           run: |
             python -m build
