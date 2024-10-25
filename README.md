@@ -8,7 +8,6 @@ This extension is composed of a Python package named `waldiez_jupyter`
 for the server extension and a NPM package named `@waldiez/jupyter`
 for the frontend extension.
 
-<!--
 ## Quick Start
 
 Using docker:
@@ -18,7 +17,7 @@ CONTAINER_COMMAND=docker # or podman
 $CONTAINER_COMMAND run \
   --rm \
   -it \
-  -p 8888:8888 \
+  -p 10000:8888 \
   -v ${PWD}:/home/user/notebooks \
   ghcr.io/waldiez/jupyter:latest
 
@@ -26,13 +25,13 @@ $CONTAINER_COMMAND run \
 $CONTAINER_COMMAND run \
   --rm \
   -it \
-  -p 8888:8888 \
+  -p 10000:8888 \
   -v ${PWD}:/home/user/notebooks \
   --userns=keep-id \
   --security-opt label=disable ghcr.io/waldiez/jupyter:latest
 ```
 
-Then open your browser at `http://localhost:8888` and you should see the JupyterLab interface.
+Then open your browser at `http://localhost:10000` and you should see the JupyterLab interface.
 
 Optional environment variables for the container:
 
@@ -41,7 +40,6 @@ Optional environment variables for the container:
 JUPYTER_PASSWORD=
 JUPYTER_TOKEN=
 ```
--->
 
 ## Requirements
 
@@ -52,7 +50,7 @@ JUPYTER_TOKEN=
 To install the extension, execute:
 
 ```shell
-pip install waldiez_jupyter
+pip install git+https://github.com/waldiez/jupyter
 ```
 
 ## Uninstall
