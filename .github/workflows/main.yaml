@@ -79,7 +79,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./reports/lcov.info
-
       # we suld add lint-js and test-js jobs here (or maybe in a separate file)
-
-      # and maybe build (and upload) the docker image
