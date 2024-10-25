@@ -100,13 +100,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```shell
 # Clone the repo to your local environment
-# Change directory to the @waldiez/jupyter directory
+# Change directory to the waldiez_jupyter directory
 # Install package in development mode
 pip install -e ".[test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable @waldiez/jupyter
+jupyter server extension enable waldiez_jupyter
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -132,8 +132,8 @@ jupyter lab build --minimize=False
 
 ```shell
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable @waldiez/jupyter
-pip uninstall @waldiez/jupyter
+jupyter server extension disable waldiez_jupyter
+pip uninstall waldiez_jupyter
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
