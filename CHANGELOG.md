@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## v0.1.2
+
+- Updated dependencies
 
 ## v0.1.1
 
