@@ -72,6 +72,8 @@ jobs:
             --cov-report lcov:reports/lcov.info \
             --junitxml=reports/xunit.xml
       - name: Report to Coveralls
+        # only send latest Python version's report
+        if: matrix.python-version == '3.12'
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
