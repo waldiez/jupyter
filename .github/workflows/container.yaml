@@ -46,9 +46,7 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          # based on if we are on a tag or not
-          # set the image tag to latest or the tag
           tags: |
-            ${{ github.repository_owner }}/jupyter:${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
-            ghcr.io/${{ github.repository_owner }}/jupyter:${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
-            quay.io/${{ github.repository_owner }}/jupyter:${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
+            ${{ github.repository_owner }}/jupyter:${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
+            ghcr.io/${{ github.repository_owner }}/jupyter:${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
+            quay.io/${{ github.repository_owner }}/jupyter:${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
