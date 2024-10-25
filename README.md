@@ -1,10 +1,10 @@
 # @waldiez/jupyter
 
-![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter) [![PyPI version](https://badge.fury.io/py/waldiez_jupyter.svg)](https://badge.fury.io/py/waldiez_jupyter)
+![CI Build](https://github.com/waldiez/jupyter/actions/workflows/main.yaml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/waldiez/jupyter/badge.svg)](https://coveralls.io/github/waldiez/jupyter) [![PyPI version](https://badge.fury.io/py/waldiez-jupyter.svg)](https://badge.fury.io/py/waldiez-jupyter)
 
 A Waldiez JupyterLab extension.
 
-This extension is composed of a Python package named `waldiez_jupyter`
+This extension is composed of a Python package named `waldiez-jupyter`
 for the server extension and a NPM package named `@waldiez/jupyter`
 for the frontend extension.
 
@@ -18,7 +18,7 @@ $CONTAINER_COMMAND run \
   --rm \
   -it \
   -p 10000:8888 \
-  -v ${PWD}:/home/user/notebooks \
+  -v ${PWD}/notebooks:/home/user/notebooks \
   ghcr.io/waldiez/jupyter:latest
 
 # with selinux and/or podman, you might get permission errors, so you can try:
@@ -26,7 +26,7 @@ $CONTAINER_COMMAND run \
   --rm \
   -it \
   -p 10000:8888 \
-  -v ${PWD}:/home/user/notebooks \
+  -v ${PWD}/notebooks:/home/user/notebooks \
   --userns=keep-id \
   --security-opt label=disable ghcr.io/waldiez/jupyter:latest
 ```
@@ -52,7 +52,7 @@ To install the extension, execute:
 ```shell
 ## if not already, install jupyter:
 # pip install jupyter
-pip install waldiez_jupyter
+pip install waldiez-jupyter
 ## you can now start jupyter lab:
 # jupyter lab
 ```
