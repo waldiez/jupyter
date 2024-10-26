@@ -2,7 +2,7 @@
 # Build Step
 # Build the frontend and backend parts of the extension
 #####################################################################################
-FROM ubuntu:24.04 as builder
+FROM ubuntu:24.04 AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -55,10 +55,10 @@ LABEL org.opencontainers.image.title="waldiez/jupyter"
 LABEL org.opencontainers.image.description="JupyterLab with waldiez extension installed"
 
 # set environment variables
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
+ENV DEBCONF_NONINTERACTIVE_SEEN=true
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
