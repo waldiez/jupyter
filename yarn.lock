@@ -3921,7 +3921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^22.8.0":
+"@types/node@npm:*, @types/node@npm:^22.8.1":
   version: 22.8.1
   resolution: "@types/node@npm:22.8.1"
   dependencies:
@@ -4182,12 +4182,12 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/jest": ^29.5.14
     "@types/json-schema": ^7.0.15
-    "@types/node": ^22.8.0
+    "@types/node": ^22.8.1
     "@types/react": ^18.3.12
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.11.0
     "@typescript-eslint/parser": ^8.11.0
-    "@waldiez/react": ^0.1.6
+    "@waldiez/react": ^0.1.7
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4216,9 +4216,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@waldiez/react@npm:0.1.6"
+"@waldiez/react@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@waldiez/react@npm:0.1.7"
   dependencies:
     "@monaco-editor/react": ^4.6.0
     "@xyflow/react": ^12.3.2
@@ -4230,7 +4230,7 @@ __metadata:
     react-icons: ^5.3.0
     react-select: ^5.8.1
     zustand: ^5.0.0
-  checksum: 02fd90a39a5f6f4798cb346d3ba302babf43742eed8abde1384e7d33d20f7ee6fbe6a584f2b4a591134ad62bea8d12ebc2e7ac2878bbae8e96e7a8f8b2c190eb
+  checksum: 350222955488696171a52967bc554bb0216c3017fe064aada2a2c0fb57ca25759b02790453c2eb8bef55e74db661ba31afb43197d44e70c33e239b9b498fcfef
   languageName: node
   linkType: hard
 
