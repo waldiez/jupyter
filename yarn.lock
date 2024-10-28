@@ -4187,7 +4187,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.11.0
     "@typescript-eslint/parser": ^8.11.0
-    "@waldiez/react": ^0.1.7
+    "@waldiez/react": ^0.1.8
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4216,21 +4216,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@waldiez/react@npm:0.1.7"
+"@waldiez/react@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@waldiez/react@npm:0.1.8"
   dependencies:
     "@monaco-editor/react": ^4.6.0
     "@xyflow/react": ^12.3.2
-    nanoid: ^5.0.7
+    nanoid: ^5.0.8
     rc-slider: ^11.1.7
     react: ^18.3.1
     react-dom: ^18.3.1
     react-error-boundary: ^4.1.2
     react-icons: ^5.3.0
-    react-select: ^5.8.1
+    react-select: ^5.8.2
     zustand: ^5.0.0
-  checksum: 350222955488696171a52967bc554bb0216c3017fe064aada2a2c0fb57ca25759b02790453c2eb8bef55e74db661ba31afb43197d44e70c33e239b9b498fcfef
+  checksum: 9caedc19438c2a3237090b65fa429bb954271665eee4853f3a58b8cf4db5b719b719faaeef24c14ad5ea1da3ceb841ba4e23857021a703681c1fa7ef80d4fa69
   languageName: node
   linkType: hard
 
@@ -8752,12 +8752,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^5.0.7":
-  version: 5.0.7
-  resolution: "nanoid@npm:5.0.7"
+"nanoid@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "nanoid@npm:5.0.8"
   bin:
     nanoid: bin/nanoid.js
-  checksum: 25ab0b0cf9082ae6747f0f55cec930e6c1cc5975103aa3a5fda44be5720eff57d9b25a8a9850274bfdde8def964b49bf03def71c6aa7ad1cba32787819b79f60
+  checksum: df131a515465053ff25c8cf0450ef191e1db83b45fe125af43f50d39feddf1f161d3b2abb34cb993df35a76b427f8d6d982e16e47d67b2fbe843664af025b5e2
   languageName: node
   linkType: hard
 
@@ -9530,9 +9530,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:^5.8.1":
-  version: 5.8.1
-  resolution: "react-select@npm:5.8.1"
+"react-select@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "react-select@npm:5.8.2"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
@@ -9546,7 +9546,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6eebb4b0b4a818edef04d907b2b6ea0e82e067654a0c6c8f01b8e5fdefd978aa6ee59d8a5d23fca4b907c0a0878b53923bf4f844351372cf55b622dcc9195d4e
+  checksum: d7b45e377e80731ef11dd0c00749f65c7ce6558c41679dbcfe0af4cfd1d77347275647d847bff1aa584128148863ea59e37cd9c90b754e29b955318fa896884c
   languageName: node
   linkType: hard
 
