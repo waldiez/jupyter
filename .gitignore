@@ -137,3 +137,8 @@ dmypy.json
 /reports/
 /static/
 **/*.pid
+/examples/*
+!/examples/**/*.waldiez
+!/examples/**/*.waldiezModel
+!/examples/**/*.waldiezSkill
+!/examples/**/*.waldiezAgent
