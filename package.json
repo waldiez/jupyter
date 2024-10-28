@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -8,7 +8,7 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://waldiez.github.io/py",
+    "homepage": "https://github.com/waldiez/jupyter",
     "bugs": {
         "url": "https://github.com/waldiez/jupyter/issues"
     },
@@ -21,6 +21,10 @@
         {
             "name": "Lazaros Toumanidis",
             "email": "laztoum@protonmail.com"
+        },
+        {
+            "name": "Stella Ioannidou",
+            "email": "stella@humancentered.gr"
         }
     ],
     "files": [

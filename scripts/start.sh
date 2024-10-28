@@ -46,14 +46,12 @@ super_user_do() {
 get_dir_to_chown() {
     _cwd="$(pwd)"
     to_chown="${ROOT_DIR}"
-    if [ ! "${_cwd}" = "${ROOT_DIR}" ]; then
-        if [ -d "${_cwd}/notebooks" ]; then
-            to_chown="notebooks"
-            cd ..
-        elif [ -d "${_cwd}/notebooks" ]; then
-            to_chown="examples"
-            cd ..
-        fi
+    if [ -d "${_cwd}/notebooks" ]; then
+        to_chown="notebooks"
+        cd "${ROOT_DIR}"
+    elif [ -d "${_cwd}/notebooks" ]; then
+        to_chown="examples"
+        cd "${ROOT_DIR}"
     fi
     echo "${to_chown}"
 }
@@ -62,7 +60,7 @@ chown_dir() {
     _cwd="$(pwd)"
     to_chown="$(get_dir_to_chown)"
     if [ -d "${to_chown}" ]; then
-        echo "Changing ownership of ${to_chown} to $(id -u), cwd: ${_cwd}"
+        echo "Changing ownership of ${to_chown} to $(whoami)"
         super_user_do chown -R "$(id -u)" "${to_chown}"
     fi
     cd "${_cwd}" || exit 1
@@ -78,7 +76,6 @@ fi
 
 if [ -n "${JUPYTER_PASSWORD}" ]; then
     echo "Jupyter password is set. Starting Jupyter with password."
-    echo "Jupyter password: ${JUPYTER_PASSWORD}"
 else
     echo "Jupyter password is not set. Starting Jupyter without password."
 fi
@@ -89,11 +86,17 @@ else
     echo "Jupyter token is not set. Starting Jupyter without token."
 fi
 
+HASHED_PASSWORD=""
+# from jupyter_server.auth import passwd
+if [ -n "${JUPYTER_PASSWORD}" ]; then
+    HASHED_PASSWORD=$(python -c "from jupyter_server.auth import passwd; print(passwd('${JUPYTER_PASSWORD}'))")
+fi
+
 PYTHONUNBUFFERED=1 jupyter lab \
     --no-browser \
     --ip="*" \
     --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
     --ServerApp.token="${JUPYTER_TOKEN}" \
-    --ServerApp.password="${JUPYTER_PASSWORD}" \
+    --ServerApp.password="${HASHED_PASSWORD}" \
     --ServerApp.allow_origin='*' \
     --ServerApp.disable_check_xsrf=True
