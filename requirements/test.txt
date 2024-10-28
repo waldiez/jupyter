@@ -22,5 +22,5 @@ pytest-timeout==2.3.1
     # via waldiez-jupyter (pyproject.toml)
 pytest-xdist==3.6.1
     # via waldiez-jupyter (pyproject.toml)
-waldiez==0.1.2
+waldiez==0.1.5
     # via waldiez-jupyter (pyproject.toml)
