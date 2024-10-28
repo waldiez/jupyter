@@ -44,12 +44,11 @@ super_user_do() {
 }
 
 get_dir_to_chown() {
-    _cwd="$(pwd)"
     to_chown="${ROOT_DIR}"
-    if [ -d "${_cwd}/notebooks" ]; then
+    if [ -d "${ROOT_DIR}/notebooks" ]; then
         to_chown="notebooks"
         cd "${ROOT_DIR}"
-    elif [ -d "${_cwd}/notebooks" ]; then
+    elif [ -d "${ROOT_DIR}/examples" ]; then
         to_chown="examples"
         cd "${ROOT_DIR}"
     fi
