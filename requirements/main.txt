@@ -252,7 +252,7 @@ traitlets==5.14.3
     #   nbclient
     #   nbconvert
     #   nbformat
-twisted==24.7.0
+twisted==24.10.0
     # via waldiez
 types-python-dateutil==2.9.0.20240906
     # via arrow
@@ -271,7 +271,7 @@ urllib3==2.2.2
     # via
     #   docker
     #   requests
-waldiez==0.1.5
+waldiez==0.1.6
     # via waldiez-jupyter (pyproject.toml)
 webcolors==24.8.0
     # via jsonschema

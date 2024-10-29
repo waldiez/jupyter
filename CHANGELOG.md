@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.6
+
+- Updated waldiez py to v0.1.6
+- Updated frontend dependencies
+
 ## v0.1.5
 
 - Updated waldiez py to v0.1.5
