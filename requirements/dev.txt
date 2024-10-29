@@ -34,7 +34,7 @@ types-pyyaml==6.0.12
     # via waldiez-jupyter (pyproject.toml)
 types-toml==0.10.8.20240310
     # via waldiez-jupyter (pyproject.toml)
-waldiez==0.1.5
+waldiez==0.1.6
     # via waldiez-jupyter (pyproject.toml)
 yamllint==1.35.1
     # via waldiez-jupyter (pyproject.toml)
