@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.7
+
+- Updated @waldiez/react to v0.1.9
+
 ## v0.1.6
 
 - Updated waldiez py to v0.1.6
