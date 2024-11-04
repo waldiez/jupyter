@@ -16,10 +16,6 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
-# install bun
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=/root/.bun/bin:${PATH}
-
 # install yarn
 RUN npm install -g corepack && \
     corepack enable && \
