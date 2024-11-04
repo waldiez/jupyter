@@ -18,6 +18,10 @@ help:
 	@echo " dev-react       Start dev mode for React"
 	@echo " dev-stop		Stop dev mode"
 	@echo " build           Build the projects"
+	@echo " build-py        Build the Python package"
+	@echo " build-js        Build the JavaScript package"
+	@echo " all             Run 'requirements', 'forlint', 'test', 'build'"
+	@echo " image           Build a container image"
 	@echo " export          Export .waldiez example files to {.py,.ipynb}"
 	@echo " test            Run the tests"
 	@echo " requirements    Generate requirements/*.txt"
@@ -113,3 +117,8 @@ build: build-py build-js
 all: requirements forlint test build
 	jlpm test
 	jlpm test:ui
+
+
+.PHONY: image
+image:
+	python scripts/dev/image.py
