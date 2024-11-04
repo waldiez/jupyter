@@ -136,4 +136,6 @@ dmypy.json
 
 /reports/
 /static/
+/notebooks/
+uv.lock
 **/*.pid

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.8
+
+- Updated @waldiez/react to v0.1.10
+- Dependency updates
+- Minor bug fixes
+
 ## v0.1.7
 
 - Updated @waldiez/react to v0.1.9

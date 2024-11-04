@@ -1,6 +1,9 @@
 #####################################################################################
+# Build an image using the @waldiez/react and "waldiez" python packages from git
+#####################################################################################
 # Build Step
 # Build the frontend and backend parts of the extension
+# Dev: Uses JS_DEV_BRANCH and PY_DEV_BRANCH to specify the branch to use
 #####################################################################################
 FROM ubuntu:24.04 AS builder
 
@@ -16,6 +19,10 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+# install bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH=/root/.bun/bin:${PATH}
+
 # install yarn
 RUN npm install -g corepack && \
     corepack enable && \
@@ -24,7 +31,8 @@ RUN npm install -g corepack && \
 WORKDIR /tmp/package
 
 # install python dependencies
-RUN pip3 install --break-system-packages jupyterlab build
+ENV PATH=/root/.local/bin:${PATH}
+RUN pip3 install --break-system-packages jupyterlab build uv
 
 COPY requirements/main.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
@@ -32,12 +40,34 @@ RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
 
 # build the extension
 COPY . /tmp/package/waldiez_jupyter
-WORKDIR /tmp/package/waldiez_jupyter
+WORKDIR /tmp/package/
 
+# specify the js branch to use
+ARG JS_DEV_BRANCH=dev
+
+RUN git clone https://github.com/waldiez/react -b $JS_DEV_BRANCH
+WORKDIR /tmp/package/react
+RUN bun install && \
+    bun build:lib && \
+    bun archive && \
+    mv out/lib/waldiez-react-*.tgz /tmp/package/waldiez.tgz
+
+WORKDIR /tmp/package/waldiez_jupyter
 RUN touch yarn.lock && \
+    jlpm remove @waldiez/react > /dev/null 2 >&1 || true && \
+    jlpm add @waldiez/react@file:../waldiez.tgz && \
     jlpm install && \
     jlpm build:lib:prod && \
-    jlpm build:prod && \
+    jlpm build:prod
+
+
+# specify the py branch to use
+ARG PY_DEV_BRANCH=dev
+
+# build the python package
+RUN uv sync && \
+    uv remove waldiez && \
+    uv add waldiez@git+https://github.com/waldiez/py.git@$PY_DEV_BRANCH && \
     python3 -m build
 
 #####################################################################################
