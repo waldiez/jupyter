@@ -124,4 +124,4 @@ image:
 
 .PHONY: dev-image
 dev-image:
-	python scripts/dev/image.py --dev
+	python scripts/dev/image.py --dev --no-cache
