@@ -83,7 +83,11 @@ class FilesHandler(APIHandler):
         try:
             files, target_extension = self._gather_post_data()
         except BaseException as error:
-            self.log.error("Error gathering post data: %s", error)
+            self.log.debug("Error gathering post data: %s", error)
+            self.send_error(
+                status_code=400,
+                reason="Invalid data in request",
+            )
             return
         if not files:
             self.send_error(
@@ -110,17 +114,17 @@ class FilesHandler(APIHandler):
         """
         input_data = self.get_json_body()
         if not input_data:
-            self.send_error(status_code=400, reason="No data in request")
             raise ValueError("No data in request")
         files = input_data.get("files", [])
         target_extension = input_data.get("extension", "")
         if target_extension not in ("py", "ipynb"):
-            self.send_error(status_code=400, reason="Invalid extension")
             raise ValueError("Invalid extension")
         if not isinstance(files, list) or not files:
-            self.send_error(status_code=400, reason="No files in request")
             raise ValueError("No files in request")
-        return self._get_file_paths(files), target_extension
+        try:
+            return self._get_file_paths(files), target_extension
+        except BaseException as error:
+            raise ValueError("Error getting file paths") from error
 
     def _get_file_path(self, file: str) -> Path:
         """Get the actual path of the file.
@@ -210,12 +214,16 @@ def _handle_export(files: list[str], target_extension: str) -> List[str]:
     file_paths = []
     for file in files:
         file_path = Path(file).resolve()
-        exporter = WaldiezExporter.load(file_path)
+        try:
+            exporter = WaldiezExporter.load(file_path)
+        except BaseException as error:  # pragma: no cover
+            logging.debug("Error loading file: %s", error)
+            continue
         if target_extension == "py":
             file_path = file_path.with_suffix(".py")
             try:
                 exporter.export(file_path, force=True)
-            except Exception as error:  # pragma: no cover
+            except BaseException as error:  # pragma: no cover
                 logging.debug("Error exporting to .py: %s", error)
                 continue
             to_cwd = _relative_to_cwd(file_path)
@@ -224,7 +232,7 @@ def _handle_export(files: list[str], target_extension: str) -> List[str]:
             file_path = file_path.with_suffix(".ipynb")
             try:
                 exporter.export(file_path, force=True)
-            except Exception as error:  # pragma: no cover
+            except BaseException as error:  # pragma: no cover
                 logging.debug("Error exporting to .ipynb: %s", error)
                 continue
             exporter.export(file_path, force=True)
