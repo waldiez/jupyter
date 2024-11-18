@@ -6,6 +6,7 @@ from pathlib import Path
 
 from jupyter_server.base.handlers import APIHandler
 from pathvalidate import sanitize_filename
+from tornado.web import HTTPError
 
 ALLOWED_EXTENSIONS = {
     ".txt",
@@ -43,6 +44,11 @@ class UploadHandler(APIHandler):
     async def post(self) -> None:
         """Handle a POST request.
 
+        Raises
+        ------
+        HTTPError
+            If the request data is invalid.
+
         The request should contain the file to upload.
 
         Example URL:
@@ -50,18 +56,13 @@ class UploadHandler(APIHandler):
         """
         file_info = self.request.files.get("file", None)
         if not file_info:
-            self.send_error(status_code=400, reason="No file in request")
-            return
+            raise HTTPError(400, reason="No file in request")
         file = file_info[0]
         # make sure the filename is safe (no extra dots, slashes, etc.)
         filename = sanitize_filename(file["filename"])
         # make sure the file extension is allowed
         if not is_allowed_extension(filename):
-            self.send_error(
-                status_code=400,
-                reason="File extension not allowed",
-            )
-            return
+            raise HTTPError(400, reason="File extension not allowed")
         # save the file
         file_path = self._get_file_path(filename)
         with open(file_path, "wb") as file_obj:
