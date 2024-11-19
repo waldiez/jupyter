@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # install system dependencies
 RUN apt update && \
     apt install -y curl unzip git ca-certificates python3-dev python3-pip && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
     apt clean && \
@@ -55,10 +55,6 @@ ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
-ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US:en \
-    LC_ALL=en_US.UTF-8 \
-    TZ=Etc/UTC
 
 # install system dependencies
 RUN apt update && \
@@ -80,13 +76,19 @@ RUN apt update && \
     zip \
     unzip && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen && \
+    locale-gen en_US.UTF-8 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LC_CTYPE=en_US.UTF-8 \
+    TZ=Etc/UTC
+
 # install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
     apt clean && \

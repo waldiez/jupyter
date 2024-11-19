@@ -118,7 +118,10 @@ all: requirements forlint test build
 	jlpm test
 	jlpm test:ui
 
-
 .PHONY: image
 image:
 	python scripts/dev/image.py
+
+.PHONY: dev-image
+dev-image:
+	python scripts/dev/image.py --dev --no-cache

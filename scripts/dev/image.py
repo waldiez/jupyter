@@ -67,7 +67,8 @@ def run_command(command: List[str]) -> None:
         env=os.environ,
         cwd=_ROOT_DIR,
         stdout=sys.stdout,
-        stderr=subprocess.PIPE,
+        stderr=sys.stderr,
+        text=True,
     )  # nosemgrep # nosec
 
 
@@ -78,6 +79,7 @@ def build_image(
     image_tag: str,
     platform: str,
     container_command: str,
+    no_cache: bool,
     build_args: List[str],
 ) -> None:
     """Build the container image.
@@ -94,6 +96,8 @@ def build_image(
         Set platform if the image is multi-platform.
     container_command : str
         The container command to use.
+    no_cache : bool
+        Do not use cache when building the image.
     build_args : List[str]
         Build arguments.
 
@@ -112,8 +116,12 @@ def build_image(
         "-f",
         container_file,
     ]
+    if no_cache:
+        cmd.append("--no-cache")
     for arg in build_args:
         cmd.extend(["--build-arg", arg])
+    if container_command == "docker":
+        cmd.extend(["--progress=plain"])
     cmd.append(".")
     run_command(cmd)
 
@@ -159,6 +167,11 @@ def cli() -> argparse.ArgumentParser:
         help="Build arguments.",
     )
     parser.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="Do not use cache when building the image.",
+    )
+    parser.add_argument(
         "--dev",
         action="store_true",
         help="Use development container.",
@@ -183,6 +196,7 @@ def main() -> None:
         args.image_tag,
         args.platform,
         args.container_command,
+        args.no_cache,
         build_args,
     )
 

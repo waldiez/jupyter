@@ -1,5 +1,5 @@
 #####################################################################################
-# Build an image using the @waldiez/react and "waldiez" python packages from git
+# Build an image using @waldiez/react and "waldiez" from git
 #####################################################################################
 # Build Step
 # Build the frontend and backend parts of the extension
@@ -12,16 +12,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 # install system dependencies
 RUN apt update && \
     apt install -y curl unzip git ca-certificates python3-dev python3-pip && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
-
-# install bun
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=/root/.bun/bin:${PATH}
 
 # install yarn
 RUN npm install -g corepack && \
@@ -38,28 +34,29 @@ COPY requirements/main.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
     rm -f /tmp/requirements.txt
 
-# build the extension
-COPY . /tmp/package/waldiez_jupyter
-WORKDIR /tmp/package/
-
 # specify the js branch to use
 ARG JS_DEV_BRANCH=dev
 
 RUN git clone https://github.com/waldiez/react -b $JS_DEV_BRANCH
 WORKDIR /tmp/package/react
-RUN bun install && \
-    bun build:lib && \
-    bun archive && \
+RUN yarn install && \
+    yarn build:lib && \
+    yarn archive && \
     mv out/lib/waldiez-react-*.tgz /tmp/package/waldiez.tgz
 
 WORKDIR /tmp/package/waldiez_jupyter
-RUN touch yarn.lock && \
+# install js requirements
+COPY package.json /tmp/package/waldiez_jupyter/package.json
+COPY yarn.lock /tmp/package/waldiez_jupyter/yarn.lock
+RUN jlpm install
+
+# build the extension
+COPY . /tmp/package/waldiez_jupyter
+RUN jlpm install && \
     jlpm remove @waldiez/react > /dev/null 2 >&1 || true && \
     jlpm add @waldiez/react@file:../waldiez.tgz && \
-    jlpm install && \
     jlpm build:lib:prod && \
     jlpm build:prod
-
 
 # specify the py branch to use
 ARG PY_DEV_BRANCH=dev
@@ -85,10 +82,6 @@ ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
-ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US:en \
-    LC_ALL=en_US.UTF-8 \
-    TZ=Etc/UTC
 
 # install system dependencies
 RUN apt update && \
@@ -110,13 +103,20 @@ RUN apt update && \
     zip \
     unzip && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen && \
+    locale-gen en_US.UTF-8 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+# locale environment variables
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LC_CTYPE=en_US.UTF-8 \
+    TZ=Etc/UTC
+
 # install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
     apt clean && \
@@ -143,8 +143,11 @@ RUN pip install --upgrade pip jupyterlab ipywidgets ipykernel
 COPY --chown=user:user scripts /home/user/scripts
 RUN chmod +x /home/user/scripts/start.sh
 
+ARG PY_DEV_BRANCH=dev
 COPY --from=builder --chown=user:user /tmp/package/waldiez_jupyter/dist/*.whl /home/user/tmp/
 RUN pip install --user /home/user/tmp/*.whl && \
+    pip uninstall -y waldiez autogen-agentchat && \
+    pip install git+https://github.com/waldiez/py.git@$PY_DEV_BRANCH && \
     rm -rf /home/user/tmp
 
 RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
