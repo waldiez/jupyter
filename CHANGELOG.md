@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.9
+
+- Updated @waldiez/react to v0.1.11
+- Updated waldiez to v0.1.8
+- Other py and js dependencies updated
+
 ## v0.1.8
 
 - Updated @waldiez/react to v0.1.10
