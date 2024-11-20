@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.11
+
+- Updated waldiez to v0.1.10
+
 ## v0.1.10
 
 - Updated waldiez to v0.1.9
