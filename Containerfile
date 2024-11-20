@@ -53,7 +53,6 @@ LABEL org.opencontainers.image.description="JupyterLab with waldiez extension in
 # set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND="noninteractive"
-ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
 # install system dependencies
