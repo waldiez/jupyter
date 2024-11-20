@@ -252,7 +252,7 @@ urllib3==2.2.2
     # via
     #   docker
     #   requests
-waldiez==0.1.9
+waldiez==0.1.10
     # via waldiez-jupyter (pyproject.toml)
 webcolors==24.8.0
     # via jsonschema
