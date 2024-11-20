@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.10
+
+- Updated waldiez to v0.1.9
+
 ## v0.1.9
 
 - Updated @waldiez/react to v0.1.11
