@@ -4866,7 +4866,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.15.0
     "@typescript-eslint/parser": ^8.15.0
-    "@waldiez/react": 0.1.11
+    "@waldiez/react": 0.1.12
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4895,9 +4895,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:0.1.11":
-  version: 0.1.11
-  resolution: "@waldiez/react@npm:0.1.11"
+"@waldiez/react@npm:0.1.12":
+  version: 0.1.12
+  resolution: "@waldiez/react@npm:0.1.12"
   dependencies:
     "@monaco-editor/react": ^4.6.0
     "@xyflow/react": ^12.3.5
@@ -4911,7 +4911,7 @@ __metadata:
     react-select: ^5.8.3
     zundo: ^2.3.0
     zustand: ^5.0.1
-  checksum: 66d627b1b3607276a138a94bdbade61916ad2cacf98e32426d297c1a7cdb6d21874194ee0260bc55a68a690eeac05e8e5710bcbbf7446e0f803d994999005e14
+  checksum: 55fc0be9b3b29eee9d51ec79e5a24fd947c9259d77d100299b1dcef15e2f29a6f90255472f19faf7979666ccdd428f5fda3ea9d38d11b8b1bea2ced2283a1213
   languageName: node
   linkType: hard
 
