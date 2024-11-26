@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased]
+
+- Updated @waldiez/react to v0.1.14
+- Added travel planning and guardrails examples
+- Updated js dependencies
+- Updated py dependencies
+
 ## v0.1.12
 
 - Updated @waldiez/react to v0.1.12

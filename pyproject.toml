@@ -28,7 +28,7 @@ dependencies = [
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
 test = [
-    "coverage==7.6.7",
+    "coverage==7.6.8",
     "pytest==8.3.3",
     'pytest-datadir==1.5.0',
     "pytest-cov==6.0.0",
@@ -50,9 +50,9 @@ dev = [
     'pydocstyle==6.3.0',
     'pylint==3.3.1',
     'python-dotenv==1.0.1',
-    'ruff==0.7.4',
+    'ruff==0.8.0',
     'toml==0.10.2',
-    'types-PyYAML==6.0.12',
+    'types-PyYAML==6.0.12.20240917',
     'types-toml==0.10.8.20240310',
     'yamllint==1.35.1',
 ]
@@ -217,6 +217,7 @@ ignore-paths = [
   "^(.*)/build/*",
   "^(.*)/dist/*",
   "^(.*)/examples/*",
+  "^(.*)/notebooks/*",
   "^(.*)/node_modules/*",
   "^(.*)/waldiez_out/*",
   ".venv/*",
@@ -224,6 +225,7 @@ ignore-paths = [
   "build/*",
   "dist/*",
   "examples/*",
+  "notebooks/*",
   "node_modules/*",
   "^(.*)/(.*).pyi",
   "^(.*)/_version.py"
@@ -232,7 +234,7 @@ unsafe-load-any-extension = "no"
 
 [tool.pylint.messages_control]
 enable=["c-extension-no-member"]
-[tool.pylint.fotmat]
+[tool.pylint.format]
 max-line-length=80
 [tool.pylint.similarities]
 ignore-imports="yes"

@@ -1,5 +1,5 @@
 import { Waldiez, WaldiezProps, importFlow } from '@waldiez/react';
-import '@waldiez/react/dist/style.css';
+import '@waldiez/react/dist/@waldiez.css';
 
 import { ReactWidget, UseSignal } from '@jupyterlab/ui-components';
 
