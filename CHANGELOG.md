@@ -2,7 +2,10 @@
 
 ## [unreleased]
 
-- Updated @waldiez/react to v0.1.14
+## v0.1.13
+
+- Updated @waldiez/react to v0.15
+- Updated waldiez to v0.1.11
 - Added travel planning and guardrails examples
 - Updated js dependencies
 - Updated py dependencies
