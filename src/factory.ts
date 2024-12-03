@@ -74,7 +74,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<
             alignment: 'start',
             spacing: 0
         });
-        panel.title.label = 'Waldie';
+        panel.title.label = 'Waldiez';
         panel.title.closable = true;
         const editor = new WaldiezEditor({
             context,

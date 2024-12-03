@@ -3,6 +3,7 @@ import { Signal } from '@lumino/signaling';
 import { EditorWidget, IWaldiezEditorProps } from '../widget';
 
 const waldiezFlow = {
+    type: 'flow',
     name: 'Test Flow',
     description: 'Test Description',
     requirements: [],

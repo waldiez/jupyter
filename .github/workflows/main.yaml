@@ -43,11 +43,33 @@ jobs:
       - name: ruff
         run: ruff check --config pyproject.toml .
 
-  test-py:
+  lint-js:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - run: |
+          corepack enable
+          yarn set version stable
+      - name: Install jlpm
+        run: |
+          python -m pip install --upgrade pip jupyterlab
+      - name: Install dependencies
+        run: jlpm install
+      - name: Run linters
+        run: jlpm lint
+
+  test-py:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -63,19 +85,32 @@ jobs:
           pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt
       - name: Run tests
         run: |
-          python -m pytest \
-            -c pyproject.toml \
-            --cov=waldiez_jupyter \
-            --cov-report=term-missing:skip-covered \
-            --cov-report html:reports/html \
-            --cov-report xml:reports/coverage.xml \
-            --cov-report lcov:reports/lcov.info \
-            --junitxml=reports/xunit.xml
+          python -m pytest -c pyproject.toml --cov=waldiez_jupyter --cov-report lcov:reports/lcov.info
       - name: Report to Coveralls
         # only send latest Python version's report
-        if: matrix.python-version == '3.12'
+        if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./reports/lcov.info
-      # we suld add lint-js and test-js jobs here (or maybe in a separate file)
+
+  test-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - run: |
+          corepack enable
+          yarn set version stable
+      - name: Install jlpm
+        run: |
+          python -m pip install --upgrade pip jupyterlab
+      - name: Install dependencies
+        run: jlpm install
+      - name: Run tests
+        run: jlpm test
