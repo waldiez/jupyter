@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -62,7 +62,7 @@
         "prettier:check": "jlpm prettier:base --check",
         "stylelint": "jlpm stylelint:check --fix",
         "stylelint:check": "stylelint --cache \"style/**/*.css\"",
-        "test": "NODE_NO_WARNINGS=1 jest --coverage",
+        "test": "NODE_NO_WARNINGS=1 jest --coverage --coverageReporters text text-summary lcov",
         "test:ui": "NODE_NO_WARNINGS=1 cd ui-tests && yarn install && yarn test",
         "watch": "run-p watch:src watch:labextension",
         "watch:src": "tsc -w --sourceMap",
@@ -88,7 +88,7 @@
         "@jupyterlab/ui-components-extension": "^4.3.1",
         "@lumino/algorithm": "^2.0.2",
         "@lumino/widgets": "^2.5.0",
-        "@waldiez/react": "0.1.15"
+        "@waldiez/react": "0.1.16"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
@@ -102,8 +102,8 @@
         "@types/node": "^22.10.1",
         "@types/react": "^18.3.12",
         "@types/react-addons-linked-state-mixin": "^0.14.27",
-        "@typescript-eslint/eslint-plugin": "^8.16.0",
-        "@typescript-eslint/parser": "^8.16.0",
+        "@typescript-eslint/eslint-plugin": "^8.17.0",
+        "@typescript-eslint/parser": "^8.17.0",
         "add": "^2.0.6",
         "copyfiles": "^2.4.1",
         "css-loader": "^7.1.2",
@@ -126,7 +126,7 @@
         "stylelint-prettier": "^5.0.2",
         "ts-jest": "^29.2.5",
         "typescript": "~5.7.2",
-        "typescript-eslint": "^8.16.0",
+        "typescript-eslint": "^8.17.0",
         "yarn-deduplicate": "^6.0.2",
         "yjs": "^13.6.20"
     },

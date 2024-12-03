@@ -159,7 +159,8 @@ export const editorContext = {
             changed: {
                 connect: jest.fn()
             }
-        }
+        },
+        toString: () => '{"type": "flow"}'
     },
     pathChanged: {
         connect: jest.fn()

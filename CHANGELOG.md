@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+## v0.1.14
+
+- Updated @waldiez/react to v0.16
+- Updated waldiez to v0.1.12
+- Other js dependencies
+- Other py dependencies
+
 ## v0.1.13
 
 - Updated @waldiez/react to v0.15
