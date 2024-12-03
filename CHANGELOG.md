@@ -2,6 +2,10 @@
 
 ## [unreleased]
 
+## v0.1.15
+
+- Updated waldiez to v0.1.13
+
 ## v0.1.14
 
 - Updated @waldiez/react to v0.16
