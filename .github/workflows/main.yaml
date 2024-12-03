@@ -113,4 +113,4 @@ jobs:
       - name: Install dependencies
         run: jlpm install
       - name: Run tests
-        run: yarn test
+        run: jlpm test
