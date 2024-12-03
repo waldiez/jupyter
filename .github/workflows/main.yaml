@@ -54,7 +54,8 @@ jobs:
           corepack enable
           yarn set version stable
       - name: Install dependencies
-        run: yarn install
+        # we use jlpm instead of yarn, the yarn.lock file is not in sync
+        run: rm yarn.lock && touch yarn.lock && yarn install
       - name: Run linters
         run: yarn lint
 
@@ -99,6 +100,6 @@ jobs:
           corepack enable
           yarn set version stable
       - name: Install dependencies
-        run: yarn install
+        run: rm yarn.lock && touch yarn.lock && yarn install
       - name: Run tests
         run: yarn test
