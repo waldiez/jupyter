@@ -6,7 +6,7 @@ jupyter-server==2.14.2
     # via waldiez-jupyter (pyproject.toml)
 pathvalidate==3.2.1
     # via waldiez-jupyter (pyproject.toml)
-pytest==8.3.3
+pytest==8.3.4
     # via waldiez-jupyter (pyproject.toml)
 pytest-cov==6.0.0
     # via waldiez-jupyter (pyproject.toml)

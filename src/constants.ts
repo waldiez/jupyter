@@ -26,7 +26,8 @@ export namespace WALDIEZ_STRINGS {
     export const CHANGE_KERNEL = 'Change kernel';
     export const RECONNECT_TO_KERNEL = 'Reconnect to kernel';
     export const LOGGER_INITIALIZED = 'Waldiez logger initialized';
-    export const STARTING_WORKFLOW = 'Starting workflow...';
+    export const AFTER_INSTALL_NOTE =
+        'NOTE: If new packages were added and you are using Jupyter, you might need to restart the kernel.';
     export const NO_KERNEL = 'No kernel';
     export const NO_KERNEL_MESSAGE =
         'Please start a kernel before running the workflow.';

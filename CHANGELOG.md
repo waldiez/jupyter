@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+## v0.1.16
+
+- Updated @waldiez/react to v0.1.17
+- Changed filtering of flow messages
+- Other js dependencies updates
+- Other py dependencies updates
+
 ## v0.1.15
 
 - Updated waldiez to v0.1.13
