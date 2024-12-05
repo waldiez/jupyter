@@ -96,13 +96,16 @@ export class WaldiezRunner {
      * @memberof WaldiezRunner
      */
     getPreviousMessages(inputPrompt: string) {
-        // filter previous messages (like installing requirements)
-        // and start from the `starting workflow` message
-        const starting = WALDIEZ_STRINGS.STARTING_WORKFLOW;
-        const start = this._messages.findIndex(
-            // msg => msg === starting || msg === `${starting}\n`
-            msg => msg.startsWith(starting) || msg.startsWith(`${starting}\n`)
-        );
+        // try to filter previous messages (like installing requirements)
+        let start = -1;
+        for (let i = this._messages.length - 1; i >= 0; i--) {
+            if (
+                this._messages[i].includes(WALDIEZ_STRINGS.AFTER_INSTALL_NOTE)
+            ) {
+                start = i;
+                break;
+            }
+        }
         if (start >= 0) {
             this._messages = this._messages.slice(start + 1);
         }

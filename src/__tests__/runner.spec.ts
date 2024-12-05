@@ -210,7 +210,7 @@ describe('WaldiezRunner', () => {
         runner.run(mockKernelConnectionSuccess, 'path/to/file.waldiez');
         runner['_messages'] = [
             'Installing requirements...',
-            WALDIEZ_STRINGS.STARTING_WORKFLOW,
+            WALDIEZ_STRINGS.AFTER_INSTALL_NOTE,
             'Step 1 completed',
             'Step 2 completed',
             'Input required'
