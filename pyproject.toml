@@ -119,7 +119,7 @@ ignore = ["W002"]
 
 # black
 [tool.black]
-line-length = 120
+line-length = 80
 skip-string-normalization = true
 include = '''
     \.pyi?$
@@ -139,6 +139,7 @@ exclude = '''
   | dist
   | node_modules
   | examples
+  | notebooks
 )/
 '''
 
@@ -162,6 +163,7 @@ exclude = [
   'build',
   'dist',
   'examples',
+  'notebooks',
   'node_modules',
   'waldiez_out',
 ]
@@ -176,13 +178,14 @@ skip = [
   'build',
   'dist',
   'examples',
+  'notebooks',
   'waldiez_out'
 ]
 # known_local_folder = ["..."]
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
-line_length = 120
+line_length = 80
 
 [tool.pydocstyle]
 match-dir = '''
@@ -192,6 +195,7 @@ match-dir = '''
   [^!(dist)]
   [^!(node_modules)]
   [^!(examples)]
+  [^!(notebooks)]
   [^!(waldiez_out)]
 '''
 
@@ -271,10 +275,11 @@ skips = ['*_test.py', '*/test_*.py']
 
 # ruff
 [tool.ruff]
-line-length = 120
+line-length = 80
 extend-exclude = [
   "**/.venv",
   "**/examples",
+  "**/notebooks",
   "**/.local",
   "**/node_modules",
   "**/build",
@@ -314,7 +319,9 @@ addopts = """
 
 # consider_namespace_packages = true
 # pythonpath = []
-# filterwarnings = []
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
 python_files = ["test_*.py", "*_test.py"]
 
 # coverage

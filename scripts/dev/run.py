@@ -62,7 +62,9 @@ def _start_jupyter() -> None:
 def _start_jlpm() -> None:
     try:
         # pylint: disable=subprocess-run-check, line-too-long
-        subprocess.run([JLPM_COMMAND, "run", "watch"], cwd=ROOT_DIR, check=True)  # nosemgrep  # nosec
+        subprocess.run(  # nosemgrep  # nosec
+            [JLPM_COMMAND, "run", "watch"], cwd=ROOT_DIR, check=True
+        )
     except KeyboardInterrupt:
         _stop()
 

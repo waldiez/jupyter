@@ -24,9 +24,13 @@ def _write_all_dot_txt() -> None:
 def _ensure_uv() -> None:
     """Ensure that the `uv` tool is installed."""
     if not shutil.which("uv"):
-        subprocess.run(["python", "-m", "pip", "install", "uv"], check=True)  # nosemgrep # nosec
+        subprocess.run(  # nosemgrep # nosec
+            ["python", "-m", "pip", "install", "uv"], check=True
+        )
     try:
-        subprocess.run(["uv", "--version"], check=True, stdout=subprocess.DEVNULL)  # nosemgrep # nosec
+        subprocess.run(  # nosemgrep # nosec
+            ["uv", "--version"], check=True, stdout=subprocess.DEVNULL
+        )
     except subprocess.CalledProcessError:
         print("Failed to run `uv`.")
         print("Please make sure that the `uv` tool is installed.")
