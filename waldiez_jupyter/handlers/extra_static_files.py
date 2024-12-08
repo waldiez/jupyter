@@ -111,7 +111,7 @@ def _download_monaco_editor(
         raise ValueError("SHA-1 sum mismatch.")
     os.makedirs(static_root_path, exist_ok=True)
     with tarfile.open(fileobj=io.BytesIO(response.data)) as tar:
-        tar.extractall(static_root_path)  # nosemgrep # nosec
+        tar.extractall(static_root_path, filter="data")  # nosemgrep # nosec
     monaco_editor_path = os.path.join(static_root_path, "package")
     src_dir = os.path.join(monaco_editor_path, "min", "vs")
     if not os.path.exists(src_dir):
