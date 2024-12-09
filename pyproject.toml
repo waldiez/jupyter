@@ -53,6 +53,7 @@ dev = [
     'ruff==0.8.2',
     'toml==0.10.2',
     'types-PyYAML==6.0.12.20240917',
+    'toml; python_version <= "3.10"',
     'types-toml==0.10.8.20240310',
     'yamllint==1.35.1',
 ]
