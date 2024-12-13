@@ -2,7 +2,8 @@
 
 ## [unreleased]
 
-- Updated waldiez to v0.1.15
+- Updated waldiez to v0.1.16
+- Updated @waldiez/react to v0.1.20
 - Updated other js dependencies
 - Updated other py dependencies
 
