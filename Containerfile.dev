@@ -64,8 +64,12 @@ ARG PY_DEV_BRANCH=dev
 # build the python package
 RUN uv sync && \
     uv remove waldiez && \
+    # both waldiez_jupyter and waldiez have
+    # examples as subdirectories/submodules
+    mv examples examples.bak && \
     uv add waldiez@git+https://github.com/waldiez/py.git@$PY_DEV_BRANCH && \
-    python3 -m build
+    python3 -m build && \
+    mv examples.bak examples
 
 #####################################################################################
 # Final image
