@@ -213,6 +213,7 @@
     "logconsole",
     "lumino",
     "mainmenu",
+    "makedirs",
     "Margulis",
     "Maryam",
     "Matsumoto",
@@ -363,6 +364,7 @@
     "xdist",
     "xunit",
     "xyflow",
+    "yarnrc",
     "ydoc",
     "yfinance"
   ]
