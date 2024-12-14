@@ -40,6 +40,8 @@ ROOT_LEVEL_DIRS = [
 def _remove_dirs() -> None:
     for pattern in DIR_PATTERNS:
         for dirpath in glob.glob(f"./**/{pattern}", recursive=True):
+            if "node_modules" in dirpath:
+                continue
             sys.stdout.write(f"removing {dirpath}\n")
             try:
                 shutil.rmtree(dirpath)
@@ -58,6 +60,8 @@ def _remove_dirs() -> None:
 def _remove_files() -> None:
     for pattern in FILE_PATTERNS:
         for filepath in glob.glob(f"./**/{pattern}", recursive=True):
+            if "node_modules" in filepath:
+                continue
             sys.stdout.write(f"removing {filepath}\n")
             os.remove(filepath)
 
