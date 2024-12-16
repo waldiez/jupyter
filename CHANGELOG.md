@@ -2,6 +2,9 @@
 
 ## [unreleased]
 
+- Updated waldiez to v0.1.18
+- Updated dev js dependencies
+
 ## v0.1.18
 
 - Updated waldiez to v0.1.17
