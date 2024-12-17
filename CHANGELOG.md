@@ -2,6 +2,12 @@
 
 ## [unreleased]
 
+## v0.1.19
+
+- Updated waldiez to v0.1.19
+- Updated @waldiez/react to v0.1.21
+- Updated dev js dependencies
+
 ## v0.1.18
 
 - Updated waldiez to v0.1.17
