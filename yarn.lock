@@ -1479,8 +1479,8 @@ __metadata:
   linkType: hard
 
 "@codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.10.1, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0, @codemirror/language@npm:^6.8.0":
-  version: 6.10.6
-  resolution: "@codemirror/language@npm:6.10.6"
+  version: 6.10.7
+  resolution: "@codemirror/language@npm:6.10.7"
   dependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.23.0
@@ -1488,7 +1488,7 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
     style-mod: ^4.0.0
-  checksum: 0bd5e4da0c714b4d2aad2e2ad19bb803d9992e5f0d56da3fb2534e63b03b8a562bd8b9ac4439509c687b589e3eaa5a33339eda13d91e54a5d5a99e032d1be981
+  checksum: c9b71e2df8559bc677edae293a825a0dd196c98d49a6e20a98cc6bea51a01c67d268b07b5a761d7ac15b1d65415e17af1f644d5629ab4207268804e71cd48d7c
   languageName: node
   linkType: hard
 
@@ -4134,7 +4134,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.27
     "@typescript-eslint/eslint-plugin": ^8.18.1
     "@typescript-eslint/parser": ^8.18.1
-    "@waldiez/react": ^0.1.20
+    "@waldiez/react": ^0.1.21
     add: ^2.0.6
     copyfiles: ^2.4.1
     css-loader: ^7.1.2
@@ -4163,9 +4163,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.1.20":
-  version: 0.1.20
-  resolution: "@waldiez/react@npm:0.1.20"
+"@waldiez/react@npm:^0.1.21":
+  version: 0.1.21
+  resolution: "@waldiez/react@npm:0.1.21"
   dependencies:
     "@monaco-editor/react": ^4.6.0
     "@xyflow/react": ^12.3.6
@@ -4181,7 +4181,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.0.0
     react-dom: ^18.3.1 || ^19.0.0
-  checksum: 31e4221d30f91615c739315418efcd6412d7d7b829b376d684de8d275780fb278d667cb3e9c6099935629ca55b29eb7328710dd0c912f4a71d52175d1e478373
+  checksum: 453cf868a1f3a552221f2cabb9b031f9596a232e1b91cd577c004f0b269495ac4ace0540947a47e1050f14deb4d43b39b209ee5db630ca9d722e7fd3d43be232
   languageName: node
   linkType: hard
 
@@ -5772,13 +5772,13 @@ __metadata:
   linkType: hard
 
 "dunder-proto@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "dunder-proto@npm:1.0.0"
+  version: 1.0.1
+  resolution: "dunder-proto@npm:1.0.1"
   dependencies:
-    call-bind-apply-helpers: ^1.0.0
+    call-bind-apply-helpers: ^1.0.1
     es-errors: ^1.3.0
     gopd: ^1.2.0
-  checksum: 6f0697b17c47377efc00651f43f34e71c09ebba85fafb4d91fe67f5810931f3fa3f45a1ef5d207debbd5682ad9abc3b71b49cb3e67222dcad71fafc92cf6199b
+  checksum: 149207e36f07bd4941921b0ca929e3a28f1da7bd6b6ff8ff7f4e2f2e460675af4576eeba359c635723dc189b64cdd4787e0255897d5b135ccc5d15cb8685fc90
   languageName: node
   linkType: hard
 
@@ -7191,11 +7191,11 @@ __metadata:
   linkType: hard
 
 "is-finalizationregistry@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "is-finalizationregistry@npm:1.1.0"
+  version: 1.1.1
+  resolution: "is-finalizationregistry@npm:1.1.1"
   dependencies:
-    call-bind: ^1.0.7
-  checksum: 480818ab86e112a00444410a2fd551a5363bca0c39c7bc66e29df665b1e47c803ba107227c1db86d67264a3f020779fab257061463ce02b01b6abbe5966e33b8
+    call-bound: ^1.0.3
+  checksum: 38c646c506e64ead41a36c182d91639833311970b6b6c6268634f109eef0a1a9d2f1f2e499ef4cb43c744a13443c4cdd2f0812d5afdcee5e9b65b72b28c48557
   languageName: node
   linkType: hard
 
@@ -7367,12 +7367,12 @@ __metadata:
   linkType: hard
 
 "is-weakset@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "is-weakset@npm:2.0.3"
+  version: 2.0.4
+  resolution: "is-weakset@npm:2.0.4"
   dependencies:
-    call-bind: ^1.0.7
-    get-intrinsic: ^1.2.4
-  checksum: 8b6a20ee9f844613ff8f10962cfee49d981d584525f2357fee0a04dfbcde9fd607ed60cb6dab626dbcc470018ae6392e1ff74c0c1aced2d487271411ad9d85ae
+    call-bound: ^1.0.3
+    get-intrinsic: ^1.2.6
+  checksum: 5c6c8415a06065d78bdd5e3a771483aa1cd928df19138aa73c4c51333226f203f22117b4325df55cc8b3085a6716870a320c2d757efee92d7a7091a039082041
   languageName: node
   linkType: hard
 
