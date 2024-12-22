@@ -77,8 +77,8 @@ This extension is using [Jest](https://jestjs.io/) for JavaScript code testing.
 To execute them, execute:
 
 ```shell
-jlpm
-jlpm test
+yarn
+yarn test
 ```
 
 ### Integration tests

@@ -1,18 +1,12 @@
-import { IEditorServices } from '@jupyterlab/codeeditor';
-import {
-    ABCWidgetFactory,
-    DocumentModel,
-    DocumentRegistry
-} from '@jupyterlab/docregistry';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { ITranslator } from '@jupyterlab/translation';
-
-import { CommandRegistry } from '@lumino/commands';
-import { SplitPanel } from '@lumino/widgets';
-
-import { FACTORY_NAME } from './constants';
-import { WaldiezEditor } from './editor';
+import { FACTORY_NAME } from "./constants";
+import { WaldiezEditor } from "./editor";
+import { IEditorServices } from "@jupyterlab/codeeditor";
+import { ABCWidgetFactory, DocumentModel, DocumentRegistry } from "@jupyterlab/docregistry";
+import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
+import { ISettingRegistry } from "@jupyterlab/settingregistry";
+import { ITranslator } from "@jupyterlab/translation";
+import { CommandRegistry } from "@lumino/commands";
+import { SplitPanel } from "@lumino/widgets";
 
 /**
  * A widget factory to create new instances of WaldiezEditor.
@@ -23,10 +17,7 @@ import { WaldiezEditor } from './editor';
  * @param <WaldiezEditor> The type of widget to create
  * @param <DocumentModel> The type of model to use
  */
-export class WaldiezEditorFactory extends ABCWidgetFactory<
-    WaldiezEditor,
-    DocumentModel
-> {
+export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, DocumentModel> {
     private _commands: CommandRegistry;
     private _rendermime: IRenderMimeRegistry;
     private _editorServices: IEditorServices;
@@ -66,15 +57,13 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<
      * @returns The widget
      * @memberof WaldiezEditorFactory
      */
-    protected createNewWidget(
-        context: DocumentRegistry.IContext<DocumentModel>
-    ): WaldiezEditor {
+    protected createNewWidget(context: DocumentRegistry.IContext<DocumentModel>): WaldiezEditor {
         const panel = new SplitPanel({
-            orientation: 'vertical',
-            alignment: 'start',
-            spacing: 0
+            orientation: "vertical",
+            alignment: "start",
+            spacing: 0,
         });
-        panel.title.label = 'Waldiez';
+        panel.title.label = "Waldiez";
         panel.title.closable = true;
         const editor = new WaldiezEditor({
             context,
@@ -82,7 +71,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<
             editorServices: this._editorServices,
             settingregistry: this._settingRegistry,
             content: panel,
-            commands: this._commands
+            commands: this._commands,
         });
         return editor;
     }

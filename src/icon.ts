@@ -1,6 +1,6 @@
-import waldiez_logo from '@waldiez/react/dist/logo.svg';
+import { LabIcon } from "@jupyterlab/ui-components";
 
-import { LabIcon } from '@jupyterlab/ui-components';
+import waldiez_logo from "@waldiez/react/dist/logo.svg";
 
 /**
  * The waldiez icon.
@@ -8,6 +8,6 @@ import { LabIcon } from '@jupyterlab/ui-components';
  * @public
  */
 export const waldiezIcon: LabIcon = new LabIcon({
-    name: 'waldiez:icon/logo',
-    svgstr: waldiez_logo
+    name: "waldiez:icon/logo",
+    svgstr: waldiez_logo,
 });

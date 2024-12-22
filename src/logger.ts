@@ -1,30 +1,18 @@
-import { MainAreaWidget } from '@jupyterlab/apputils';
-import {
-    ILogPayload,
-    ILogger,
-    LogConsolePanel,
-    LogLevel,
-    LoggerRegistry
-} from '@jupyterlab/logconsole';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { CommandIDs } from "./commands";
+import { WALDIEZ_STRINGS } from "./constants";
+import { MainAreaWidget } from "@jupyterlab/apputils";
+import { ILogPayload, ILogger, LogConsolePanel, LogLevel, LoggerRegistry } from "@jupyterlab/logconsole";
+import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,
     IInputRequestMsg,
-    IStreamMsg
-} from '@jupyterlab/services/lib/kernel/messages';
-import {
-    CommandToolbarButton,
-    clearIcon,
-    consoleIcon
-} from '@jupyterlab/ui-components';
-
-import { CommandRegistry } from '@lumino/commands';
-import { SplitPanel } from '@lumino/widgets';
-
-import { CommandIDs } from './commands';
-import { WALDIEZ_STRINGS } from './constants';
+    IStreamMsg,
+} from "@jupyterlab/services/lib/kernel/messages";
+import { CommandToolbarButton, clearIcon, consoleIcon } from "@jupyterlab/ui-components";
+import { CommandRegistry } from "@lumino/commands";
+import { SplitPanel } from "@lumino/widgets";
 
 /**
  * A logger for the Waldiez extension.
@@ -53,7 +41,7 @@ export class WaldiezLogger {
         this._toggleConsoleViewCommandId = `${CommandIDs.toggleLogsView}-${this._id}`;
         this._loggerRegistry = new LoggerRegistry({
             defaultRendermime: this._rendermime,
-            maxLength: 1000
+            maxLength: 1000,
         });
         this._logConsole = new LogConsolePanel(this._loggerRegistry);
         this._logConsole.id = `waldiez-log-console-${this._id}`;
@@ -69,14 +57,12 @@ export class WaldiezLogger {
             id: this._toggleConsoleViewCommandId,
             icon: consoleIcon,
             label: () =>
-                this._widgetIsVisible
-                    ? ` ${WALDIEZ_STRINGS.HIDE_LOGS}`
-                    : ` ${WALDIEZ_STRINGS.SHOW_LOGS}`
+                this._widgetIsVisible ? ` ${WALDIEZ_STRINGS.HIDE_LOGS}` : ` ${WALDIEZ_STRINGS.SHOW_LOGS}`,
         });
         // the split panel to contain the log console
         this._panel = options.panel;
         this._widget = this._getLogWidget();
-        this._getLogger().level = 'info';
+        this._getLogger().level = "info";
     }
     /**
      * Get the toggle console view button.
@@ -115,41 +101,35 @@ export class WaldiezLogger {
      * @memberof WaldiezLogger
      */
     log(
-        msg:
-            | IStreamMsg
-            | IErrorMsg
-            | IInputRequestMsg
-            | IExecuteReplyMsg
-            | IExecuteRequestMsg
-            | ILogPayload
+        msg: IStreamMsg | IErrorMsg | IInputRequestMsg | IExecuteReplyMsg | IExecuteRequestMsg | ILogPayload,
     ): void {
-        if ('level' in msg) {
+        if ("level" in msg) {
             this._logData(msg);
         } else {
-            if (msg.header.msg_type === 'error') {
+            if (msg.header.msg_type === "error") {
                 this._logData({
                     data: (msg as IErrorMsg).content.ename,
-                    level: 'error',
-                    type: 'text'
+                    level: "error",
+                    type: "text",
                 });
                 this._logData({
                     data: (msg as IErrorMsg).content.evalue,
-                    level: 'error',
-                    type: 'text'
+                    level: "error",
+                    type: "text",
                 });
                 this._logData({
-                    data: (msg as IErrorMsg).content.traceback.join('\n'),
-                    level: 'error',
-                    type: 'text'
+                    data: (msg as IErrorMsg).content.traceback.join("\n"),
+                    level: "error",
+                    type: "text",
                 });
             } else {
-                if (msg.header.msg_type === 'stream') {
+                if (msg.header.msg_type === "stream") {
                     this._logIOPub(msg as IStreamMsg);
-                } else if (msg.header.msg_type === 'input_request') {
+                } else if (msg.header.msg_type === "input_request") {
                     this._logStdin(msg as IInputRequestMsg);
-                } else if (msg.header.msg_type === 'execute_reply') {
+                } else if (msg.header.msg_type === "execute_reply") {
                     this._logReply(msg as IExecuteReplyMsg);
-                } else if (msg.header.msg_type === 'execute_request') {
+                } else if (msg.header.msg_type === "execute_request") {
                     this._logExecuteRequest(msg as IExecuteRequestMsg);
                 }
             }
@@ -189,10 +169,7 @@ export class WaldiezLogger {
      */
     dispose(): void {
         this._logConsole.dispose();
-        for (const commandId of [
-            this._toggleConsoleViewCommandId,
-            this._logConsoleClearCommandId
-        ]) {
+        for (const commandId of [this._toggleConsoleViewCommandId, this._logConsoleClearCommandId]) {
             if (this._commands.hasCommand(commandId)) {
                 this._commands.notifyCommandChanged(commandId);
             }
@@ -205,9 +182,7 @@ export class WaldiezLogger {
      * @memberof WaldiezLogger
      */
     private _scrollToBottom(retry: number = 0): void {
-        const logs = this._logConsole.node.querySelectorAll(
-            '.jp-OutputArea-child'
-        );
+        const logs = this._logConsole.node.querySelectorAll(".jp-OutputArea-child");
         if (!logs) {
             // too early?, try again
             if (retry < 5) {
@@ -229,27 +204,26 @@ export class WaldiezLogger {
      */
     private _getLogWidget(): MainAreaWidget<LogConsolePanel> {
         const logConsoleWidget = new MainAreaWidget<LogConsolePanel>({
-            content: this._logConsole
+            content: this._logConsole,
         });
         logConsoleWidget.toolbar.addItem(
-            'clear',
+            "clear",
             new CommandToolbarButton({
                 commands: this._commands,
-                id: this._logConsoleClearCommandId
-            })
+                id: this._logConsoleClearCommandId,
+            }),
         );
         if (!this._commands.hasCommand(this._logConsoleClearCommandId)) {
             this._commands.addCommand(this._logConsoleClearCommandId, {
                 execute: () => this._getLogger().clear(),
-                isEnabled: () =>
-                    !!this._logConsole && this._logConsole.source !== null,
+                isEnabled: () => !!this._logConsole && this._logConsole.source !== null,
                 label: ` ${WALDIEZ_STRINGS.CLEAR_LOGS}`,
-                icon: clearIcon
+                icon: clearIcon,
             });
         }
         if (!this._commands.hasCommand(this._toggleConsoleViewCommandId)) {
             this._commands.addCommand(this._toggleConsoleViewCommandId, {
-                execute: this.toggle.bind(this)
+                execute: this.toggle.bind(this),
             });
         }
         return logConsoleWidget;
@@ -262,24 +236,23 @@ export class WaldiezLogger {
      */
     private _logIOPub(msg: IStreamMsg): void {
         const content = msg.content;
-        if (content.name === 'stdout' || content.name === 'stderr') {
-            let level: LogLevel = 'info';
+        if (content.name === "stdout" || content.name === "stderr") {
+            let level: LogLevel = "info";
             const data = content.text;
             const dataLower = data.toLowerCase();
-            if (content.name === 'stderr') {
+            if (content.name === "stderr") {
                 if (
-                    dataLower.includes('warning') &&
-                    (!dataLower.includes('error') ||
-                        dataLower.includes('exception'))
+                    dataLower.includes("warning") &&
+                    (!dataLower.includes("error") || dataLower.includes("exception"))
                 ) {
                     // some warnings (for example about tqdm) are sent to stderr
-                    level = 'warning';
+                    level = "warning";
                 }
             }
             const payload: ILogPayload = {
                 data,
                 level,
-                type: 'text'
+                type: "text",
             };
             this._logData(payload);
         }
@@ -294,8 +267,8 @@ export class WaldiezLogger {
         const content = msg.content;
         const payload: ILogPayload = {
             data: content.prompt,
-            level: 'warning',
-            type: 'text'
+            level: "warning",
+            type: "text",
         };
         this._logData(payload);
     }
@@ -309,8 +282,8 @@ export class WaldiezLogger {
         const content = msg.content;
         const payload: ILogPayload = {
             data: content.status,
-            level: 'info',
-            type: 'text'
+            level: "info",
+            type: "text",
         };
         this._logData(payload);
     }
@@ -324,8 +297,8 @@ export class WaldiezLogger {
         const content = msg.content;
         const payload: ILogPayload = {
             data: content.code,
-            level: 'info',
-            type: 'text'
+            level: "info",
+            type: "text",
         };
         this._logData(payload);
     }

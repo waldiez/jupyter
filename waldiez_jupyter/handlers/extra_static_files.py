@@ -69,7 +69,12 @@ def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
         LOG.error("Files: %s", os.listdir(static_root_path))
         LOG.error("vs folder: %s", os.listdir(static_root_path / "vs"))
         raise RuntimeError("Failed to download monaco editor files.")
-    with open(static_root_path / DETAILS_JSON, "w", encoding="utf-8") as file:
+    with open(
+        static_root_path / DETAILS_JSON,
+        "w",
+        encoding="utf-8",
+        newline="\n",
+    ) as file:
         json.dump(
             {
                 "last_check": datetime.now(timezone.utc).isoformat(),

@@ -1,11 +1,10 @@
-import { Waldiez, WaldiezProps, importFlow } from '@waldiez/react';
-import '@waldiez/react/dist/@waldiez.css';
+import { ReactWidget, UseSignal } from "@jupyterlab/ui-components";
+import { ISignal } from "@lumino/signaling";
 
-import { ReactWidget, UseSignal } from '@jupyterlab/ui-components';
+import { JSX } from "react";
 
-import { ISignal } from '@lumino/signaling';
-
-import { JSX } from 'react';
+import { Waldiez, WaldiezProps, importFlow } from "@waldiez/react";
+import "@waldiez/react/dist/@waldiez.css";
 
 /**
  * The props for the Waldiez editor widget.
@@ -29,10 +28,7 @@ export interface IWaldiezEditorProps {
     onChange?: (content: string) => void;
     onUserInput?: (userInput: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
-    inputPrompt: ISignal<
-        any,
-        { previousMessages: string[]; prompt: string } | null
-    >;
+    inputPrompt: ISignal<any, { previousMessages: string[]; prompt: string } | null>;
 }
 
 /**
@@ -44,16 +40,13 @@ export interface IWaldiezEditorProps {
  * @param props The props for the widget
  */
 export class EditorWidget extends ReactWidget {
-    private _inputPrompt: ISignal<
-        any,
-        { previousMessages: string[]; prompt: string } | null
-    >;
+    private _inputPrompt: ISignal<any, { previousMessages: string[]; prompt: string } | null>;
 
     private _waldiez: WaldiezProps;
 
     constructor(props: IWaldiezEditorProps) {
         super();
-        this.addClass('jp-waldiez-widget');
+        this.addClass("jp-waldiez-widget");
         this._inputPrompt = props.inputPrompt;
         const flow = importFlow(props.jsonData);
         this._waldiez = {
@@ -70,7 +63,7 @@ export class EditorWidget extends ReactWidget {
             onRun: props.onRun,
             onUserInput: props.onUserInput,
             onUpload: props.onUpload,
-            monacoVsPath: props.vsPath
+            monacoVsPath: props.vsPath,
         };
     }
 

@@ -57,13 +57,6 @@ pip install waldiez-jupyter
 # jupyter lab
 ```
 
-Or from the repository:
-
-```shell
-# Note: node js and yarn are required to build the extension
-pip install git+https://github.com/waldiez/jupyter
-```
-
 ## Uninstall
 
 To remove the extension, execute:

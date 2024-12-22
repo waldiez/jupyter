@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
-.REPORTS_DIR := reports
+.REPORTS_DIR := coverage
 .PACKAGE_NAME := waldiez_jupyter
+.PACKAGE_MANaGER := yarn
 
 .PHONY: help
 help:
@@ -22,7 +23,6 @@ help:
 	@echo " build-js        Build the JavaScript package"
 	@echo " all             Run 'requirements', 'forlint', 'test', 'build'"
 	@echo " image           Build a container image"
-	@echo " export          Export .waldiez example files to {.py,.ipynb}"
 	@echo " test            Run the tests"
 	@echo " requirements    Generate requirements/*.txt"
 	@echo " clean           Remove unneeded files (__pycache__, .mypy_cache, etc.)"
@@ -34,13 +34,12 @@ format:
 	autoflake --remove-all-unused-imports --remove-unused-variables --in-place .
 	black --config pyproject.toml .
 	ruff format --config pyproject.toml .
-	jlpm lint
+	${.PACKAGE_MANaGER} run lint
 
 
 .PHONY: init
 init:
-	python scripts/dev/init.py
-
+	python scripts/init.py
 
 .PHONY: lint
 lint:
@@ -53,27 +52,23 @@ lint:
 	yamllint -c .yamllint.yaml .
 	ruff check --config pyproject.toml .
 	pylint --rcfile=pyproject.toml --recursive y --output-format=text .
-	jlpm lint:check
+	${.PACKAGE_MANaGER} run lint
 
 .PHONY: forlint
 forlint: format lint
 
 .PHONY: clean
 clean:
-	python scripts/dev/clean.py
-	jlpm clean:all
+	python scripts/clean.py
+	${.PACKAGE_MANaGER} run clean:all
 
 .PHONY: requirements
 requirements:
-	python scripts/dev/requirements.py
-
-.PHONY: export
-export:
-	python scripts/dev/export.py
+	python scripts/requirements.py
 
 .PHONY: test
 test:
-	python -c 'import os; os.makedirs("reports", exist_ok=True);'
+	python -c 'import os; os.makedirs("coverage", exist_ok=True);'
 	pytest \
 		-c pyproject.toml \
 		--capture=sys \
@@ -91,15 +86,15 @@ test:
 
 .PHONY: dev
 dev: .pre-dev
-	python scripts/dev/run.py
+	python scripts/run.py
 
 .PHONY: dev-react
 dev-react:
-	python scripts/dev/run.py --react
+	python scripts/run.py --react
 
 .PHONY: dev-stop
 dev-stop:
-	python scripts/dev/run.py --stop
+	python scripts/run.py --stop
 
 .PHONY: build-py
 build-py:
@@ -108,20 +103,17 @@ build-py:
 
 .PHONY: build-js
 build-js:
-	jlpm && jlpm lint && jlpm build
+	${.PACKAGE_MANaGER} install && ${.PACKAGE_MANaGER} run lint && ${.PACKAGE_MANaGER} run build
 
 .PHONY: build
 build: build-py build-js
 
 .PHONY: all
 all: requirements forlint test build
-	jlpm test
-	jlpm test:ui
+	${.PACKAGE_MANaGER} run test
+	${.PACKAGE_MANaGER} run test:ui
+
 
 .PHONY: image
 image:
-	python scripts/dev/image.py
-
-.PHONY: dev-image
-dev-image:
-	python scripts/dev/image.py --dev --no-cache
+	python scripts/image.py

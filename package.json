@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.1.19",
+    "version": "0.2.0",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -41,29 +41,31 @@
         "url": "https://github.com/waldiez/jupyter.git"
     },
     "scripts": {
-        "build": "jlpm build:lib && jlpm build:labextension:dev",
-        "build:prod": "jlpm clean && jlpm build:lib:prod && jlpm build:labextension",
+        "build:dev": "yarn build:lib && yarn build:labextension:dev",
+        "build": "yarn clean && yarn build:lib:prod && yarn build:labextension",
         "build:labextension": "jupyter labextension build .",
         "build:labextension:dev": "jupyter labextension build --development True .",
         "build:lib": "tsc --sourceMap",
         "build:lib:prod": "tsc",
-        "clean": "jlpm clean:lib",
+        "clean": "yarn clean:lib",
         "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
         "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-        "clean:labextension": "rimraf @waldiez/jupyter/labextension @waldiez/jupyter/_version.py",
-        "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
-        "eslint": "jlpm eslint:check --fix",
+        "clean:labextension": "rimraf waldiez_jupyter/labextension waldiez_jupyter/_version.py",
+        "clean:all": "yarn clean:lib && yarn clean:labextension && yarn clean:lintcache",
+        "eslint": "yarn eslint:check --fix",
         "eslint:check": "eslint --report-unused-disable-directives --max-warnings 0 --cache src",
-        "install:extension": "jlpm build",
-        "lint": "jlpm stylelint && jlpm prettier && jlpm eslint",
-        "lint:check": "jlpm stylelint:check && jlpm prettier:check && jlpm eslint:check",
-        "prettier": "jlpm prettier:base --write --list-different",
-        "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
-        "prettier:check": "jlpm prettier:base --check",
-        "stylelint": "jlpm stylelint:check --fix",
+        "install:extension": "yarn build",
+        "format": "yarn stylelint && yarn prettier && yarn eslint",
+        "lint": "yarn stylelint:check && yarn prettier:check && yarn eslint:check",
+        "prettier": "yarn prettier:base --write --list-different",
+        "prettier:base": "prettier \"**/*{.ts,.tsx,.css,.json,.md}\"",
+        "prettier:check": "yarn prettier:base --check",
+        "stylelint": "yarn stylelint:check --fix",
         "stylelint:check": "stylelint --cache \"style/**/*.css\"",
         "test": "NODE_NO_WARNINGS=1 jest --coverage --coverageReporters text text-summary lcov",
         "test:ui": "NODE_NO_WARNINGS=1 cd ui-tests && yarn install && yarn test",
+        "version:get": "node --import=tsx scripts/version.ts --get",
+        "version:set": "node --import=tsx scripts/version.ts --set",
         "watch": "run-p watch:src watch:labextension",
         "watch:src": "tsc -w --sourceMap",
         "watch:labextension": "jupyter labextension watch ."
@@ -71,36 +73,41 @@
     "dependencies": {
         "@jupyter-widgets/base": "^6.0.10",
         "@jupyter-widgets/jupyterlab-manager": "^5.0.13",
-        "@jupyterlab/application": "^4.3.3",
-        "@jupyterlab/cells": "^4.3.3",
-        "@jupyterlab/codeeditor": "^4.3.3",
-        "@jupyterlab/coreutils": "^6.3.3",
-        "@jupyterlab/docregistry": "^4.3.3",
-        "@jupyterlab/fileeditor": "^4.3.3",
-        "@jupyterlab/launcher": "^4.3.3",
-        "@jupyterlab/logconsole": "^4.3.3",
-        "@jupyterlab/mainmenu": "^4.3.3",
-        "@jupyterlab/notebook": "^4.3.3",
-        "@jupyterlab/rendermime": "^4.3.3",
-        "@jupyterlab/services": "^7.3.3",
-        "@jupyterlab/settingregistry": "^4.3.3",
-        "@jupyterlab/ui-components": "^4.3.3",
-        "@jupyterlab/ui-components-extension": "^4.3.3",
+        "@jupyterlab/application": "^4.3.4",
+        "@jupyterlab/apputils": "^4.4.4",
+        "@jupyterlab/cells": "^4.3.4",
+        "@jupyterlab/codeeditor": "^4.3.4",
+        "@jupyterlab/coreutils": "^6.3.4",
+        "@jupyterlab/docregistry": "^4.3.4",
+        "@jupyterlab/filebrowser": "^4.3.4",
+        "@jupyterlab/fileeditor": "^4.3.4",
+        "@jupyterlab/launcher": "^4.3.4",
+        "@jupyterlab/logconsole": "^4.3.4",
+        "@jupyterlab/mainmenu": "^4.3.4",
+        "@jupyterlab/notebook": "^4.3.4",
+        "@jupyterlab/rendermime": "^4.3.4",
+        "@jupyterlab/services": "^7.3.4",
+        "@jupyterlab/settingregistry": "^4.3.4",
+        "@jupyterlab/translation": "^4.3.4",
+        "@jupyterlab/ui-components": "^4.3.4",
+        "@jupyterlab/ui-components-extension": "^4.3.4",
         "@lumino/algorithm": "^2.0.2",
+        "@lumino/commands": "^2.3.1",
+        "@lumino/signaling": "^2.1.3",
         "@lumino/widgets": "^2.5.0",
         "@waldiez/react": "^0.1.21"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
-        "@jupyterlab/builder": "^4.3.3",
-        "@jupyterlab/testutils": "^4.3.3",
+        "@jupyterlab/builder": "^4.3.4",
+        "@jupyterlab/testutils": "^4.3.4",
         "@stylistic/eslint-plugin": "^2.12.1",
         "@testing-library/react": "^16.1.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.0",
         "@types/jest": "^29.5.14",
         "@types/json-schema": "^7.0.15",
         "@types/node": "^22.10.2",
-        "@types/react": "^18.3.17",
+        "@types/react": "^18.3.18",
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.18.1",
         "@typescript-eslint/parser": "^8.18.1",
@@ -125,10 +132,11 @@
         "stylelint-config-standard": "^36.0.1",
         "stylelint-prettier": "^5.0.2",
         "ts-jest": "^29.2.5",
+        "tsx": "^4.19.2",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.18.1",
         "yarn-deduplicate": "^6.0.2",
-        "yjs": "^13.6.20"
+        "yjs": "^13.6.21"
     },
     "sideEffects": [
         "style/*.css",
@@ -172,32 +180,6 @@
         "**/__tests__",
         "ui-tests"
     ],
-    "prettier": {
-        "plugins": [
-            "@trivago/prettier-plugin-sort-imports"
-        ],
-        "singleQuote": true,
-        "trailingComma": "none",
-        "arrowParens": "avoid",
-        "endOfLine": "auto",
-        "overrides": [
-            {
-                "files": "package.json",
-                "options": {
-                    "tabWidth": 4
-                }
-            }
-        ],
-        "importOrderSeparation": true,
-        "importOrderSortSpecifiers": true,
-        "importOrder": [
-            "^@jupyterlab/",
-            "^@lumino/",
-            "^@xyflow/",
-            "^react",
-            "^[./]"
-        ]
-    },
     "stylelint": {
         "extends": [
             "stylelint-config-recommended",

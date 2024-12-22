@@ -23,7 +23,7 @@ classifiers = [
 dependencies = [
     "jupyter_server>=2.0.1,<3",
     "pathvalidate==3.2.1",
-    "waldiez==0.1.19",
+    "waldiez>=0.2.0",
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
@@ -44,13 +44,13 @@ dev = [
     'black[jupyter]==24.10.0',
     'flake8==7.1.1',
     'isort==5.13.2',
-    'jupyterlab==4.3.3',
-    'mypy==1.13.0',
+    'jupyterlab==4.3.4',
+    'mypy==1.14.0',
     'pre-commit==4.0.1',
     'pydocstyle==6.3.0',
     'pylint==3.3.2',
     'python-dotenv==1.0.1',
-    'ruff==0.8.3',
+    'ruff==0.8.4',
     'toml==0.10.2',
     'types-PyYAML==6.0.12.20240917',
     'toml; python_version <= "3.10"',
@@ -95,11 +95,11 @@ skip-if-exists = ["waldiez_jupyter/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
-npm = ["jlpm"]
+npm = ["yarn"]
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
 build_cmd = "install:extension"
-npm = ["jlpm"]
+npm = ["yarn"]
 source_dir = "src"
 build_dir = "waldiez_jupyter/labextension"
 
@@ -109,10 +109,10 @@ version_cmd = "hatch version"
 [tool.jupyter-releaser.hooks]
 before-build-npm = [
     "python -m pip install 'jupyterlab>=4.0.0,<5'",
-    "jlpm",
-    "jlpm build:prod"
+    "yarn",
+    "yarn build:prod"
 ]
-before-build-python = ["jlpm clean:all"]
+before-build-python = ["yarn clean:all"]
 
 [tool.check-wheel-contents]
 ignore = ["W002"]
@@ -248,8 +248,10 @@ min-similarity-lines=10
 [tool.pylint.broad_try_clause]
 max-try-statements=3
 [tool.pylint.design]
-max-args=10
-max-attributes=10
+max-args=11
+max-attributes=11
+max-positional-arguments=11
+max-statements=50
 [tool.pylint.string]
 check-quote-consistency = true
 check-str-concat-over-line-jumps = true

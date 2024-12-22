@@ -1,28 +1,17 @@
-import {
-    ILayoutRestorer,
-    JupyterFrontEnd,
-    JupyterFrontEndPlugin
-} from '@jupyterlab/application';
-import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
-import { IEditorServices } from '@jupyterlab/codeeditor';
-import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
-import { ILauncher } from '@jupyterlab/launcher';
-import { IMainMenu } from '@jupyterlab/mainmenu';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { ITranslator } from '@jupyterlab/translation';
-
-import { CommandIDs, handleWaldiezCommands } from './commands';
-import {
-    FACTORY_NAME,
-    NAMESPACE,
-    PLUGIN_ID,
-    WALDIEZ_FILE_TYPE,
-    WALDIEZ_STRINGS
-} from './constants';
-import { WaldiezEditor } from './editor';
-import { WaldiezEditorFactory } from './factory';
-import { waldiezIcon } from './icon';
+import { CommandIDs, handleWaldiezCommands } from "./commands";
+import { FACTORY_NAME, NAMESPACE, PLUGIN_ID, WALDIEZ_FILE_TYPE, WALDIEZ_STRINGS } from "./constants";
+import { WaldiezEditor } from "./editor";
+import { WaldiezEditorFactory } from "./factory";
+import { waldiezIcon } from "./icon";
+import { ILayoutRestorer, JupyterFrontEnd, JupyterFrontEndPlugin } from "@jupyterlab/application";
+import { ICommandPalette, WidgetTracker } from "@jupyterlab/apputils";
+import { IEditorServices } from "@jupyterlab/codeeditor";
+import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
+import { ILauncher } from "@jupyterlab/launcher";
+import { IMainMenu } from "@jupyterlab/mainmenu";
+import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
+import { ISettingRegistry } from "@jupyterlab/settingregistry";
+import { ITranslator } from "@jupyterlab/translation";
 
 /**
  * Initialization data for the waldiez extension.
@@ -37,27 +26,12 @@ import { waldiezIcon } from './icon';
  * @param mainMenu The main menu (optional)
  * @param translator The translator (optional)
  */
-const plugin: JupyterFrontEndPlugin<
-    WaldiezEditorFactory,
-    JupyterFrontEnd.IShell,
-    'desktop' | 'mobile'
-> = {
+const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell, "desktop" | "mobile"> = {
     id: PLUGIN_ID,
     description: WALDIEZ_STRINGS.PLUGIN_DESCRIPTION,
     autoStart: true,
-    requires: [
-        IRenderMimeRegistry,
-        IEditorServices,
-        IFileBrowserFactory,
-        ISettingRegistry
-    ],
-    optional: [
-        ILayoutRestorer,
-        ILauncher,
-        ICommandPalette,
-        IMainMenu,
-        ITranslator
-    ],
+    requires: [IRenderMimeRegistry, IEditorServices, IFileBrowserFactory, ISettingRegistry],
+    optional: [ILayoutRestorer, ILauncher, ICommandPalette, IMainMenu, ITranslator],
     activate: async (
         app: JupyterFrontEnd,
         rendermime: IRenderMimeRegistry,
@@ -68,13 +42,13 @@ const plugin: JupyterFrontEndPlugin<
         launcher?: ILauncher,
         palette?: ICommandPalette,
         mainMenu?: IMainMenu,
-        translator?: ITranslator
+        translator?: ITranslator,
     ) => {
-        console.log('JupyterLab extension waldiez is activated!');
+        console.log("JupyterLab extension waldiez is activated!");
         const namespace = NAMESPACE;
         const tracker = new WidgetTracker<WaldiezEditor>({ namespace });
         const widgetFactory = new WaldiezEditorFactory({
-            name: 'Waldie',
+            name: "Waldie",
             fileTypes: [WALDIEZ_FILE_TYPE],
             defaultFor: [WALDIEZ_FILE_TYPE],
             canStartKernel: true,
@@ -85,20 +59,20 @@ const plugin: JupyterFrontEndPlugin<
             translator,
             rendermime,
             editorServices,
-            settingRegistry
+            settingRegistry,
         });
         if (launcher) {
             launcher.add({
                 command: CommandIDs.createNew,
-                category: 'Other',
-                rank: 1
+                category: "Other",
+                rank: 1,
             });
         }
         if (palette) {
             palette.addItem({
                 command: CommandIDs.createNew,
                 args: { isPalette: true },
-                category: FACTORY_NAME
+                category: FACTORY_NAME,
             });
         }
         // Handle state restoration.
@@ -108,9 +82,9 @@ const plugin: JupyterFrontEndPlugin<
                 command: CommandIDs.openWaldiez,
                 args: widget => ({
                     path: widget.context.path,
-                    factory: FACTORY_NAME
+                    factory: FACTORY_NAME,
                 }),
-                name: widget => widget.context.path
+                name: widget => widget.context.path,
             });
         }
         widgetFactory.widgetCreated.connect((_sender, widget) => {
@@ -122,7 +96,7 @@ const plugin: JupyterFrontEndPlugin<
                 tracker.add(widget);
             }
             if (!widget.isAttached) {
-                app.shell.add(widget, 'main');
+                app.shell.add(widget, "main");
             }
             app.shell.activateById(widget.id);
         });
@@ -130,24 +104,17 @@ const plugin: JupyterFrontEndPlugin<
         app.docRegistry.addFileType({
             name: WALDIEZ_FILE_TYPE,
             displayName: WALDIEZ_STRINGS.WALDIEZ_FILE,
-            contentType: 'file',
-            fileFormat: 'json',
+            contentType: "file",
+            fileFormat: "json",
             extensions: [`.${WALDIEZ_FILE_TYPE}`],
-            mimeTypes: ['application/json', 'text/json'],
+            mimeTypes: ["application/json", "text/json"],
             icon: waldiezIcon,
-            iconLabel: 'JupyterLab-Waldie'
+            iconLabel: "JupyterLab-Waldie",
         });
         app.docRegistry.addWidgetFactory(widgetFactory);
-        await handleWaldiezCommands(
-            app,
-            tracker,
-            fileBrowserFactory,
-            widgetFactory,
-            mainMenu,
-            translator
-        );
+        await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, translator);
         return widgetFactory;
-    }
+    },
 };
 
 export default plugin;

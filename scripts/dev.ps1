@@ -1,7 +1,7 @@
 $originalLocation = Get-Location
 
 $HERE = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$ROOT_DIR = Split-Path -Parent -Path (Split-Path -Parent -Path $HERE)
+$ROOT_DIR = Split-Path -Parent -Path $HERE
 
 Set-Location -Path $ROOT_DIR
 

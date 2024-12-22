@@ -1,177 +1,177 @@
-import { ILogPayload } from '@jupyterlab/logconsole';
+import { ILogPayload } from "@jupyterlab/logconsole";
 import {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,
     IInputRequestMsg,
-    IStreamMsg
-} from '@jupyterlab/services/lib/kernel/messages';
+    IStreamMsg,
+} from "@jupyterlab/services/lib/kernel/messages";
 
 export const logMessage: ILogPayload = {
-    type: 'text',
-    data: 'Hello, World!',
-    level: 'error'
+    type: "text",
+    data: "Hello, World!",
+    level: "error",
 };
 
 export const iopubMessage: IStreamMsg = {
-    channel: 'iopub',
+    channel: "iopub",
     content: {
-        name: 'stderr',
-        text: 'warning: Hello, World!'
+        name: "stderr",
+        text: "warning: Hello, World!",
     },
     header: {
-        msg_type: 'stream',
-        msg_id: '123',
-        session: '123',
-        username: 'test',
-        version: '1.0',
-        date: '2021-01-01'
+        msg_type: "stream",
+        msg_id: "123",
+        session: "123",
+        username: "test",
+        version: "1.0",
+        date: "2021-01-01",
     },
     metadata: {},
-    parent_header: {}
+    parent_header: {},
 };
 
 export const errorMsg: IErrorMsg = {
-    channel: 'iopub',
+    channel: "iopub",
     content: {
-        ename: 'NameError',
+        ename: "NameError",
         evalue: 'NameError: name "x" is not defined',
-        traceback: ['NameError: name "x" is not defined']
+        traceback: ['NameError: name "x" is not defined'],
     },
     header: {
-        msg_type: 'error',
-        msg_id: '123',
-        session: '123',
-        username: 'test',
-        version: '1.0',
-        date: '2021-01-01'
+        msg_type: "error",
+        msg_id: "123",
+        session: "123",
+        username: "test",
+        version: "1.0",
+        date: "2021-01-01",
     },
     metadata: {},
-    parent_header: {}
+    parent_header: {},
 };
 
 export const inputRequestMessage: IInputRequestMsg = {
-    channel: 'stdin',
+    channel: "stdin",
     content: {
-        prompt: '>>>',
-        password: false
+        prompt: ">>>",
+        password: false,
     },
     header: {
-        msg_type: 'input_request',
-        msg_id: '123',
-        session: '123',
-        username: 'test',
-        version: '1.0',
-        date: '2021-01-01'
+        msg_type: "input_request",
+        msg_id: "123",
+        session: "123",
+        username: "test",
+        version: "1.0",
+        date: "2021-01-01",
     },
     metadata: {},
-    parent_header: {}
+    parent_header: {},
 };
 
 export const executeReplyMessage: IExecuteReplyMsg = {
-    channel: 'shell',
+    channel: "shell",
     content: {
         execution_count: 1,
-        status: 'ok',
-        user_expressions: {}
+        status: "ok",
+        user_expressions: {},
     },
     header: {
-        msg_type: 'execute_reply',
-        msg_id: '123',
-        session: '123',
-        username: 'test',
-        version: '1.0',
-        date: '2021-01-01'
+        msg_type: "execute_reply",
+        msg_id: "123",
+        session: "123",
+        username: "test",
+        version: "1.0",
+        date: "2021-01-01",
     },
     metadata: {},
     parent_header: {
-        date: '2021-01-01',
-        msg_id: '123',
-        msg_type: 'execute_request',
-        session: '123',
-        version: '1.0',
-        username: 'test'
-    }
+        date: "2021-01-01",
+        msg_id: "123",
+        msg_type: "execute_request",
+        session: "123",
+        version: "1.0",
+        username: "test",
+    },
 };
 
 export const executeRequestMessage: IExecuteRequestMsg = {
-    channel: 'shell',
+    channel: "shell",
     content: {
         code: 'print("Hello, World!")',
         silent: false,
         store_history: true,
         user_expressions: {},
-        allow_stdin: true
+        allow_stdin: true,
     },
     header: {
-        msg_type: 'execute_request',
-        msg_id: '123',
-        session: '123',
-        username: 'test',
-        version: '1.0',
-        date: '2021-01-01'
+        msg_type: "execute_request",
+        msg_id: "123",
+        session: "123",
+        username: "test",
+        version: "1.0",
+        date: "2021-01-01",
     },
     metadata: {},
-    parent_header: {}
+    parent_header: {},
 };
 
 export const editorContext = {
     ready: Promise.resolve(),
-    path: 'test-path',
-    localPath: 'test-local-path',
+    path: "test-path",
+    localPath: "test-local-path",
     addSibling: jest.fn(),
     dispose: jest.fn(),
     isDisposed: false,
     sessionContext: {
         ready: Promise.resolve(),
         kernelChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         statusChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         iopubMessage: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         propertyChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         kernel: {
-            status: 'idle',
+            status: "idle",
             info: {
                 language_info: {
-                    name: 'python'
-                }
-            }
-        }
+                    name: "python",
+                },
+            },
+        },
     },
     model: {
         contentChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         stateChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         mimeTypeChanged: {
-            connect: jest.fn()
+            connect: jest.fn(),
         },
         value: {
             changed: {
-                connect: jest.fn()
-            }
+                connect: jest.fn(),
+            },
         },
-        toString: () => '{"type": "flow"}'
+        toString: () => '{"type": "flow"}',
     },
     pathChanged: {
-        connect: jest.fn()
+        connect: jest.fn(),
     },
     toolbar: {
         addItem: jest.fn(),
         insertItem: jest.fn(),
         removeItem: jest.fn(),
         names: jest.fn(),
-        widgets: []
-    }
+        widgets: [],
+    },
 } as any;
 export const mockEditor = {
     toolbar: {
@@ -179,44 +179,44 @@ export const mockEditor = {
         insertItem: jest.fn(),
         removeItem: jest.fn(),
         names: jest.fn(),
-        widgets: []
+        widgets: [],
     },
     dispose: jest.fn(),
     isDisposed: false,
-    node: document.createElement('div'),
-    context: editorContext
+    node: document.createElement("div"),
+    context: editorContext,
 };
 export function mockFetch(data: string, error: boolean) {
     window.Request = jest.fn().mockImplementation(() => ({
         headers: new Headers(),
         signal: {
             removeEventListener: () => {},
-            addEventListener: () => {}
-        }
+            addEventListener: () => {},
+        },
     }));
     if (error) {
         window.fetch = jest.fn().mockImplementation(() => {
-            return Promise.reject(new Error('error'));
+            return Promise.reject(new Error("error"));
         });
     } else {
         window.fetch = jest.fn().mockImplementation(() => {
             return Promise.resolve({
                 ok: true,
                 text: () => data,
-                json: () => JSON.parse(data)
+                json: () => JSON.parse(data),
             });
         });
     }
 }
 export const patchServerConnection = (responseText: string, error: boolean) => {
     mockFetch(responseText, error);
-    jest.mock('@jupyterlab/services', () => {
+    jest.mock("@jupyterlab/services", () => {
         return {
             ServerConnection: {
                 makeRequest: jest.fn().mockResolvedValue({
-                    text: jest.fn().mockResolvedValue(responseText)
-                })
-            }
+                    text: jest.fn().mockResolvedValue(responseText),
+                }),
+            },
         };
     });
 };

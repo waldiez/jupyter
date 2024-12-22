@@ -48,15 +48,15 @@ WORKDIR /tmp/package/waldiez_jupyter
 # install js requirements
 COPY package.json /tmp/package/waldiez_jupyter/package.json
 COPY yarn.lock /tmp/package/waldiez_jupyter/yarn.lock
-RUN jlpm install
+RUN yarn install
 
 # build the extension
 COPY . /tmp/package/waldiez_jupyter
-RUN jlpm install && \
-    jlpm remove @waldiez/react > /dev/null 2 >&1 || true && \
-    jlpm add @waldiez/react@file:../waldiez.tgz && \
-    jlpm build:lib:prod && \
-    jlpm build:prod
+RUN yarn install && \
+    yarn remove @waldiez/react > /dev/null 2 >&1 || true && \
+    yarn add @waldiez/react@file:../waldiez.tgz && \
+    yarn build:lib:prod && \
+    yarn build
 
 # build the python package
 RUN uv sync && python3 -m build
@@ -140,7 +140,7 @@ ARG PY_DEV_BRANCH=dev
 COPY --from=builder --chown=user:user /tmp/package/waldiez_jupyter/dist/*.whl /home/user/tmp/
 RUN pip install --user /home/user/tmp/*.whl && \
     pip uninstall -y waldiez autogen-agentchat && \
-    pip install --user git+https://github.com/waldiez/waldiez.git@$PY_DEV_BRANCH && \
+    pip install --user git+https://github.com/waldiez/python.git@$PY_DEV_BRANCH && \
     rm -rf /home/user/tmp
 
 RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \

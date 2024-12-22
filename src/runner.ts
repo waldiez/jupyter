@@ -1,22 +1,21 @@
-import { Kernel } from '@jupyterlab/services';
+import { WALDIEZ_STRINGS } from "./constants";
+import { WaldiezLogger } from "./logger";
+import { Kernel } from "@jupyterlab/services";
 import {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,
     IInputRequestMsg,
-    IStreamMsg
-} from '@jupyterlab/services/lib/kernel/messages';
-
-import { WALDIEZ_STRINGS } from './constants';
-import { WaldiezLogger } from './logger';
+    IStreamMsg,
+} from "@jupyterlab/services/lib/kernel/messages";
 
 export const getCodeToExecute = (filePath: string) => {
     return (
-        'from pathlib import Path\n' +
-        'from waldiez import WaldiezRunner\n\n' +
+        "from pathlib import Path\n" +
+        "from waldiez import WaldiezRunner\n\n" +
         `file_path = Path(r"${filePath}").as_posix()\n` +
-        'runner = WaldiezRunner.load(waldiez_file=file_path)\n' +
-        'runner.run()'
+        "runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
+        "runner.run()"
     );
 };
 
@@ -61,7 +60,7 @@ export class WaldiezRunner {
      */
     run(kernel: Kernel.IKernelConnection, filePath: string) {
         if (this._running) {
-            console.warn('A waldiez file is already running');
+            console.warn("A waldiez file is already running");
             return;
         }
         this._running = true;
@@ -70,9 +69,9 @@ export class WaldiezRunner {
         this._future = kernel.requestExecute(
             {
                 code,
-                stop_on_error: true
+                stop_on_error: true,
             },
-            false
+            false,
         );
         this._onFuture();
     }
@@ -99,9 +98,7 @@ export class WaldiezRunner {
         // try to filter previous messages (like installing requirements)
         let start = -1;
         for (let i = this._messages.length - 1; i >= 0; i--) {
-            if (
-                this._messages[i].includes(WALDIEZ_STRINGS.AFTER_INSTALL_NOTE)
-            ) {
+            if (this._messages[i].includes(WALDIEZ_STRINGS.AFTER_INSTALL_NOTE)) {
                 start = i;
                 break;
             }
@@ -115,8 +112,8 @@ export class WaldiezRunner {
         }
         const messagesToSend = [];
         for (const msg of this._messages) {
-            if (msg !== inputPrompt && msg !== inputPrompt + '\n') {
-                const lines = msg.split('\n');
+            if (msg !== inputPrompt && msg !== inputPrompt + "\n") {
+                const lines = msg.split("\n");
                 for (const line of lines) {
                     messagesToSend.push(this._remove_ansi(line));
                 }
@@ -133,7 +130,7 @@ export class WaldiezRunner {
      */
     private _remove_ansi(str: string): string {
         // eslint-disable-next-line no-control-regex
-        return str.replace(/\u001b\[[0-9;]*m/g, '');
+        return str.replace(/\u001b\[[0-9;]*m/g, "");
     }
     /**
      * Listen for stdin, iopub and reply messages.
@@ -142,27 +139,27 @@ export class WaldiezRunner {
      */
     private _onFuture() {
         if (!this._future) {
-            console.error('Failed to create a future for the waldiez file');
+            console.error("Failed to create a future for the waldiez file");
             this.reset();
             return;
         }
         this._future.onStdin = msg => {
             const requestMsg = msg as IInputRequestMsg;
             const prompt = requestMsg.content.prompt;
-            if (!['>', '> '].includes(prompt)) {
+            if (![">", "> "].includes(prompt)) {
                 this._messages.push(requestMsg.content.prompt);
             }
             this._onStdin(requestMsg);
         };
         this._future.onIOPub = msg => {
             const msgType = msg.header.msg_type;
-            if (msgType === 'stream') {
+            if (msgType === "stream") {
                 const streamMsg = msg as IStreamMsg;
-                if (streamMsg.content.name === 'stdout') {
+                if (streamMsg.content.name === "stdout") {
                     this._messages.push(streamMsg.content.text);
                 }
                 this._logger.log(streamMsg);
-            } else if (msgType === 'error') {
+            } else if (msgType === "error") {
                 this._logger.log(msg as IErrorMsg);
             }
         };
@@ -172,16 +169,16 @@ export class WaldiezRunner {
         };
         this._future.done
             .catch(err => {
-                console.error('Error while running the waldiez file', err);
+                console.error("Error while running the waldiez file", err);
                 if (!err) {
                     err = {
-                        channel: 'iopub',
+                        channel: "iopub",
                         content: {
-                            name: 'stderr',
-                            text: 'Failed to run the waldiez file'
+                            name: "stderr",
+                            text: "Failed to run the waldiez file",
                         },
-                        header: { msg_type: 'stream' },
-                        metadata: {}
+                        header: { msg_type: "stream" },
+                        metadata: {},
                     };
                 }
                 this._logger.log(err as IStreamMsg);

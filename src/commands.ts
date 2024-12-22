@@ -1,28 +1,27 @@
-import { JupyterFrontEnd } from '@jupyterlab/application';
-import { SessionContextDialogs, WidgetTracker } from '@jupyterlab/apputils';
-import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
-import { IMainMenu } from '@jupyterlab/mainmenu';
-import { ITranslator } from '@jupyterlab/translation';
-import { notebookIcon, pythonIcon } from '@jupyterlab/ui-components';
-
-import { WALDIEZ_FILE_TYPE, WALDIEZ_STRINGS } from './constants';
-import { WaldiezEditor } from './editor';
-import { WaldiezEditorFactory } from './factory';
-import { waldiezIcon } from './icon';
-import { handleExport } from './rest';
+import { WALDIEZ_FILE_TYPE, WALDIEZ_STRINGS } from "./constants";
+import { WaldiezEditor } from "./editor";
+import { WaldiezEditorFactory } from "./factory";
+import { waldiezIcon } from "./icon";
+import { handleExport } from "./rest";
+import { JupyterFrontEnd } from "@jupyterlab/application";
+import { SessionContextDialogs, WidgetTracker } from "@jupyterlab/apputils";
+import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
+import { IMainMenu } from "@jupyterlab/mainmenu";
+import { ITranslator } from "@jupyterlab/translation";
+import { notebookIcon, pythonIcon } from "@jupyterlab/ui-components";
 
 export namespace CommandIDs {
-    export const createNew = 'waldiez:create-new';
-    export const openWaldiez = 'waldiez:open-waldiez';
-    export const clearLogs = 'waldiez:clear-logs';
-    export const toggleLogsView = 'waldiez:toggle-logs-view';
-    export const interruptKernel = 'waldiez:interrupt-kernel';
-    export const reconnectToKernel = 'waldiez:reconnect-to-kernel';
-    export const shutdownKernel = 'waldiez:shutdown-kernel';
-    export const restartKernel = 'waldiez:restart-kernel';
-    export const changeKernel = 'waldiez:change-kernel';
-    export const exportToPython = 'waldiez:to-py';
-    export const exportToJupyter = 'waldiez:to-ipynb';
+    export const createNew = "waldiez:create-new";
+    export const openWaldiez = "waldiez:open-waldiez";
+    export const clearLogs = "waldiez:clear-logs";
+    export const toggleLogsView = "waldiez:toggle-logs-view";
+    export const interruptKernel = "waldiez:interrupt-kernel";
+    export const reconnectToKernel = "waldiez:reconnect-to-kernel";
+    export const shutdownKernel = "waldiez:shutdown-kernel";
+    export const restartKernel = "waldiez:restart-kernel";
+    export const changeKernel = "waldiez:change-kernel";
+    export const exportToPython = "waldiez:to-py";
+    export const exportToJupyter = "waldiez:to-ipynb";
 }
 
 /**
@@ -31,14 +30,11 @@ export namespace CommandIDs {
  * @param tracker The WidgetTracker
  * @returns boolean indicating if the current widget is a WaldiezEditor or not
  */
-const isWaldiezEditor: (
-    app: JupyterFrontEnd,
-    tracker: WidgetTracker<WaldiezEditor>
-) => boolean = (app, tracker) => {
-    return (
-        tracker.currentWidget !== null &&
-        tracker.currentWidget === app.shell.currentWidget
-    );
+const isWaldiezEditor: (app: JupyterFrontEnd, tracker: WidgetTracker<WaldiezEditor>) => boolean = (
+    app,
+    tracker,
+) => {
+    return tracker.currentWidget !== null && tracker.currentWidget === app.shell.currentWidget;
 };
 
 /**
@@ -56,17 +52,10 @@ export const handleWaldiezCommands = async (
     fileBrowserFactory: IFileBrowserFactory,
     widgetFactory: WaldiezEditorFactory,
     mainMenu?: IMainMenu,
-    translator?: ITranslator
+    translator?: ITranslator,
 ) => {
     const isEnabled = isWaldiezEditor.bind(null, app, tracker);
-    registerCommands(
-        app,
-        tracker,
-        fileBrowserFactory,
-        widgetFactory,
-        isEnabled,
-        translator
-    );
+    registerCommands(app, tracker, fileBrowserFactory, widgetFactory, isEnabled, translator);
     if (mainMenu) {
         addCommandsToMenu(mainMenu, isEnabled);
     }
@@ -84,23 +73,23 @@ const addCommandsToMenu = (mainMenu: IMainMenu, isEnabled: () => boolean) => {
     // Kernel
     mainMenu.kernelMenu.kernelUsers.interruptKernel.add({
         id: CommandIDs.interruptKernel,
-        isEnabled
+        isEnabled,
     });
     mainMenu.kernelMenu.kernelUsers.reconnectToKernel.add({
         id: CommandIDs.reconnectToKernel,
-        isEnabled
+        isEnabled,
     });
     mainMenu.kernelMenu.kernelUsers.restartKernel.add({
         id: CommandIDs.restartKernel,
-        isEnabled
+        isEnabled,
     });
     mainMenu.kernelMenu.kernelUsers.shutdownKernel.add({
         id: CommandIDs.shutdownKernel,
-        isEnabled
+        isEnabled,
     });
     mainMenu.kernelMenu.kernelUsers.changeKernel.add({
         id: CommandIDs.changeKernel,
-        isEnabled
+        isEnabled,
     });
 };
 
@@ -116,12 +105,12 @@ export const registerCommands = (
     fileBrowserFactory: IFileBrowserFactory,
     widgetFactory: WaldiezEditorFactory,
     isEnabled: () => boolean,
-    translator?: ITranslator
+    translator?: ITranslator,
 ) => {
     const { commands } = app;
     const getCurrentWidget: (args: any) => WaldiezEditor | null = args => {
         const widget = tracker.currentWidget;
-        const activate = args['activate'] !== false;
+        const activate = args["activate"] !== false;
         if (activate && widget) {
             app.shell.activateById(widget.id);
         }
@@ -129,70 +118,64 @@ export const registerCommands = (
     };
     // create a new .waldiez file
     commands.addCommand(CommandIDs.createNew, {
-        label: args =>
-            args['isPalette']
-                ? WALDIEZ_STRINGS.NEW_WALDIEZ_FILE
-                : WALDIEZ_STRINGS.WALDIEZ_FILE,
+        label: args => (args["isPalette"] ? WALDIEZ_STRINGS.NEW_WALDIEZ_FILE : WALDIEZ_STRINGS.WALDIEZ_FILE),
         caption: WALDIEZ_STRINGS.CAPTION,
         icon: waldiezIcon,
         execute: async args => {
-            const cwd =
-                args['cwd'] ||
-                fileBrowserFactory.tracker.currentWidget?.model.path ||
-                '';
-            const file = await commands.execute('docmanager:new-untitled', {
+            const cwd = args["cwd"] || fileBrowserFactory.tracker.currentWidget?.model.path || "";
+            const file = await commands.execute("docmanager:new-untitled", {
                 path: cwd,
-                type: 'file',
-                ext: `.${WALDIEZ_FILE_TYPE}`
+                type: "file",
+                ext: `.${WALDIEZ_FILE_TYPE}`,
             });
             if (!file) {
-                console.error('Could not create a new .waldiez file');
+                console.error("Could not create a new .waldiez file");
                 return;
             }
             const widget = await commands.execute(CommandIDs.openWaldiez, {
                 cwd,
                 path: file.path,
-                factory: widgetFactory.name
+                factory: widgetFactory.name,
             });
             if (widget) {
                 if (!widget.isAttached) {
-                    app.shell.add(widget, 'main');
+                    app.shell.add(widget, "main");
                 }
                 app.shell.activateById(widget.id);
             }
-        }
+        },
     });
     // open a .waldiez file
     commands.addCommand(CommandIDs.openWaldiez, {
         label: WALDIEZ_STRINGS.OPEN_WALDIEZ,
         icon: waldiezIcon,
         execute: async args => {
-            const path = args['path'];
-            const widget = await app.commands.execute('docmanager:open', {
+            const path = args["path"];
+            const widget = await app.commands.execute("docmanager:open", {
                 path: path ?? `Untitled.${WALDIEZ_FILE_TYPE}`,
-                factory: widgetFactory.name
+                factory: widgetFactory.name,
             });
             if (widget) {
                 if (!widget.isAttached) {
-                    app.shell.add(widget, 'main');
+                    app.shell.add(widget, "main");
                 }
                 app.shell.activateById(widget.id);
             }
-        }
+        },
     });
     // convert a .waldiez to .py
     commands.addCommand(CommandIDs.exportToPython, {
         label: WALDIEZ_STRINGS.TO_PYTHON,
         caption: WALDIEZ_STRINGS.TO_PYTHON_CAPTION,
         icon: pythonIcon,
-        execute: async () => handleExport(fileBrowserFactory, 'py')
+        execute: async () => handleExport(fileBrowserFactory, "py"),
     });
     // convert a .waldiez to .ipynb
     commands.addCommand(CommandIDs.exportToJupyter, {
         label: WALDIEZ_STRINGS.TO_JUPYTER,
         caption: WALDIEZ_STRINGS.TO_JUPYTER_CAPTION,
         icon: notebookIcon,
-        execute: async () => handleExport(fileBrowserFactory, 'ipynb')
+        execute: async () => handleExport(fileBrowserFactory, "ipynb"),
     });
     // interrupt kernel
     commands.addCommand(CommandIDs.interruptKernel, {
@@ -208,7 +191,7 @@ export const registerCommands = (
             }
             return Promise.resolve(void 0);
         },
-        isEnabled
+        isEnabled,
     });
     // restart kernel
     commands.addCommand(CommandIDs.restartKernel, {
@@ -224,7 +207,7 @@ export const registerCommands = (
             }
             return Promise.resolve(void 0);
         },
-        isEnabled
+        isEnabled,
     });
     // change kernel
     commands.addCommand(CommandIDs.changeKernel, {
@@ -239,17 +222,16 @@ export const registerCommands = (
             if (!session) {
                 return;
             }
-            const kernelOptions =
-                sessionContext.specsManager.specs?.kernelspecs;
+            const kernelOptions = sessionContext.specsManager.specs?.kernelspecs;
             if (!kernelOptions) {
                 return;
             }
             const contextDialogs = new SessionContextDialogs({
-                translator
+                translator,
             });
             return contextDialogs.selectKernel(sessionContext);
         },
-        isEnabled
+        isEnabled,
     });
     // shutdown kernel
     commands.addCommand(CommandIDs.shutdownKernel, {
@@ -261,7 +243,7 @@ export const registerCommands = (
             }
             return current.context.sessionContext.shutdown();
         },
-        isEnabled
+        isEnabled,
     });
     // reconnect to kernel
     commands.addCommand(CommandIDs.reconnectToKernel, {
@@ -277,6 +259,6 @@ export const registerCommands = (
             }
             return Promise.resolve(void 0);
         },
-        isEnabled
+        isEnabled,
     });
 };

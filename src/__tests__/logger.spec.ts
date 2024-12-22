@@ -1,35 +1,30 @@
-import { JupyterLab } from '@jupyterlab/application';
-import {
-    IRenderMimeRegistry,
-    RenderMimeRegistry
-} from '@jupyterlab/rendermime';
-
-import { CommandRegistry } from '@lumino/commands';
-import { SplitPanel } from '@lumino/widgets';
-
-import { WaldiezLogger } from '../logger';
+import { WaldiezLogger } from "../logger";
 import {
     executeReplyMessage,
     executeRequestMessage,
     inputRequestMessage,
     iopubMessage,
-    logMessage
-} from './utils';
+    logMessage,
+} from "./utils";
+import { JupyterLab } from "@jupyterlab/application";
+import { IRenderMimeRegistry, RenderMimeRegistry } from "@jupyterlab/rendermime";
+import { CommandRegistry } from "@lumino/commands";
+import { SplitPanel } from "@lumino/widgets";
 
-jest.mock('@jupyterlab/settingregistry');
-jest.mock('@jupyterlab/codeeditor');
-jest.mock('@jupyterlab/application', () => {
+jest.mock("@jupyterlab/settingregistry");
+jest.mock("@jupyterlab/codeeditor");
+jest.mock("@jupyterlab/application", () => {
     return {
         JupyterLab: jest.fn().mockImplementation(() => {
-            const actual = jest.requireActual('@jupyterlab/application');
+            const actual = jest.requireActual("@jupyterlab/application");
             return {
                 ...actual,
-                commands: new CommandRegistry()
+                commands: new CommandRegistry(),
             };
-        })
+        }),
     };
 });
-describe('WaldiezLogger', () => {
+describe("WaldiezLogger", () => {
     let app: jest.Mocked<JupyterLab>;
     let rendermime: IRenderMimeRegistry;
 
@@ -40,84 +35,84 @@ describe('WaldiezLogger', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
-    it('should be created', () => {
+    it("should be created", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         expect(logger).toBeTruthy();
     });
-    it('should log a message', () => {
+    it("should log a message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
-        logger.log({ ...logMessage, level: 'info' });
+        logger.log({ ...logMessage, level: "info" });
     });
-    it('should log an error message', () => {
+    it("should log an error message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
-        logger.log({ ...logMessage, level: 'error' });
+        logger.log({ ...logMessage, level: "error" });
     });
-    it('should log an iopub message', () => {
+    it("should log an iopub message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         logger.log(iopubMessage);
     });
-    it('should log an input request message', () => {
+    it("should log an input request message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         logger.log(inputRequestMessage);
     });
-    it('should log an execute reply message', () => {
+    it("should log an execute reply message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         logger.log(executeReplyMessage);
     });
-    it('should log an execute request message', () => {
+    it("should log an execute request message", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         logger.log(executeRequestMessage);
     });
-    it('should clear the log', () => {
+    it("should clear the log", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         logger.clear();
     });
-    it('should toggle the log', () => {
+    it("should toggle the log", () => {
         const logger = new WaldiezLogger({
             commands: app.commands,
             rendermime,
-            editorId: 'editorId',
-            panel: new SplitPanel()
+            editorId: "editorId",
+            panel: new SplitPanel(),
         });
         expect(logger.isVisible).toBe(false);
         logger.toggle();

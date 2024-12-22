@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 HERE="$(dirname "$(readlink -f "$0")")"
-ROOT_DIR="$(dirname "$(dirname "$HERE")")"
+ROOT_DIR="$(dirname "$HERE")"
 
 cd "$ROOT_DIR" || exit 1
 

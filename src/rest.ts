@@ -1,22 +1,18 @@
-import { URLExt } from '@jupyterlab/coreutils';
-import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
-import { ServerConnection } from '@jupyterlab/services';
+import { URLExt } from "@jupyterlab/coreutils";
+import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
+import { ServerConnection } from "@jupyterlab/services";
 
 /**
  * Request the server to export the selected files to a specific extension.
  * @param fileBrowserFactory The file browser factory
  * @param extension The extension to export to: 'py' or 'ipynb'
  */
-export const handleExport = async (
-    fileBrowserFactory: IFileBrowserFactory,
-    extension: 'py' | 'ipynb'
-) => {
+export const handleExport = async (fileBrowserFactory: IFileBrowserFactory, extension: "py" | "ipynb") => {
     const files = [];
-    const selectedItems =
-        fileBrowserFactory.tracker.currentWidget?.selectedItems();
+    const selectedItems = fileBrowserFactory.tracker.currentWidget?.selectedItems();
     if (selectedItems) {
         for (const selectedItem of selectedItems) {
-            if (selectedItem.name.endsWith('.waldiez')) {
+            if (selectedItem.name.endsWith(".waldiez")) {
                 files.push(selectedItem.path);
             }
         }
@@ -35,20 +31,15 @@ export const handleExport = async (
  */
 export const getWaldiezActualPath = async (path: string) => {
     const settings = ServerConnection.makeSettings();
-    const requestUrl = URLExt.join(
-        settings.baseUrl,
-        'waldiez',
-        'files',
-        '?path=' + path
-    );
+    const requestUrl = URLExt.join(settings.baseUrl, "waldiez", "files", "?path=" + path);
     let response: Response;
     try {
         response = await ServerConnection.makeRequest(
             requestUrl,
             {
-                method: 'GET'
+                method: "GET",
             },
-            settings
+            settings,
         );
     } catch (error) {
         throw new ServerConnection.NetworkError(error as any);
@@ -59,18 +50,15 @@ export const getWaldiezActualPath = async (path: string) => {
         try {
             jsonData = JSON.parse(data);
         } catch (_) {
-            throw new Error('Not a JSON response body.');
+            throw new Error("Not a JSON response body.");
         }
     }
 
     if (!response.ok) {
-        throw new ServerConnection.ResponseError(
-            response,
-            data.message || data
-        );
+        throw new ServerConnection.ResponseError(response, data.message || data);
     }
     if (!jsonData) {
-        throw new Error('No data returned from the server');
+        throw new Error("No data returned from the server");
     }
     return jsonData.path;
 };
@@ -84,18 +72,18 @@ export const getWaldiezActualPath = async (path: string) => {
  */
 export const uploadFile = async (file: File) => {
     const settings = ServerConnection.makeSettings();
-    const requestUrl = URLExt.join(settings.baseUrl, 'waldiez', 'upload');
+    const requestUrl = URLExt.join(settings.baseUrl, "waldiez", "upload");
     let response: Response;
     try {
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append("file", file);
         response = await ServerConnection.makeRequest(
             requestUrl,
             {
                 body: formData,
-                method: 'POST'
+                method: "POST",
             },
-            settings
+            settings,
         );
     } catch (error) {
         throw new ServerConnection.NetworkError(error as any);
@@ -105,21 +93,18 @@ export const uploadFile = async (file: File) => {
         try {
             JSON.parse(data);
         } catch (_) {
-            throw new Error('Not a JSON response body.');
+            throw new Error("Not a JSON response body.");
         }
     }
     let jsonData: any;
     if (!response.ok) {
-        throw new ServerConnection.ResponseError(
-            response,
-            data.message || data
-        );
+        throw new ServerConnection.ResponseError(response, data.message || data);
     }
     if (data.length > 0) {
         try {
             jsonData = JSON.parse(data);
         } catch (_) {
-            throw new Error('Not a JSON response body.');
+            throw new Error("Not a JSON response body.");
         }
     }
     return jsonData.path;
@@ -133,21 +118,18 @@ export const uploadFile = async (file: File) => {
  * @throws {ServerConnection.ResponseError} If the response is not ok
  * @private
  */
-const _requestFilesExport = async (
-    files: Array<string>,
-    extension: 'py' | 'ipynb'
-) => {
+const _requestFilesExport = async (files: Array<string>, extension: "py" | "ipynb") => {
     const settings = ServerConnection.makeSettings();
-    const requestUrl = URLExt.join(settings.baseUrl, 'waldiez', 'files');
+    const requestUrl = URLExt.join(settings.baseUrl, "waldiez", "files");
     let response: Response;
     try {
         response = await ServerConnection.makeRequest(
             requestUrl,
             {
                 body: JSON.stringify({ files, extension }),
-                method: 'POST'
+                method: "POST",
             },
-            settings
+            settings,
         );
     } catch (error) {
         throw new ServerConnection.NetworkError(error as any);
@@ -157,14 +139,11 @@ const _requestFilesExport = async (
         try {
             JSON.parse(data);
         } catch (_) {
-            console.log('Not a JSON response body.', response);
+            console.log("Not a JSON response body.", response);
         }
     }
 
     if (!response.ok) {
-        throw new ServerConnection.ResponseError(
-            response,
-            data.message || data
-        );
+        throw new ServerConnection.ResponseError(response, data.message || data);
     }
 };
