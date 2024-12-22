@@ -31,7 +31,7 @@ FILE_PATTERNS = [
     ".coverage*",
 ]
 
-SKIP_DIRS = [".venv"]
+SKIP_DIRS = [".venv", "node_modules"]
 
 
 def _remove_dirs() -> None:
