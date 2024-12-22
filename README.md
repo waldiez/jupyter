@@ -4,6 +4,8 @@
 
 A Waldiez JupyterLab extension.
 
+![Overview](https://raw.githubusercontent.com/waldiez/jupyter/refs/heads/main/overview.webp)
+
 This extension is composed of a Python package named `waldiez-jupyter`
 for the server extension and a NPM package named `@waldiez/jupyter`
 for the frontend extension.
