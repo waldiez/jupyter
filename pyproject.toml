@@ -94,7 +94,7 @@ ensured-targets = [
 skip-if-exists = ["waldiez_jupyter/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
-build_cmd = "build:prod"
+build_cmd = "build"
 npm = ["yarn"]
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
@@ -110,7 +110,9 @@ version_cmd = "hatch version"
 before-build-npm = [
     "python -m pip install 'jupyterlab>=4.0.0,<5'",
     "yarn",
-    "yarn build:prod"
+    "yarn cache clean",
+    "yarn clean:all",
+    "yarn build"
 ]
 before-build-python = ["yarn clean:all"]
 
