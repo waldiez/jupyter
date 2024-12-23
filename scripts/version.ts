@@ -61,6 +61,14 @@ function setVersion(version: string): void {
         }
     });
     if (!gotWaldiez) {
+        Object.keys(packageJson.devDependencies).forEach(dependency => {
+            if (dependency.startsWith("@waldiez/react")) {
+                gotWaldiez = true;
+                packageJson.dependencies[dependency] = `^${version}`;
+            }
+        });
+    }
+    if (!gotWaldiez) {
         console.error("Error: @waldiez/react not found in dependencies");
         process.exit(1);
     }
