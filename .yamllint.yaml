@@ -2,11 +2,11 @@
 extends: default
 
 rules:
-  line-length:
-    max: 200
-    level: warning
+    line-length:
+        max: 200
+        level: warning
 ignore:
-  - .venv
-  - .local
-  - .github
-  - node_modules
+    - .venv
+    - .local
+    - .github
+    - node_modules

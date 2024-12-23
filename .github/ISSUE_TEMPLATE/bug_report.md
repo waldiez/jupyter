@@ -25,7 +25,7 @@ labels: bug
 ## Environment
 
 - Versions:
-  - Python version:
-  - waldiez version:
-  - ... Other related packages versions ...
+    - Python version:
+    - waldiez version:
+    - ... Other related packages versions ...
 - OS:
