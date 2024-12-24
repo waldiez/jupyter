@@ -30,12 +30,12 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 test = [
     "coverage==7.6.9",
     "pytest==8.3.4",
-    'pytest-asyncio==0.25.0',
     'pytest-datadir==1.5.0',
     "pytest-cov==6.0.0",
     'pytest-html==4.1.1',
     'pytest-sugar==1.0.0',
     'pytest-timeout==2.3.1',
+    'pytest-tornasync==0.6.0.post2',
     'pytest-xdist==3.6.1',
     "pytest-jupyter[server]>=0.10.1",
 ]
@@ -315,8 +315,8 @@ line-ending = "lf"
 
 # pytest
 [tool.pytest.ini_options]
-asyncio_mode = 'auto'
-asyncio_default_fixture_loop_scope='session'
+# asyncio_mode = 'auto'
+# asyncio_default_fixture_loop_scope='session'
 addopts = """
   -n 1 \
   --exitfirst \
