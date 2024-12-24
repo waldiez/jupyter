@@ -35,9 +35,9 @@ COPY . /tmp/package/waldiez_jupyter
 WORKDIR /tmp/package/waldiez_jupyter
 
 RUN touch yarn.lock && \
-    jlpm install && \
-    jlpm build:lib:prod && \
-    jlpm build:prod && \
+    yarn install && \
+    yarn build:lib:prod && \
+    yarn build && \
     python3 -m build
 
 #####################################################################################
