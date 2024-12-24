@@ -8,7 +8,7 @@ jupyterlab==4.3.4
 mypy==1.14.0
 pre-commit==4.0.1
 pydocstyle==6.3.0
-pylint==3.3.2
+pylint==3.3.3
 python-dotenv==1.0.1
 ruff==0.8.4
 toml; python_version <= "3.10"

@@ -2,11 +2,8 @@
 extends: default
 
 rules:
-    line-length:
-        max: 200
-        level: warning
-ignore:
-    - .venv
-    - .local
-    - .github
-    - node_modules
+  line-length:
+    max: 200
+    level: warning
+
+ignore-from-file: .gitignore

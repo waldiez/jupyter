@@ -4,7 +4,20 @@
     "mypy.runUsingActiveInterpreter": true,
     "mypy-type-checker.args": ["--config pyproject.toml"],
     "yaml.format.printWidth": 100,
+    "python.envFile": "",
+    "files.eol": "\n",
     "npm.packageManager": "yarn",
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.venv": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/out": true,
+        "**/coverage": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/.ruff_cache": true
+    },
     "cSpell.words": [
         "addgroup",
         "addopts",
@@ -348,6 +361,7 @@
         "Teruko",
         "testutils",
         "tini",
+        "tornasync",
         "Toumanidis",
         "tqdm",
         "transposons",

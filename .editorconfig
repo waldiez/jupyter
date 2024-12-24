@@ -15,5 +15,5 @@ indent_style = tab
 [*.md]
 trim_trainling_whitespace = false
 
-[*.{yaml,yml,json,js,css,jinja2,j2,md,toml,txt,webmanifest}]
+[*.{yaml,yml,md,txt,webmanifest}]
 indent_size = 2

@@ -9,6 +9,7 @@ import pytest
 import tornado
 
 
+@pytest.mark.asyncio
 async def test_get_file_no_path(jp_fetch: Callable[..., Any]) -> None:
     """Test the GET file handler without a path.
     Parameters
@@ -21,6 +22,7 @@ async def test_get_file_no_path(jp_fetch: Callable[..., Any]) -> None:
     assert exc_info.value.code == 400
 
 
+@pytest.mark.asyncio
 async def test_get_file_not_fount(jp_fetch: Callable[..., Any]) -> None:
     """Test the GET file handler with a non-existing path.
     Parameters
@@ -33,6 +35,7 @@ async def test_get_file_not_fount(jp_fetch: Callable[..., Any]) -> None:
     assert exc_info.value.code == 404
 
 
+@pytest.mark.asyncio
 async def test_get_file(
     jp_fetch: Callable[..., Any],
     jp_root_dir: Path,
@@ -60,6 +63,7 @@ async def test_get_file(
     file_path.unlink()
 
 
+@pytest.mark.asyncio
 async def test_export_to_py(
     jp_fetch: Callable[..., Any],
     jp_root_dir: Path,
@@ -101,6 +105,7 @@ async def test_export_to_py(
         (data_dir / "waldiez_api_keys.py").unlink()
 
 
+@pytest.mark.asyncio
 async def test_export_to_ipynb(
     jp_fetch: Callable[..., Any],
     jp_root_dir: Path,
@@ -142,6 +147,7 @@ async def test_export_to_ipynb(
         (data_dir / "waldiez_api_keys.py").unlink()
 
 
+@pytest.mark.asyncio
 async def test_export_to_invalid_extension(
     jp_fetch: Callable[..., Any],
     jp_root_dir: Path,
@@ -179,6 +185,7 @@ async def test_export_to_invalid_extension(
         (data_dir / "waldiez_api_keys.py").unlink()
 
 
+@pytest.mark.asyncio
 async def test_export_from_invalid_extension(
     jp_fetch: Callable[..., Any],
     jp_root_dir: Path,

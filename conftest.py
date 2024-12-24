@@ -1,5 +1,6 @@
 """Pytest configuration file for the Waldiez Jupyter extension."""
 
+import asyncio
 import json
 import os
 from pathlib import Path
@@ -119,3 +120,24 @@ def data_dir() -> Path:
     """
     here = Path(__file__).parent
     return here / "waldiez_jupyter" / "tests" / "data"
+
+
+@pytest.fixture(scope="session")
+def event_loop() -> asyncio.AbstractEventLoop:
+    """Return the event loop.
+
+    From pytest-jupyter:
+    Note: The client and server plugins use
+        pytest-tornasync for async test suite running.
+        It may not compatible with pytest-asyncio,
+        meaning that all fixtures must be synchronous.
+        You can use the asyncio_loop fixture and
+        run asyncio_loop.run_until_complete against
+        an async function in your fixtures if needed.
+
+    Returns
+    -------
+    asyncio.AbstractEventLoop
+        The event loop.
+    """
+    return asyncio.get_event_loop()
