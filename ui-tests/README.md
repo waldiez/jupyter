@@ -22,27 +22,28 @@ To run the tests, you need to:
 
 1. Compile the extension:
 
-```sh
-jlpm install
-jlpm build:prod
+```shell
+yarn install
+yarn build
 ```
 
 > Check the extension is installed in JupyterLab.
 
+<!-- markdownlint-disable MD029 -->
 2. Install test dependencies (needed only once):
 
-```sh
+```shell
 cd ./ui-tests
-jlpm install
-jlpm playwright install
+yarn install
+yarn playwright install
 cd ..
 ```
 
 3. Execute the [Playwright](https://playwright.dev/docs/intro) tests:
 
-```sh
+```shell
 cd ./ui-tests
-jlpm playwright test
+yarn playwright test
 ```
 
 Test results will be shown in the terminal. In case of any test failures, the test report
@@ -59,27 +60,27 @@ the reference snapshots stored in the repository. To do that, you need to:
 
 1. Compile the extension:
 
-```sh
-jlpm install
-jlpm build:prod
+```shell
+yarn install
+yarn build
 ```
 
 > Check the extension is installed in JupyterLab.
 
 2. Install test dependencies (needed only once):
 
-```sh
+```shell
 cd ./ui-tests
-jlpm install
-jlpm playwright install
+yarn install
+yarn playwright install
 cd ..
 ```
 
 3. Execute the [Playwright](https://playwright.dev/docs/intro) command:
 
-```sh
+```shell
 cd ./ui-tests
-jlpm playwright test -u
+yarn playwright test -u
 ```
 
 > Some discrepancy may occurs between the snapshots generated on your computer and
@@ -95,34 +96,34 @@ To create tests, the easiest way is to use the code generator tool of playwright
 
 1. Compile the extension:
 
-```sh
-jlpm install
-jlpm build:prod
+```shell
+yarn install
+yarn build
 ```
 
 > Check the extension is installed in JupyterLab.
 
 2. Install test dependencies (needed only once):
 
-```sh
+```shell
 cd ./ui-tests
-jlpm install
-jlpm playwright install
+yarn install
+yarn playwright install
 cd ..
 ```
 
 3. Start the server:
 
-```sh
+```shell
 cd ./ui-tests
-jlpm start
+yarn start
 ```
 
 4. Execute the [Playwright code generator](https://playwright.dev/docs/codegen) in **another terminal**:
 
-```sh
+```shell
 cd ./ui-tests
-jlpm playwright codegen localhost:8888
+yarn playwright codegen localhost:8888
 ```
 
 ## Debug tests
@@ -133,35 +134,35 @@ To debug tests, a good way is to use the inspector tool of playwright:
 
 1. Compile the extension:
 
-```sh
-jlpm install
-jlpm build:prod
+```shell
+yarn install
+yarn build:prod
 ```
 
 > Check the extension is installed in JupyterLab.
 
 2. Install test dependencies (needed only once):
 
-```sh
+```shell
 cd ./ui-tests
-jlpm install
-jlpm playwright install
+yarn install
+yarn playwright install
 cd ..
 ```
 
 3. Execute the Playwright tests in [debug mode](https://playwright.dev/docs/debug):
 
-```sh
+```shell
 cd ./ui-tests
-jlpm playwright test --debug
+yarn playwright test --debug
 ```
 
 ## Upgrade Playwright and the browsers
 
 To update the web browser versions, you must update the package `@playwright/test`:
 
-```sh
+```shell
 cd ./ui-tests
-jlpm up "@playwright/test"
-jlpm playwright install
+yarn up "@playwright/test"
+yarn playwright install
 ```
