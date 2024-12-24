@@ -17,6 +17,9 @@ VENV_DIR = ROOT_DIR / ".venv"
 EXE_ = ".exe" if sys.platform == "win32" else ""
 BIN_DIR = VENV_DIR / "Scripts" if sys.platform == "win32" else VENV_DIR / "bin"
 YARN_COMMAND = shutil.which("yarn")
+if not YARN_COMMAND:
+    print("Yarn not found, please install it")
+    sys.exit(1)
 JUPYTER_COMMAND = str(BIN_DIR / f"jupyter{EXE_}")
 PYTHON_COMMAND = str(BIN_DIR / f"python{EXE_}")
 
@@ -64,7 +67,7 @@ def _start_yarn() -> None:
     try:
         # pylint: disable=subprocess-run-check, line-too-long
         subprocess.run(  # nosemgrep  # nosec
-            [YARN_COMMAND, "run", "watch"], cwd=ROOT_DIR, check=True
+            [str(YARN_COMMAND), "run", "watch"], cwd=ROOT_DIR, check=True
         )
     except KeyboardInterrupt:
         _stop()
