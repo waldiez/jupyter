@@ -1,2 +1,2 @@
 jupyter_server>=2.0.1,<3
-pathvalidate==3.2.1
+pathvalidate==3.2.3
