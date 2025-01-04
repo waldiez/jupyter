@@ -73,11 +73,13 @@ test:
 		-c pyproject.toml \
 		--capture=sys \
 		--cov=${.PACKAGE_NAME} \
+		--cov-branch \
 		--cov-report=term-missing:skip-covered \
 		--cov-report html:${.REPORTS_DIR}/html \
 		--cov-report xml:${.REPORTS_DIR}/coverage.xml \
 		--cov-report lcov:${.REPORTS_DIR}/lcov.info \
-		--junitxml=${.REPORTS_DIR}/xunit.xml
+		--junitxml=${.REPORTS_DIR}/xunit.xml \
+		${.PACKAGE_NAME}/tests
 
 .PHONY: .pre-dev
 .pre-dev:

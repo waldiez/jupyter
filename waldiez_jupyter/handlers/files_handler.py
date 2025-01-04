@@ -1,5 +1,7 @@
-"""Handle requests to handle .waldiez files.
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+"""Handle requests to handle .waldiez files.
 GET:
     Get the actual path of a .waldiez file:
     On the frontend, the path is relative to server's setting notebook_dir.

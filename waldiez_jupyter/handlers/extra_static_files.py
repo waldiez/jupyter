@@ -1,5 +1,7 @@
-"""Ensure extra static files (for monaco editor) are present.
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+"""Ensure extra static files (for monaco editor) are present.
 We can serve these files from the Jupyter server or not.
 The option is available on the plugin configuration page.
 The default is to do serve them. If not, the files are served
@@ -67,7 +69,6 @@ def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
         LOG.error("Monaco editor files not found.")
         LOG.error("Path: %s", static_root_path)
         LOG.error("Files: %s", os.listdir(static_root_path))
-        LOG.error("vs folder: %s", os.listdir(static_root_path / "vs"))
         raise RuntimeError("Failed to download monaco editor files.")
     with open(
         static_root_path / DETAILS_JSON,

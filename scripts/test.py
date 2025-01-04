@@ -1,5 +1,7 @@
-"""Run tests in the my_package package."""
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+"""Run tests in the my_package package."""
 # Requirement:
 # The (final) coverage report must be in the `coverage` directory.
 # It must be in the `lcov` format. (file `coverage/lcov.info`)
@@ -45,6 +47,7 @@ def run_pytest() -> None:
             "pytest",
             "-c",
             "pyproject.toml",
+            "--capture=sys",
             "--cov=waldiez_jupyter",
             "--cov-branch",
             "--cov-report=term-missing",
@@ -55,7 +58,7 @@ def run_pytest() -> None:
             "--cov-report",
             "xml:coverage/coverage.xml",
             "--junitxml=coverage/xunit.xml",
-            "tests",
+            "waldiez_jupyter/tests",
         ],
         check=True,
         cwd=ROOT_DIR,

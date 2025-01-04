@@ -1,5 +1,7 @@
-"""Start/stop dev mode.
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+"""Start/stop dev mode.
 --react (frontend)
 if both, we subprocess two calls
 """

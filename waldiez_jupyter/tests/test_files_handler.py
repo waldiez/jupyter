@@ -1,5 +1,7 @@
-"""Test the handlers."""
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+"""Test the handlers."""
 import json
 import shutil
 from pathlib import Path

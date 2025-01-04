@@ -1,4 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0.
+# Copyright (c) 2024 - 2025 Waldiez and contributors.
 # type: ignore
+
 """Jupyter server extension for Waldiez."""
 
 from typing import Dict, List
@@ -9,7 +12,7 @@ from jupyter_server.serverapp import ServerApp
 # pyright: reportMissingImports=false
 try:
     from ._version import __version__  # noqa
-except ImportError:
+except ImportError:  # pragma: no cover
     # Fallback when using the package in dev mode without installing
     # in editable mode with pip. It is highly recommended to install
     # the package from a stable release or in editable mode:
