@@ -1,4 +1,3 @@
-# type: ignore
 """Generate requirements/*txt files from pyproject.toml."""
 
 # flake8: noqa E501
@@ -13,7 +12,7 @@ from typing import Any, Dict, List, Protocol, Tuple
 
 
 ROOT_DIR = Path(__file__).parent.parent
-EXCLUDED_EXTRAS = []
+EXCLUDED_EXTRAS: List[str] = []
 EXCLUDED_PACKAGES = ["waldiez"]  # we might need a version not yet published
 
 # toml uses 'r' mode, tomllib uses 'rb' mode
@@ -75,7 +74,7 @@ def get_loader() -> TomlLoader:
         raise ImportError("Failed to import the `toml` library.") from error
 
 
-def _write_all_dot_txt(project_dir: Path, extras: list) -> None:
+def _write_all_dot_txt(project_dir: Path, extras: List[str]) -> None:
     """Generate requirements/all.txt with references to all requirements."""
     if not os.path.exists(project_dir / "requirements"):
         os.makedirs(project_dir / "requirements")
