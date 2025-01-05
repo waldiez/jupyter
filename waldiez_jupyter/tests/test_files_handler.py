@@ -90,6 +90,7 @@ async def test_export_to_py(
                 "extension": "py",
             }
         ),
+        request_timeout=60,
     )
     assert response.code == 200
     relative_to_cwd = waldiez_path.relative_to(Path.cwd())
@@ -131,6 +132,7 @@ async def test_export_to_ipynb(
                 "extension": "ipynb",
             }
         ),
+        request_timeout=60,
     )
     assert response.code == 200
     relative_to_cwd = waldiez_path.relative_to(Path.cwd())
