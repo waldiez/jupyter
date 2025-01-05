@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 .REPORTS_DIR := coverage
 .PACKAGE_NAME := waldiez_jupyter
-.PACKAGE_MANaGER := yarn
+.PACKAGE_MANAGER := yarn
 
 .PHONY: help
 help:
@@ -34,7 +34,7 @@ format:
 	autoflake --remove-all-unused-imports --remove-unused-variables --in-place .
 	black --config pyproject.toml .
 	ruff format --config pyproject.toml .
-	${.PACKAGE_MANaGER} run lint
+	${.PACKAGE_MANAGER} run lint
 
 
 .PHONY: init
@@ -52,7 +52,7 @@ lint:
 	yamllint -c .yamllint.yaml .
 	ruff check --config pyproject.toml .
 	pylint --rcfile=pyproject.toml --recursive y --output-format=text .
-	${.PACKAGE_MANaGER} run lint
+	${.PACKAGE_MANAGER} run lint
 
 .PHONY: forlint
 forlint: format lint
@@ -60,7 +60,7 @@ forlint: format lint
 .PHONY: clean
 clean:
 	python scripts/clean.py
-	${.PACKAGE_MANaGER} run clean:all
+	${.PACKAGE_MANAGER} run clean:all
 
 .PHONY: requirements
 requirements:
@@ -105,15 +105,15 @@ build-py:
 
 .PHONY: build-js
 build-js:
-	${.PACKAGE_MANaGER} install && ${.PACKAGE_MANaGER} run lint && ${.PACKAGE_MANaGER} run build
+	${.PACKAGE_MANAGER} install && ${.PACKAGE_MANAGER} run lint && ${.PACKAGE_MANAGER} run build
 
 .PHONY: build
 build: build-py build-js
 
 .PHONY: all
 all: requirements forlint test build
-	${.PACKAGE_MANaGER} run test
-	${.PACKAGE_MANaGER} run test:ui
+	${.PACKAGE_MANAGER} run test
+	${.PACKAGE_MANAGER} run test:ui
 
 
 .PHONY: image
