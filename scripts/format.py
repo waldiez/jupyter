@@ -2,6 +2,7 @@
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
 """Run python formatters."""
+
 import shutil
 import subprocess  # nosemgrep # nosec
 import sys

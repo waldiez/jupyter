@@ -1,10 +1,12 @@
 # SPDX-License-Identifier: Apache-2.0.
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
-"""Generate requirements/*txt files from pyproject.toml."""
 # flake8: noqa E501
 # pylint: disable=import-error,import-outside-toplevel,too-few-public-methods,broad-except
 # isort: skip_file
+
+"""Generate requirements/*txt files from pyproject.toml."""
+
 import os
 import re
 import subprocess  # nosemgrep # nosec

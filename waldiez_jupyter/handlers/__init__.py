@@ -2,6 +2,7 @@
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
 """Extension handlers for the Jupyter Server."""
+
 from jupyter_server.serverapp import ServerWebApplication
 from jupyter_server.utils import url_path_join
 

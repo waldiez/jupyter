@@ -2,6 +2,7 @@
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
 """Tests for the upload handler."""
+
 import json
 from pathlib import Path
 from typing import Any, Callable

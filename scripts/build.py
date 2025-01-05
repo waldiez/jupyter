@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0.
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
-"""Build the `my_project` python package."""
+"""Build the `waldiez_jupyter` python package."""
+
 import os
 import shutil
 import subprocess  # nosemgrep # nosec
