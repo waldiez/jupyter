@@ -92,7 +92,7 @@ def update_waldiez_dependency(version_string: str) -> None:
     found_dep = False
     for i, line in enumerate(lines):
         if "waldiez>" in line or "waldiez=" in line or "waldiez<" in line:
-            lines[i] = f'    "waldiez>={version_string}",\n'
+            lines[i] = f'    "waldiez>={version_string}",' + "\n"
             found_dep = True
             break
     if not found_dep:

@@ -73,7 +73,8 @@ def get_loader() -> TomlLoader:
             except Exception as err:
                 raise ImportError(
                     "Failed to install the `toml` library. "
-                    f"Please install it manually.\nError: {err}"
+                    "Please install it manually.\n"
+                    "Error: {err}"
                 ) from err
         raise ImportError("Failed to import the `toml` library.") from error
 
@@ -90,7 +91,7 @@ def _write_all_dot_txt(project_dir: Path, extras: List[str]) -> None:
         newline="\n",
     ) as file:
         for item in items:
-            file.write(f"-r {item}.txt\n")
+            file.write(f"-r {item}.txt" + "\n")
 
 
 def get_package_name(requirement: str) -> str:
@@ -124,7 +125,7 @@ def _write_main_txt(project_dir: Path, main_requirements: List[str]) -> None:
             raw_requirement = get_package_name(requirement)
             if raw_requirement in EXCLUDED_PACKAGES:
                 continue
-            file.write(f"{requirement}\n")
+            file.write(requirement + "\n")
 
 
 def _write_extra_txt(
@@ -143,7 +144,7 @@ def _write_extra_txt(
             raw_requirement = get_package_name(requirement)
             if raw_requirement in EXCLUDED_PACKAGES:
                 continue
-            file.write(f"{requirement}\n")
+            file.write(requirement + "\n")
 
 
 def _write_requirements_txt(

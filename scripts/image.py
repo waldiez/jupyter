@@ -118,7 +118,8 @@ def run_command(command: List[str]) -> None:
         If the command returns a non-zero exit status.
     """
     # pylint: disable=inconsistent-quotes
-    print(f"Running command: \n{' '.join(command)}\n")
+    command_string = " ".join(command)
+    print("Running command: \n" + command_string + "\n")
     subprocess.run(
         command,
         check=True,
