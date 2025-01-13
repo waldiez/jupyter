@@ -77,6 +77,11 @@ def cli() -> argparse.ArgumentParser:
         action="store_true",
         help="Push the image.",
     )
+    parser.add_argument(
+        "--dev",
+        action="store_true",
+        help="Build dev image.",
+    )
     return parser
 
 
@@ -287,7 +292,7 @@ def main() -> None:
     """
     args, _ = cli().parse_known_args()
     build_args = args.build_args or []
-    container_file = "Containerfile"
+    container_file = "Containerfile.dev" if args.dev else "Containerfile"
     platform_arg = args.platform
     container_command = args.container_command
     allow_error = check_other_platform(container_command, platform_arg)

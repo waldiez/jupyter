@@ -24,6 +24,10 @@ RUN npm install -g corepack && \
     corepack enable && \
     yarn set version stable
 
+# install bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH=/root/.bun/bin:${PATH}
+
 WORKDIR /tmp/package
 
 # install python dependencies
@@ -37,12 +41,12 @@ RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
 # specify the js branch to use
 ARG JS_DEV_BRANCH=dev
 
+# build the react package
 RUN git clone https://github.com/waldiez/react.git -b $JS_DEV_BRANCH
 WORKDIR /tmp/package/react
-RUN yarn install && \
-    yarn build:lib && \
-    yarn archive && \
-    mv out/lib/waldiez-react-*.tgz /tmp/package/waldiez.tgz
+RUN bun install && \
+    bun run build && \
+    mv out/archive/waldiez-react-*.tgz /tmp/package/waldiez.tgz
 
 WORKDIR /tmp/package/waldiez_jupyter
 # install js requirements

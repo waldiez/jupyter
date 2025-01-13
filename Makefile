@@ -23,6 +23,7 @@ help:
 	@echo " build-js        Build the JavaScript package"
 	@echo " all             Run 'requirements', 'forlint', 'test', 'build'"
 	@echo " image           Build a container image"
+	@echo " dev-image       Build a container image using waldiez packages from git"
 	@echo " test            Run the tests"
 	@echo " requirements    Generate requirements/*.txt"
 	@echo " clean           Remove unneeded files (__pycache__, .mypy_cache, etc.)"
@@ -115,7 +116,10 @@ all: requirements forlint test build
 	${.PACKAGE_MANAGER} run test
 	${.PACKAGE_MANAGER} run test:ui
 
-
 .PHONY: image
 image:
 	python scripts/image.py
+
+.PHONY: dev-image
+dev-image:
+	python scripts/image.py --dev
