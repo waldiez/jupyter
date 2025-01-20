@@ -103,6 +103,8 @@ async def test_export_to_py(
     (jp_root_dir / "flow.waldiez").unlink()
     if (data_dir / "test_flow_api_keys.py").exists():
         (data_dir / "test_flow_api_keys.py").unlink()
+    if (data_dir / "waldiez_api_keys.py").exists():
+        (data_dir / "waldiez_api_keys.py").unlink()
 
 
 async def test_export_to_ipynb(
@@ -145,6 +147,8 @@ async def test_export_to_ipynb(
     (jp_root_dir / "flow.waldiez").unlink()
     if (data_dir / "test_flow_api_keys.py").exists():
         (data_dir / "test_flow_api_keys.py").unlink()
+    if (data_dir / "waldiez_api_keys.py").exists():
+        (data_dir / "waldiez_api_keys.py").unlink()
 
 
 async def test_export_to_invalid_extension(
