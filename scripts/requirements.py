@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Protocol, Tuple
 
 ROOT_DIR = Path(__file__).parent.parent
 EXCLUDED_EXTRAS: List[str] = []
-EXCLUDED_PACKAGES = ["waldiez"]  # we might need a version not yet published
+EXCLUDED_PACKAGES: List[str] = []  # we might need a version not yet published
 
 # toml uses 'r' mode, tomllib uses 'rb' mode
 OPEN_MODE = "rb" if sys.version_info >= (3, 11) else "r"
