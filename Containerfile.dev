@@ -3,7 +3,7 @@
 #####################################################################################
 # Build Step
 # Build the frontend and backend parts of the extension
-# Dev: Uses JS_DEV_BRANCH and PY_DEV_BRANCH to specify the branch to use
+# Dev: Uses JS_BRANCH and PY_BRANCH to specify the branch to use
 #####################################################################################
 FROM ubuntu:24.04 AS builder
 
@@ -39,10 +39,10 @@ RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
     rm -f /tmp/requirements.txt
 
 # specify the js branch to use
-ARG JS_DEV_BRANCH=dev
+ARG JS_BRANCH=main
 
 # build the react package
-RUN git clone https://github.com/waldiez/react.git -b $JS_DEV_BRANCH
+RUN git clone https://github.com/waldiez/react.git -b $JS_BRANCH
 WORKDIR /tmp/package/react
 RUN bun install && \
     bun run build && \
@@ -140,11 +140,11 @@ RUN pip install --upgrade pip jupyterlab ipywidgets ipykernel
 COPY --chown=user:user scripts /home/user/scripts
 RUN chmod +x /home/user/scripts/start.sh
 
-ARG PY_DEV_BRANCH=dev
+ARG PY_BRANCH=main
 COPY --from=builder --chown=user:user /tmp/package/waldiez_jupyter/dist/*.whl /home/user/tmp/
 RUN pip install --user /home/user/tmp/*.whl && \
     pip uninstall -y waldiez autogen-agentchat && \
-    pip install --user git+https://github.com/waldiez/python.git@$PY_DEV_BRANCH && \
+    pip install --user git+https://github.com/waldiez/python.git@$PY_BRANCH && \
     rm -rf /home/user/tmp
 
 RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
