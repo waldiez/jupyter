@@ -2,25 +2,16 @@ import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslintTs from "typescript-eslint";
+import headers from "eslint-plugin-headers";
 
 // export default eslintTs.config({
 const defaultConfig = eslintTs.config({
     extends: [eslint.configs.recommended, ...eslintTs.configs.recommended, eslintPluginPrettierRecommended],
-    ignores: ["node_modules", "dist", "public", ".local", "**/assets/**"],
+    files: ["**/*.{ts,tsx}"],
     plugins: {
         "@stylistic": stylistic,
+        headers,
     },
-    // no overrides in flat config
-    // overrides: [
-    //     {
-    //         files: ['*spec.ts', '*spec.tsx'],
-    //         plugins: ['jest'],
-    //         extends: ['plugin:jest/recommended'],
-    //         rules: {
-    //             'jest/expect-expect': 'off'
-    //         }
-    //     }
-    // ],
     rules: {
         "prettier/prettier": [
             "error",
@@ -75,10 +66,26 @@ const defaultConfig = eslintTs.config({
         curly: ["error", "all"],
         eqeqeq: "error",
         "prefer-arrow-callback": "error",
+        "headers/header-format": [
+            "error",
+            {
+                source: "string",
+                content: "SPDX-License-Identifier: {spdxIdentifier}\nCopyright {startYear} - {currentYear} {owner}",
+                variables: {
+                    "spdxIdentifier": "Apache-2.0",
+                    "startYear": "2024",
+                    "currentYear": `${new Date().getFullYear()}`,
+                    "owner": "Waldiez & contributors",
+                },
+            },
+        ],
     },
 });
 
 export default [
+    {
+        ignores: ["node_modules", "dist", "**/.venv/**", "**/*.js"],
+    },
     ...defaultConfig,
     // overrides
     ...defaultConfig.map(config => ({

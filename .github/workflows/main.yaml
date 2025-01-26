@@ -1,6 +1,9 @@
 ---
 name: Lint, test
 
+env:
+  HUSKY: 0
+
 # yamllint disable rule:truthy
 on:
   push:

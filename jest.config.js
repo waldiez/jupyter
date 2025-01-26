@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 const jestJupyterLab = require("@jupyterlab/testutils/lib/jest-config");
 
 /** @type {import('ts-jest').JestConfigWithTsJest} **/

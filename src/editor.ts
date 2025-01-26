@@ -1,3 +1,7 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 import { CommandIDs } from "./commands";
 import { MONACO_PATH, PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "./constants";
 import { WaldiezLogger } from "./logger";

@@ -1,3 +1,7 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 import { LabIcon } from "@jupyterlab/ui-components";
 
 import waldiez_logo from "@waldiez/react/dist/logo.svg";

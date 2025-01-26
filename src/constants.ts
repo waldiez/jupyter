@@ -1,3 +1,7 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 export const NAMESPACE = "@waldiez/jupyter";
 export const PLUGIN_ID = `${NAMESPACE}:plugin`;
 export const FACTORY_NAME = "Waldiez editor";

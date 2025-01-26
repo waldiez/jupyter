@@ -1,3 +1,7 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 import { CommandIDs, handleWaldiezCommands } from "./commands";
 import { FACTORY_NAME, NAMESPACE, PLUGIN_ID, WALDIEZ_FILE_TYPE, WALDIEZ_STRINGS } from "./constants";
 import { WaldiezEditor } from "./editor";
