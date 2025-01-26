@@ -92,6 +92,6 @@ PYTHONUNBUFFERED=1 jupyter lab \
     --ip="*" \
     --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
     --IdentityProvider.token="${JUPYTER_TOKEN}" \
-    --IdentityProvider.password="${HASHED_PASSWORD}" \
+    --IdentityProvider.hashed_password="${HASHED_PASSWORD}" \
     --ServerApp.allow_origin='*' \
     --ServerApp.disable_check_xsrf=True
