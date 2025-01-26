@@ -87,11 +87,17 @@ if [ -n "${JUPYTER_PASSWORD}" ]; then
     HASHED_PASSWORD=$(python -c "from jupyter_server.auth import passwd; print(passwd('${JUPYTER_PASSWORD}'))")
 fi
 
+PASSWORD_REQUIRED="False"
+if [ -n "${JUPYTER_PASSWORD}" ]; then
+    PASSWORD_REQUIRED="True"
+fi
+
 PYTHONUNBUFFERED=1 jupyter lab \
     --no-browser \
     --ip="*" \
     --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
     --IdentityProvider.token="${JUPYTER_TOKEN}" \
     --IdentityProvider.hashed_password="${HASHED_PASSWORD}" \
+    --IdentityProvider.password_required="${PASSWORD_REQUIRED}" \
     --ServerApp.allow_origin='*' \
     --ServerApp.disable_check_xsrf=True
