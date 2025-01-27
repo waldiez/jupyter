@@ -84,7 +84,7 @@ const defaultConfig = eslintTs.config({
 
 export default [
     {
-        ignores: ["node_modules", "dist", "**/.venv/**", "**/*.js"],
+        ignores: ["node_modules", "dist", "lib", "**/.venv/**", "**/*.js"],
     },
     ...defaultConfig,
     // overrides
