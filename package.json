@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.3.9",
+    "version": "0.3.10",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -102,7 +102,7 @@
         "@jest/globals": "^29.7.0",
         "@jupyterlab/builder": "^4.3.4",
         "@jupyterlab/testutils": "^4.3.4",
-        "@stylistic/eslint-plugin": "^3.0.0",
+        "@stylistic/eslint-plugin": "^3.0.1",
         "@testing-library/react": "^16.2.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/jest": "^29.5.14",
