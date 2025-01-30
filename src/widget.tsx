@@ -54,14 +54,8 @@ export class EditorWidget extends ReactWidget {
         this._inputPrompt = props.inputPrompt;
         const flow = importFlow(props.jsonData);
         this._waldiez = {
+            ...flow,
             flowId: props.flowId,
-            name: flow.name,
-            description: flow.description,
-            requirements: flow.requirements,
-            tags: flow.tags,
-            edges: flow.edges,
-            nodes: flow.nodes,
-            viewport: flow.viewport,
             storageId: flow.storageId ?? props.flowId,
             onChange: props.onChange,
             onRun: props.onRun,
@@ -76,25 +70,7 @@ export class EditorWidget extends ReactWidget {
             <UseSignal
                 signal={this._inputPrompt}
                 initialArgs={null}
-                children={(_, inputPrompt) => (
-                    <Waldiez
-                        flowId={this._waldiez.flowId}
-                        name={this._waldiez.name}
-                        storageId={this._waldiez.storageId}
-                        description={this._waldiez.description}
-                        requirements={this._waldiez.requirements}
-                        tags={this._waldiez.tags}
-                        edges={this._waldiez.edges}
-                        nodes={this._waldiez.nodes}
-                        viewport={this._waldiez.viewport}
-                        onChange={this._waldiez.onChange}
-                        monacoVsPath={this._waldiez.monacoVsPath}
-                        onUserInput={this._waldiez.onUserInput}
-                        onRun={this._waldiez.onRun}
-                        onUpload={this._waldiez.onUpload}
-                        inputPrompt={inputPrompt}
-                    />
-                )}
+                children={(_, inputPrompt) => <Waldiez {...this._waldiez} inputPrompt={inputPrompt} />}
             />
         );
     }
