@@ -5017,7 +5017,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.23.0"
     "@typescript-eslint/parser": "npm:^8.23.0"
-    "@waldiez/react": "npm:^0.3.11"
+    "@waldiez/react": "npm:^0.3.12"
     add: "npm:^2.0.6"
     copyfiles: "npm:^2.4.1"
     css-loader: "npm:^7.1.2"
@@ -5050,9 +5050,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.3.11":
-  version: 0.3.11
-  resolution: "@waldiez/react@npm:0.3.11"
+"@waldiez/react@npm:^0.3.12":
+  version: 0.3.12
+  resolution: "@waldiez/react@npm:0.3.12"
   dependencies:
     "@monaco-editor/react": "npm:^4.6.0"
     "@xyflow/react": "npm:^12.4.2"
@@ -5069,7 +5069,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.0.0
     react-dom: ^18.3.1 || ^19.0.0
-  checksum: 10/69172dd0c28b8d4820be104a8ab0cf17e0ec408a96ea828e28e80350b0cf44d23a6a0b2ac2c88850b4b366ac28e47a7d14afa2ca67e7a6d272b116744a90f3e0
+  checksum: 10/98f66b5751b43c51dc2de479197a4af90bb30ee42748273d026963a6e1a8c198f14cfe3f1790bf263093ee5dcf7395ebcca2fda0b1407a3da01f0e9b78dadf1c
   languageName: node
   linkType: hard
 
