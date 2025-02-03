@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.3.11",
+    "version": "0.3.12",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -95,7 +95,6 @@
         "@lumino/algorithm": "^2.0.2",
         "@lumino/commands": "^2.3.1",
         "@lumino/signaling": "^2.1.3",
-        "@lumino/widgets": "^2.5.0",
         "@waldiez/react": "^0.3.11"
     },
     "devDependencies": {
@@ -107,11 +106,11 @@
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/jest": "^29.5.14",
         "@types/json-schema": "^7.0.15",
-        "@types/node": "^22.12.0",
+        "@types/node": "^22.13.0",
         "@types/react": "^18.3.18",
         "@types/react-addons-linked-state-mixin": "^0.14.27",
-        "@typescript-eslint/eslint-plugin": "^8.22.0",
-        "@typescript-eslint/parser": "^8.22.0",
+        "@typescript-eslint/eslint-plugin": "^8.23.0",
+        "@typescript-eslint/parser": "^8.23.0",
         "add": "^2.0.6",
         "copyfiles": "^2.4.1",
         "css-loader": "^7.1.2",
@@ -138,7 +137,7 @@
         "ts-jest": "^29.2.5",
         "tsx": "^4.19.2",
         "typescript": "~5.7.3",
-        "typescript-eslint": "^8.22.0",
+        "typescript-eslint": "^8.23.0",
         "yarn-deduplicate": "^6.0.2",
         "yjs": "^13.6.23"
     },
