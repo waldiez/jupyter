@@ -1,7 +1,7 @@
 -r main.txt
 coverage==7.6.10
 pytest-cov==6.0.0
-pytest-datadir==1.5.0
+pytest-datadir==1.6.1
 pytest-html==4.1.1
 pytest-jupyter[server]>=0.10.1
 pytest-sugar==1.0.0

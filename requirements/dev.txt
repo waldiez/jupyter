@@ -5,12 +5,12 @@ black[jupyter]==25.1.0
 flake8==7.1.1
 isort==6.0.0
 jupyterlab==4.3.5
-mypy==1.14.1
+mypy==1.15.0
 pre-commit==4.1.0
 pydocstyle==6.3.0
 pylint==3.3.4
 python-dotenv==1.0.1
-ruff==0.9.4
+ruff==0.9.5
 toml; python_version <= "3.10"
 toml==0.10.2
 types-PyYAML==6.0.12.20241230
