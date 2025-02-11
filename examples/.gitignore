@@ -1,5 +1,6 @@
 **
 !*/
+.local/
 .ipynb_checkpoints/
 waldiez_out/
 documents/
@@ -7,6 +8,7 @@ documents/
 !.gitignore
 !README.md
 !LICENSE
+!NOTICE.md
 !CODEOWNERS
 !*.waldiez
 !*.waldiezModel
