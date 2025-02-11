@@ -8,7 +8,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # install system dependencies
 RUN apt update && \
-    apt install -y curl unzip git ca-certificates python3-dev python3-pip && \
+    apt install -y \
+    curl \
+    unzip \
+    git \
+    ca-certificates \
+    build-essential \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
+    python3-dev python3-pip && \
     curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
@@ -64,6 +75,11 @@ RUN apt update && \
     bzip2 \
     ca-certificates \
     build-essential \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
     wget \
     fonts-liberation \
     git \
