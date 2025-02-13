@@ -106,7 +106,7 @@
         "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/jest": "^29.5.14",
         "@types/json-schema": "^7.0.15",
-        "@types/node": "^22.13.1",
+        "@types/node": "^22.13.2",
         "@types/react": "^18.3.18",
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.24.0",
