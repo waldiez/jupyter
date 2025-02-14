@@ -52,7 +52,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell
         const namespace = NAMESPACE;
         const tracker = new WidgetTracker<WaldiezEditor>({ namespace });
         const widgetFactory = new WaldiezEditorFactory({
-            name: "Waldie",
+            name: "Waldiez",
             fileTypes: [WALDIEZ_FILE_TYPE],
             defaultFor: [WALDIEZ_FILE_TYPE],
             canStartKernel: true,
@@ -113,7 +113,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell
             extensions: [`.${WALDIEZ_FILE_TYPE}`],
             mimeTypes: ["application/json", "text/json"],
             icon: waldiezIcon,
-            iconLabel: "JupyterLab-Waldie",
+            iconLabel: "JupyterLab-Waldiez",
         });
         app.docRegistry.addWidgetFactory(widgetFactory);
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, translator);
