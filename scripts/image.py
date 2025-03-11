@@ -109,7 +109,7 @@ def get_container_cmd() -> str:
     return "docker"
 
 
-def run_command(command: List[str]) -> None:
+def run_command(command: List[str], dry_run: bool = False) -> None:
     """Run a command.
 
     Parameters
@@ -124,15 +124,18 @@ def run_command(command: List[str]) -> None:
     """
     # pylint: disable=inconsistent-quotes
     command_string = " ".join(command)
-    print("Running command: \n" + command_string + "\n")
-    subprocess.run(
-        command,
-        check=True,
-        env=os.environ,
-        cwd=_ROOT_DIR,
-        stdout=sys.stdout,
-        stderr=subprocess.STDOUT,
-    )  # nosemgrep # nosec
+    if not dry_run:
+        print("Running command: \n" + command_string + "\n")
+        subprocess.run(
+            command,
+            check=True,
+            env=os.environ,
+            cwd=_ROOT_DIR,
+            stdout=sys.stdout,
+            stderr=subprocess.STDOUT,
+        )  # nosemgrep # nosec
+    else:
+        print("You might need to run this command: \n" + command_string + "\n")
 
 
 def build_image(
