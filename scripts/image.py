@@ -117,6 +117,9 @@ def run_command(command: List[str], dry_run: bool = False) -> None:
     command : List[str]
         The command to run.
 
+    dry_run : bool
+        If True, print the command instead of running it.
+
     Raises
     ------
     subprocess.CalledProcessError
