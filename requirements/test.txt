@@ -1,5 +1,5 @@
 -r main.txt
-coverage==7.6.12
+coverage==7.7.1
 pytest-cov==6.0.0
 pytest-datadir==1.6.1
 pytest-html==4.1.1
