@@ -9,6 +9,13 @@
     "commitConvention": "angular",
     "contributors": [
         {
+            "login": "ounospanas",
+            "name": "Panagiotis Kasnesis",
+            "avatar_url": "https://avatars.githubusercontent.com/u/29335277?v=4",
+            "profile": "https://scholar.google.com/citations?user=JmW9DwkAAAAJ",
+            "contributions": ["projectManagement", "research"]
+        },
+        {
             "login": "lazToum",
             "name": "Lazaros Toumanidis",
             "avatar_url": "https://avatars.githubusercontent.com/u/4764837?v=4",
@@ -21,13 +28,6 @@
             "avatar_url": "https://avatars.githubusercontent.com/u/3456066?v=4",
             "profile": "https://humancentered.gr/",
             "contributions": ["promotion", "design"]
-        },
-        {
-            "login": "ounospanas",
-            "name": "Panagiotis Kasnesis",
-            "avatar_url": "https://avatars.githubusercontent.com/u/29335277?v=4",
-            "profile": "https://consert.eee.uniwa.gr/2019/10/27/pkasnesis/",
-            "contributions": ["projectManagement", "research"]
         }
     ],
     "contributorsPerLine": 7,
