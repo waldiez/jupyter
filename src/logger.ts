@@ -107,9 +107,27 @@ export class WaldiezLogger {
     log(
         msg: IStreamMsg | IErrorMsg | IInputRequestMsg | IExecuteReplyMsg | IExecuteRequestMsg | ILogPayload,
     ): void {
+        if (typeof msg === "string") {
+            this._logData({
+                data: msg,
+                level: "info",
+                type: "text",
+            });
+        }
         if ("level" in msg) {
             this._logData(msg);
         } else {
+            if (typeof msg === "object") {
+                // if the message is not a Jupyter message, log it as a string
+                if (!msg || !("header" in msg)) {
+                    this._logData({
+                        data: JSON.stringify(msg),
+                        level: "info",
+                        type: "text",
+                    });
+                    return;
+                }
+            }
             if (msg.header.msg_type === "error") {
                 this._logData({
                     data: (msg as IErrorMsg).content.ename,

@@ -39,7 +39,9 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _logger: WaldiezLogger;
     private _runner: WaldiezRunner;
     private _restartKernelCommandId: string;
+    private _interruptKernelCommandId: string;
     private _restartKernelButton: CommandToolbarButton;
+    private _interruptKernelButton: CommandToolbarButton;
     /**
      * Construct a new WaldiezEditor.
      * @param options - The WaldiezEditor instantiation options.
@@ -59,13 +61,21 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             rendermime: options.rendermime,
         });
         this._restartKernelCommandId = `${CommandIDs.restartKernel}-${this.id}`;
+        this._interruptKernelCommandId = `${CommandIDs.interruptKernel}-${this.id}`;
         this._restartKernelButton = new CommandToolbarButton({
             commands: this._commands,
             id: this._restartKernelCommandId,
             icon: kernelIcon,
             label: ` ${WALDIEZ_STRINGS.RESTART_KERNEL}`,
         });
+        this._interruptKernelButton = new CommandToolbarButton({
+            commands: this._commands,
+            id: this._interruptKernelCommandId,
+            icon: kernelIcon,
+            label: ` ${WALDIEZ_STRINGS.INTERRUPT_KERNEL}`,
+        });
         this.toolbar.addItem("toggle-logs-view", this._logger.toggleConsoleViewButton);
+        this.toolbar.addItem("clear-logs", this._interruptKernelButton);
         this.toolbar.addItem("restart-kernel", this._restartKernelButton);
         this._runner = new WaldiezRunner({
             logger: this._logger,
@@ -85,10 +95,14 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this.content.dispose();
         this._logger.dispose();
         this._restartKernelButton.dispose();
-        this._runner.reset();
         if (this._commands.hasCommand(this._restartKernelCommandId)) {
             this._commands.notifyCommandChanged(this._restartKernelCommandId);
         }
+        this._interruptKernelButton.dispose();
+        if (this._commands.hasCommand(this._interruptKernelCommandId)) {
+            this._commands.notifyCommandChanged(this._interruptKernelCommandId);
+        }
+        this._runner.reset();
     }
     /**
      * Handle the kernel status change.
@@ -125,15 +139,37 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 label: ` ${WALDIEZ_STRINGS.RESTART_KERNEL}`,
             });
         }
+        if (!this._commands.hasCommand(this._interruptKernelCommandId)) {
+            this._commands.addCommand(this._interruptKernelCommandId, {
+                execute: this._onInterruptKernel.bind(this),
+                label: ` ${WALDIEZ_STRINGS.INTERRUPT_KERNEL}`,
+            });
+        }
     }
     //
     private _onRestartKernel(): void {
         const session = this.context.sessionContext.session;
         if (session?.kernel) {
             session.kernel.restart();
+            this._logger.log({
+                data: WALDIEZ_STRINGS.KERNEL_RESTARTED,
+                level: "info",
+                type: "text",
+            });
         }
     }
     //
+    private _onInterruptKernel(): void {
+        const session = this.context.sessionContext.session;
+        if (session?.kernel) {
+            session.kernel.interrupt();
+            this._logger.log({
+                data: WALDIEZ_STRINGS.KERNEL_INTERRUPTED,
+                level: "info",
+                type: "text",
+            });
+        }
+    }
     private _onContentChanged(contents: string): void {
         const currentContents = this.context.model.toString();
         if (contents !== currentContents) {
@@ -163,12 +199,22 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     const path = await uploadFile(file);
                     paths.push(path);
                 } catch (err) {
-                    const errorString =
-                        err instanceof Error
-                            ? err.message
-                            : typeof err === "string"
-                              ? err
-                              : ((err as any).toString() ?? "Unknown error");
+                    let errorString = "Unknown error";
+                    if (err instanceof Error) {
+                        errorString = err.message;
+                    }
+                    if (typeof err === "string") {
+                        errorString = err;
+                    }
+                    if (typeof (err as any).toString === "function") {
+                        errorString = (err as any).toString();
+                    }
+                    if (typeof (err as any).message === "string") {
+                        errorString = (err as any).message;
+                    }
+                    if (typeof err === "object" && err !== null) {
+                        errorString = JSON.stringify(err);
+                    }
                     this._logger.log({
                         data: errorString,
                         level: "error",

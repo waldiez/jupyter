@@ -114,6 +114,19 @@ describe("WaldiezEditor", () => {
         expect(restartSpy).toHaveBeenCalled();
     });
 
+    it("should interrupt kernel on command", async () => {
+        const editor = await getEditor();
+        const { context } = editor;
+        const interruptSpy = jest.fn();
+        context.sessionContext.session = {
+            kernel: {
+                interrupt: interruptSpy,
+            },
+        } as any;
+        editor["_onInterruptKernel"]();
+        expect(interruptSpy).toHaveBeenCalled();
+    });
+
     it("should handle content change", async () => {
         const editor = await getEditor();
         const { context } = editor;

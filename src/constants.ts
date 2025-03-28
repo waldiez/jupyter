@@ -26,6 +26,8 @@ export namespace WALDIEZ_STRINGS {
     export const HIDE_LOGS = "Hide logs";
     export const RESTART_KERNEL = "Restart kernel";
     export const INTERRUPT_KERNEL = "Interrupt kernel";
+    export const KERNEL_INTERRUPTED = "Kernel interrupted";
+    export const KERNEL_RESTARTED = "Kernel restarted";
     export const SHUTDOWN_KERNEL = "Shutdown kernel";
     export const CHANGE_KERNEL = "Change kernel";
     export const RECONNECT_TO_KERNEL = "Reconnect to kernel";
