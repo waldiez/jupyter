@@ -96,7 +96,7 @@ describe("WaldiezEditor", () => {
         editor["_onSessionStatusChanged"](editor.context.sessionContext, "idle");
         expect(logSpy).toHaveBeenCalledWith({
             data: "Kernel status changed to idle",
-            level: "debug",
+            level: "info",
             type: "text",
         });
     });
