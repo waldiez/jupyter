@@ -114,7 +114,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _onSessionStatusChanged(_context: ISessionContext, status: Kernel.Status): void {
         this._logger.log({
             data: WALDIEZ_STRINGS.KERNEL_STATUS_CHANGED(status),
-            level: "debug",
+            level: "info",
             type: "text",
         });
     }
@@ -151,11 +151,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         const session = this.context.sessionContext.session;
         if (session?.kernel) {
             session.kernel.restart();
-            this._logger.log({
-                data: WALDIEZ_STRINGS.KERNEL_RESTARTED,
-                level: "info",
-                type: "text",
-            });
         }
     }
     //
@@ -163,11 +158,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         const session = this.context.sessionContext.session;
         if (session?.kernel) {
             session.kernel.interrupt();
-            this._logger.log({
-                data: WALDIEZ_STRINGS.KERNEL_INTERRUPTED,
-                level: "info",
-                type: "text",
-            });
         }
     }
     private _onContentChanged(contents: string): void {
