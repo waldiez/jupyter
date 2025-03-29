@@ -16,6 +16,7 @@ import os
 import shutil
 import sys
 import tarfile
+import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -136,12 +137,8 @@ def _download_monaco_editor(
     if sha_sum != version_sha_sum:  # pragma: no cover
         raise ValueError("SHA-1 sum mismatch.")
     os.makedirs(static_dir, exist_ok=True)
-    with tarfile.open(fileobj=io.BytesIO(response.data)) as tar:
-        if _has_filter_parameter():
-            tar.extractall(path=static_dir, filter="data")  # nosemgrep # nosec
-        else:
-            tar.extractall(path=static_dir)  # nosemgrep # nosec
-    monaco_editor_path = os.path.join(static_dir, "package")
+    tmp_dir = _extract_monaco_editor_files(response)
+    monaco_editor_path = os.path.join(tmp_dir, "package")
     for src_dir_name in (os.path.join("min", "vs"), "min-maps"):
         src_dir = os.path.join(monaco_editor_path, src_dir_name)
         if not os.path.exists(src_dir):
@@ -152,9 +149,31 @@ def _download_monaco_editor(
         dst_dir = os.path.join(static_dir, dst_din_name)
         if os.path.exists(dst_dir):
             shutil.rmtree(dst_dir)
-        print(f"Moving {src_dir} to {dst_dir}")
-        shutil.move(src_dir, dst_dir)
-    shutil.rmtree(monaco_editor_path)
+        print(f"Copying {src_dir} to {dst_dir}")
+        shutil.copytree(src_dir, dst_dir)
+    shutil.rmtree(tmp_dir)
+
+
+def _extract_monaco_editor_files(response: urllib3.BaseHTTPResponse) -> str:
+    """Extract the monaco editor files.
+
+    Parameters
+    ----------
+    response : urllib3.BaseHTTPResponse
+        The response object.
+
+    Returns
+    -------
+    str
+        The path to the extracted files.
+    """
+    tmp_dir = tempfile.mkdtemp()
+    with tarfile.open(fileobj=io.BytesIO(response.data)) as tar:
+        if _has_filter_parameter():
+            tar.extractall(path=tmp_dir, filter="data")  # nosemgrep # nosec
+        else:
+            tar.extractall(path=tmp_dir)  # nosemgrep # nosec
+    return tmp_dir
 
 
 def _get_cached_details(
