@@ -139,3 +139,4 @@ dmypy.json
 /notebooks/
 uv.lock
 **/*.pid
+*/tests/data/*.py
