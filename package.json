@@ -43,10 +43,14 @@
     },
     "scripts": {
         "prepare": "node .husky/install.mjs",
+        "python": "node --import=tsx scripts/python.ts",
+        "requirements": "yarn python -m pip install -r requirements/all.txt",
+        "jupyter": "yarn python -m jupyter",
+        "before:build": "yarn clean && yarn lint && yarn requirements",
         "build:dev": "yarn build:lib && yarn build:labextension:dev",
-        "build": "yarn clean && yarn build:lib:prod && yarn build:labextension",
-        "build:labextension": "jupyter labextension build .",
-        "build:labextension:dev": "jupyter labextension build --development True .",
+        "build": "yarn before:build && yarn clean && yarn build:lib:prod && yarn build:labextension",
+        "build:labextension": "yarn jupyter labextension build .",
+        "build:labextension:dev": "yarn jupyter labextension build --development True .",
         "build:lib": "tsc --sourceMap",
         "build:lib:prod": "tsc",
         "clean": "yarn clean:lib",
@@ -70,7 +74,7 @@
         "version:set": "node --import=tsx scripts/version.ts --set",
         "watch": "run-p watch:src watch:labextension",
         "watch:src": "tsc -w --sourceMap",
-        "watch:labextension": "jupyter labextension watch ."
+        "watch:labextension": "yarn jupyter labextension watch ."
     },
     "dependencies": {
         "@jupyter-widgets/base": "^6.0.10",

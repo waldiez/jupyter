@@ -6,8 +6,7 @@ build-backend = "hatchling.build"
 name = "waldiez_jupyter"
 readme = "README.md"
 license = { file = "LICENSE" }
-# requires-python = ">=3.10,<3.14" not yet, after waldiez (core) supports 3.13
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 classifiers = [
     "Framework :: Jupyter",
     "Framework :: Jupyter :: JupyterLab",
@@ -20,12 +19,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    # "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "jupyter_server>=2.0.1,<3",
     "pathvalidate==3.2.3",
-    "waldiez==0.4.1",
+    'waldiez==0.4.1; python_version < "3.13"', # until waldiez for py 3.13 goes on PyPI
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
@@ -55,7 +54,7 @@ dev = [
     'python-dotenv==1.1.0',
     'ruff==0.11.2',
     'toml==0.10.2',
-    'types-PyYAML==6.0.12.20241230',
+    'types-PyYAML==6.0.12.20250326',
     'toml; python_version <= "3.10"',
     'types-toml==0.10.8.20240310',
     'yamllint==1.37.0',
