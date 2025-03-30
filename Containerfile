@@ -2,7 +2,7 @@
 # Build Step
 # Build the frontend and backend parts of the extension
 #####################################################################################
-FROM ubuntu:24.04 AS builder
+FROM python:3.12-slim AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -18,8 +18,7 @@ RUN apt update && \
     libpango1.0-dev \
     libjpeg-dev \
     libgif-dev \
-    librsvg2-dev \
-    python3-dev python3-pip && \
+    librsvg2-dev && \
     curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \

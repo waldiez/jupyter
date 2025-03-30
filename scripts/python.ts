@@ -144,7 +144,7 @@ const getPythonExecutable = (): string => {
         console.error("No compatible python found");
         process.exit(1);
     }
-    if (!inVenv(pythonExec)) {
+    if (!inVenv(pythonExec) && !inContainer()) {
         for (const venvName of possibleVenvNames) {
             const venvDir = path.join(__rootDir, venvName);
             const venvPythonPath = getVenvPythonExecutable(venvDir);
@@ -173,6 +173,17 @@ const showHelp = () => {
             "bun scripts/python.ts path/to/file.py\n",
     );
     process.exit(0);
+};
+
+/** check if this script is running in a container
+ * @returns true if running in a container, false otherwise
+ */
+const inContainer = (): boolean => {
+    try {
+        return fs.existsSync("/.dockerenv") || fs.existsSync("/run/.containerenv");
+    } catch (_) {
+        return false;
+    }
 };
 
 /**
