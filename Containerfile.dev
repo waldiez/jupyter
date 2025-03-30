@@ -5,7 +5,7 @@
 # Build the frontend and backend parts of the extension
 # Dev: Uses JS_BRANCH and PY_BRANCH to specify the branch to use
 #####################################################################################
-FROM ubuntu:24.04 AS builder
+FROM python:3.13-slim AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -21,8 +21,7 @@ RUN apt update && \
     libpango1.0-dev \
     libjpeg-dev \
     libgif-dev \
-    librsvg2-dev \
-    python3-dev python3-pip && \
+    librsvg2-dev && \
     curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     apt install -y nodejs && \
@@ -61,14 +60,11 @@ RUN bun install && \
 
 WORKDIR /tmp/package/waldiez_jupyter
 # install js requirements
-COPY package.json /tmp/package/waldiez_jupyter/package.json
-COPY yarn.lock /tmp/package/waldiez_jupyter/yarn.lock
-RUN yarn install
-
-# build the extension
 COPY . /tmp/package/waldiez_jupyter
-RUN yarn install && \
-    yarn remove @waldiez/react > /dev/null 2 >&1 || true && \
+RUN yarn install || (find /tmp -name build.log -exec cat {} \; && false)
+
+# build the extension with the react package from git
+RUN yarn remove @waldiez/react > /dev/null 2 >&1 || true && \
     yarn add @waldiez/react@file:../waldiez.tgz && \
     yarn build:lib:prod && \
     yarn build

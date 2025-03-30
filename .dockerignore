@@ -3,6 +3,8 @@
 # but not these files...
 !src/
 !scripts/start.sh
+!scripts/python.ts
+!scripts/post_install.ts
 **/__pycache__/
 src/**/*.py[cod]
 !style/
@@ -13,10 +15,21 @@ waldiez_jupyter/labextension/*
 !package.json
 !install.json
 !yarn.lock
+!.markdownlint.json
+!.flake8
+!.prettierignore
+!.prettierrc.json
+!.yamllint.yaml
 !.yarnrc.yml
+!babel.config.js
+!eslint.config.mjs
+!jest.config.js
+!jest.setup.ts
+!tsconfig.json
 !pyproject.toml
 !setup.py
 !tsconfig.json
-!requirements/main.txt
+!tsconfig.test.json
+!requirements/*.txt
 !LICENSE
 !README.md

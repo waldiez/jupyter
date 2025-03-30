@@ -43,7 +43,7 @@
     },
     "scripts": {
         "prepare": "node .husky/install.mjs",
-        "postinstall": "cd ui-tests && yarn install",
+        "postinstall": "node --import=tsx scripts/python.ts",
         "python": "node --import=tsx scripts/python.ts",
         "requirements": "yarn python -m pip install -r requirements/all.txt",
         "jupyter": "yarn python -m jupyter",
@@ -122,6 +122,7 @@
         "eslint-config-prettier": "^10.1.1",
         "eslint-plugin-headers": "^1.2.1",
         "eslint-plugin-prettier": "^5.2.5",
+        "fs-extra": "^11.3.0",
         "husky": "^9.1.7",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^29.7.0",
