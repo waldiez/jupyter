@@ -1,81 +1,7 @@
 #####################################################################################
-# Build an image using @waldiez/react and "waldiez" from git
+# Build an image using @waldiez/react and "waldiez" from git or from a local path
 #####################################################################################
-# Build Step
-# Build the frontend and backend parts of the extension
-# Dev: Uses JS_BRANCH and PY_BRANCH to specify the branch to use
-#####################################################################################
-FROM python:3.13-slim AS builder
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-# install system dependencies
-RUN apt update && \
-    apt install -y \
-    curl \
-    unzip \
-    git \
-    ca-certificates \
-    build-essential \
-    libcairo2-dev \
-    libpango1.0-dev \
-    libjpeg-dev \
-    libgif-dev \
-    librsvg2-dev && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
-    apt install -y nodejs && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives/*
-
-# install yarn
-RUN npm install -g corepack && \
-    corepack enable && \
-    yarn set version stable
-
-# install bun
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=/root/.bun/bin:${PATH}
-
-WORKDIR /tmp/package
-
-# install python dependencies
-ENV PATH=/root/.local/bin:${PATH}
-RUN pip3 install --break-system-packages jupyterlab build uv
-
-COPY requirements/main.txt /tmp/requirements.txt
-RUN pip3 install --break-system-packages -r /tmp/requirements.txt && \
-    rm -f /tmp/requirements.txt
-
-# specify the js branch to use
-ARG JS_BRANCH=main
-
-# build the react package
-RUN git clone https://github.com/waldiez/react.git -b $JS_BRANCH
-WORKDIR /tmp/package/react
-RUN bun install && \
-    bun run build && \
-    mv out/archive/waldiez-react-*.tgz /tmp/package/waldiez.tgz
-
-WORKDIR /tmp/package/waldiez_jupyter
-# install js requirements
-COPY . /tmp/package/waldiez_jupyter
-RUN yarn install || (find /tmp -name build.log -exec cat {} \; && false)
-
-# build the extension with the react package from git
-RUN yarn remove @waldiez/react > /dev/null 2 >&1 || true && \
-    yarn add @waldiez/react@file:../waldiez.tgz && \
-    yarn build:lib:prod && \
-    yarn build
-
-# build the python package
-RUN uv sync && python3 -m build
-
-#####################################################################################
-# Final image
-#####################################################################################
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 LABEL maintainer="waldiez <development@waldiez.io>"
 LABEL org.opencontainers.image.source="quay.io/waldiez/jupyter"
@@ -133,6 +59,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
+RUN npm install -g corepack
+
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
 
 # add a non-root user
@@ -148,21 +76,25 @@ RUN mkdir -p /home/user/notebooks /home/user/tmp /home/user/.local/bin && \
 ENV PATH=/home/user/.local/bin:${PATH}
 
 USER user
-RUN pip install --upgrade pip jupyterlab ipywidgets ipykernel
 
-COPY --chown=user:user scripts /home/user/scripts
-RUN chmod +x /home/user/scripts/start.sh
+# install bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH=/home/user/.bun/bin:${PATH}
 
-ARG PY_BRANCH=main
-COPY --from=builder --chown=user:user /tmp/package/waldiez_jupyter/dist/*.whl /home/user/tmp/
-RUN pip install --user /home/user/tmp/*.whl && \
-    pip uninstall -y waldiez autogen-agentchat && \
-    pip install --user git+https://github.com/waldiez/python.git@$PY_BRANCH && \
-    rm -rf /home/user/tmp
+COPY --chown=user:user . /home/user/app
+
+WORKDIR /home/user/app
+
+# enable yarn (after a package.json is present)
+RUN corepack enable && \
+    yarn set version stable
+
+RUN sh /home/user/app/scripts/build_dev.sh && rm -rf /home/user/app
+COPY --chown=user:user scripts/start.sh /home/user/app/scripts/start.sh
+RUN chmod +x /home/user/app/scripts/start.sh
 
 RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
     echo '{"@jupyterlab/apputils-extension:themes":{"theme": "JupyterLab Dark"}}' > /home/user/.local/share/jupyter/lab/settings/overrides.json
-
 
 EXPOSE 8888
 VOLUME /home/user/notebooks
@@ -171,4 +103,4 @@ WORKDIR /home/user/notebooks
 ENV TINI_SUBREAPER=true
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/home/user/scripts/start.sh"]
+CMD ["/home/user/app/scripts/start.sh"]
