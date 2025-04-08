@@ -1,6 +1,6 @@
 -r main.txt
-coverage==7.7.1
-pytest-cov==6.0.0
+coverage==7.8.0
+pytest-cov==6.1.1
 pytest-datadir==1.6.1
 pytest-html==4.1.1
 pytest-jupyter[server]>=0.10.1
