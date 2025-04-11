@@ -98,7 +98,7 @@
         "@jupyterlab/translation": "^4.4.0",
         "@jupyterlab/ui-components": "^4.4.0",
         "@jupyterlab/ui-components-extension": "^4.4.0",
-        "@waldiez/react": "^0.4.2"
+        "@waldiez/react": "^0.4.3"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
