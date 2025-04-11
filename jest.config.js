@@ -21,6 +21,7 @@ const esModules = [
     "@rjsf",
     "@xyflow/",
     "@waldiez/react/",
+    "react-hotkeys-hook",
 ].join("|");
 
 module.exports = {
