@@ -32,12 +32,6 @@ dependencies = [
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
-[project.urls]
-homepage = 'https://waldiez.io'
-repository = 'https://github.com/waldiez/jupyter.git'
-documentation = "https://docs.waldiez.io/"
-issues = "https://github.com/waldiez/jupyter/issues"
-
 [project.optional-dependencies]
 test = [
     'coverage==7.8.0',
