@@ -2383,7 +2383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyter-widgets/base@npm:^6.0.10, @jupyter-widgets/base@npm:^6.0.11":
+"@jupyter-widgets/base@npm:^6.0.11":
   version: 6.0.11
   resolution: "@jupyter-widgets/base@npm:6.0.11"
   dependencies:
@@ -2418,7 +2418,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyter-widgets/jupyterlab-manager@npm:^5.0.13":
+"@jupyter-widgets/jupyterlab-manager@npm:^5.0.14":
   version: 5.0.14
   resolution: "@jupyter-widgets/jupyterlab-manager@npm:5.0.14"
   dependencies:
@@ -4264,8 +4264,8 @@ __metadata:
   resolution: "@waldiez/jupyter@workspace:."
   dependencies:
     "@jest/globals": "npm:^29.7.0"
-    "@jupyter-widgets/base": "npm:^6.0.10"
-    "@jupyter-widgets/jupyterlab-manager": "npm:^5.0.13"
+    "@jupyter-widgets/base": "npm:^6.0.11"
+    "@jupyter-widgets/jupyterlab-manager": "npm:^5.0.14"
     "@jupyterlab/application": "npm:^4.4.0"
     "@jupyterlab/apputils": "npm:^4.5.0"
     "@jupyterlab/builder": "npm:^4.4.0"
@@ -4302,7 +4302,7 @@ __metadata:
     copyfiles: "npm:^2.4.1"
     css-loader: "npm:^7.1.2"
     eslint: "npm:^9.24.0"
-    eslint-config-prettier: "npm:^10.1.1"
+    eslint-config-prettier: "npm:^10.1.2"
     eslint-plugin-headers: "npm:^1.2.1"
     eslint-plugin-prettier: "npm:^5.2.6"
     fs-extra: "npm:^11.3.0"
@@ -6474,7 +6474,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^10.1.1":
+"eslint-config-prettier@npm:^10.1.2":
   version: 10.1.2
   resolution: "eslint-config-prettier@npm:10.1.2"
   peerDependencies:

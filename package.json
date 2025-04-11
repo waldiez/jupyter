@@ -9,7 +9,7 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/waldiez/jupyter",
+    "homepage": "https://waldiez.io",
     "bugs": {
         "url": "https://github.com/waldiez/jupyter/issues"
     },
@@ -78,8 +78,8 @@
         "watch:labextension": "yarn jupyter labextension watch ."
     },
     "dependencies": {
-        "@jupyter-widgets/base": "^6.0.10",
-        "@jupyter-widgets/jupyterlab-manager": "^5.0.13",
+        "@jupyter-widgets/base": "^6.0.11",
+        "@jupyter-widgets/jupyterlab-manager": "^5.0.14",
         "@jupyterlab/application": "^4.4.0",
         "@jupyterlab/apputils": "^4.5.0",
         "@jupyterlab/cells": "^4.4.0",
@@ -119,7 +119,7 @@
         "copyfiles": "^2.4.1",
         "css-loader": "^7.1.2",
         "eslint": "^9.24.0",
-        "eslint-config-prettier": "^10.1.1",
+        "eslint-config-prettier": "^10.1.2",
         "eslint-plugin-headers": "^1.2.1",
         "eslint-plugin-prettier": "^5.2.6",
         "fs-extra": "^11.3.0",
