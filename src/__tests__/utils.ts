@@ -190,7 +190,7 @@ export const mockEditor = {
     node: document.createElement("div"),
     context: editorContext,
 };
-export function mockFetch(data: string, error: boolean) {
+export const mockFetch = (data: string, error: boolean) => {
     window.Request = jest.fn().mockImplementation(() => ({
         headers: new Headers(),
         signal: {
@@ -211,7 +211,8 @@ export function mockFetch(data: string, error: boolean) {
             });
         });
     }
-}
+};
+
 export const patchServerConnection = (responseText: string, error: boolean) => {
     mockFetch(responseText, error);
     jest.mock("@jupyterlab/services", () => {

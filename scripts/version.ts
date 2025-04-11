@@ -8,12 +8,12 @@ import url from "url";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-function showHelp(status: number = 1): void {
+const showHelp = (status: number = 1): void => {
     console.log("Usage: node --import=tsx|bun version.ts [--get | --set <version>]");
     process.exit(status);
-}
+};
 
-function validateArgs(): void {
+const validateArgs = (): void => {
     if (process.argv.length < 3) {
         console.error("Error: No arguments provided");
         showHelp();
@@ -38,15 +38,15 @@ function validateArgs(): void {
             showHelp();
         }
     }
-}
+};
 
-function getVersion(): string {
+const getVersion = (): string => {
     const packageJsonPath = path.join(__dirname, "..", "package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
     return packageJson.version;
-}
+};
 
-function setVersion(version: string): void {
+const setVersion = (version: string): void => {
     const packageJsonPath = path.join(__dirname, "..", "package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
     packageJson.version = version;
@@ -73,9 +73,9 @@ function setVersion(version: string): void {
     writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 4)}\n`, { encoding: "utf8" });
     // the new version might not yet be available in the registry
     // execSync("yarn install", { stdio: "inherit", cwd: path.join(__dirname, "..") });
-}
+};
 
-function main(): void {
+const main = (): void => {
     validateArgs();
     const action = process.argv[2];
     if (action === "--get") {
@@ -83,6 +83,6 @@ function main(): void {
     } else if (action === "--set") {
         setVersion(process.argv[3]);
     }
-}
+};
 
 main();
