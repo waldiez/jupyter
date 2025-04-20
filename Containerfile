@@ -125,7 +125,7 @@ RUN mkdir -p /home/user/notebooks /home/user/tmp /home/user/.local/bin && \
 ENV PATH=/home/user/.local/bin:${PATH}
 
 USER user
-RUN pip install --upgrade pip jupyterlab ipywidgets ipykernel
+RUN pip install --upgrade pip jupyterhub jupyterlab ipywidgets ipykernel
 
 COPY --chown=user:user scripts /home/user/scripts
 RUN chmod +x /home/user/scripts/start.sh

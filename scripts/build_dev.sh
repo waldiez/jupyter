@@ -217,7 +217,7 @@ if [ "$in_venv" != "True" ]; then
 fi
 
 before_python_whl() {
-    before_requirements_packages="pip setuptools wheel build jupyterlab ipywidgets ipykernel"
+    before_requirements_packages="pip setuptools wheel build jupyterhub jupyterlab ipywidgets ipykernel"
     python3 -m pip install --upgrade $extra_pip_args $before_requirements_packages
     python3 -m pip install ${extra_pip_args} -r ${requirements_file}
     python3 -m build --wheel . && \
