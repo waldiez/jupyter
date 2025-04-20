@@ -216,7 +216,8 @@ describe("WaldiezEditor", () => {
         // const getSpy = jest.spyOn(editor as any, '_getServeMonacoSetting');
         // getSpy.mockResolvedValue(true);
         const result = await editor["_getServeMonacoSetting"]();
-        expect(result).toBeTruthy();
+        expect(result).not.toBeNull();
+        expect(result).toBe("/static/vs");
     });
     it("should dispose", async () => {
         const editor = await getEditor();

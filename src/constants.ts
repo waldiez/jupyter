@@ -5,7 +5,6 @@
 export const NAMESPACE = "@waldiez/jupyter";
 export const PLUGIN_ID = `${NAMESPACE}:plugin`;
 export const FACTORY_NAME = "Waldiez editor";
-export const MONACO_PATH = "/static/vs";
 export const WALDIEZ_FILE_TYPE = "waldiez";
 export const SERVE_MONACO = "serve_monaco";
 // strings

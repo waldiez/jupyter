@@ -3,7 +3,7 @@
  * Copyright 2024 - 2025 Waldiez & contributors
  */
 import { CommandIDs } from "./commands";
-import { MONACO_PATH, PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "./constants";
+import { PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "./constants";
 import { WaldiezLogger } from "./logger";
 import { getWaldiezActualPath, uploadFile } from "./rest";
 import { WaldiezRunner } from "./runner";
@@ -13,7 +13,7 @@ import { IEditorServices } from "@jupyterlab/codeeditor";
 import { DocumentModel, DocumentWidget } from "@jupyterlab/docregistry";
 import { ILogPayload } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
-import { Kernel } from "@jupyterlab/services";
+import { Kernel, ServerConnection } from "@jupyterlab/services";
 import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { CommandToolbarButton, kernelIcon } from "@jupyterlab/ui-components";
@@ -42,6 +42,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _interruptKernelCommandId: string;
     private _restartKernelButton: CommandToolbarButton;
     private _interruptKernelButton: CommandToolbarButton;
+    private _serverSettings: ServerConnection.ISettings;
     /**
      * Construct a new WaldiezEditor.
      * @param options - The WaldiezEditor instantiation options.
@@ -77,6 +78,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this.toolbar.addItem("toggle-logs-view", this._logger.toggleConsoleViewButton);
         this.toolbar.addItem("clear-logs", this._interruptKernelButton);
         this.toolbar.addItem("restart-kernel", this._restartKernelButton);
+        this._serverSettings = ServerConnection.makeSettings();
         this._runner = new WaldiezRunner({
             logger: this._logger,
             onStdin: this._onStdin.bind(this),
@@ -120,8 +122,8 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     }
     // handle context ready event
     private _onContextReady(): void {
-        this._getServeMonacoSetting().then(serveMonaco => {
-            const waldiezWidget = this._getWaldiezWidget(serveMonaco);
+        this._getServeMonacoSetting().then(vsPath => {
+            const waldiezWidget = this._getWaldiezWidget(vsPath);
             this.content.addWidget(waldiezWidget);
             const payload: ILogPayload = {
                 data: WALDIEZ_STRINGS.LOGGER_INITIALIZED,
@@ -169,15 +171,25 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     }
     //
     private _getServeMonacoSetting() {
-        return new Promise<boolean>(resolve => {
+        return new Promise<string | null>(resolve => {
             this._settingsRegistry
                 .get(PLUGIN_ID, SERVE_MONACO)
                 .then(setting => {
-                    resolve(setting.composite as boolean);
+                    const doServe = (setting.composite as boolean) || false;
+                    if (doServe) {
+                        const fullUrl = this._serverSettings.baseUrl;
+                        let withOutHost = fullUrl.replace(/https?:\/\/[^/]+/, "");
+                        if (!withOutHost.endsWith("/")) {
+                            withOutHost += "/";
+                        }
+                        resolve(`${withOutHost}static/vs`);
+                    } else {
+                        resolve(null);
+                    }
                 })
                 .catch(_ => {
                     console.error(_);
-                    resolve(false);
+                    resolve(null);
                 });
         });
     }
@@ -218,7 +230,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         });
     }
     //
-    private _getWaldiezWidget(serveMonaco: boolean): EditorWidget {
+    private _getWaldiezWidget(vsPath: string | null): EditorWidget {
         const fileContents = this.context.model.toString();
         let jsonData = {};
         try {
@@ -226,7 +238,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         } catch (_) {
             // no-op (empty/new file?)
         }
-        const vsPath = serveMonaco ? MONACO_PATH : null;
         return new EditorWidget({
             flowId: this.id,
             jsonData,
