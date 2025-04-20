@@ -144,17 +144,12 @@ const getPythonExecutable = (): string => {
         console.error("No compatible python found");
         process.exit(1);
     }
-    if (!inVenv(pythonExec) && !inContainer()) {
+    if (!inVenv(pythonExec)) {
         for (const venvName of possibleVenvNames) {
             const venvDir = path.join(__rootDir, venvName);
             const venvPythonPath = getVenvPythonExecutable(venvDir);
             if (fs.existsSync(venvPythonPath)) {
                 return venvPythonPath;
-            } else {
-                console.error(
-                    `Virtual environment not found at ${venvDir}. Please create one using ${pythonExec} -m venv ${venvDir}`,
-                );
-                process.exit(1);
             }
         }
     }
@@ -173,17 +168,6 @@ const showHelp = () => {
             "bun scripts/python.ts path/to/file.py\n",
     );
     process.exit(0);
-};
-
-/** check if this script is running in a container
- * @returns true if running in a container, false otherwise
- */
-const inContainer = (): boolean => {
-    try {
-        return fs.existsSync("/.dockerenv") || fs.existsSync("/run/.containerenv");
-    } catch (_) {
-        return false;
-    }
 };
 
 /**
