@@ -222,7 +222,7 @@ before_python_whl() {
     python3 -m pip install ${extra_pip_args} -r ${requirements_file}
     python3 -m build --wheel . && \
         python3 -m pip install --force ${extra_pip_args} dist/*.whl && \
-        python3 -m pip uninstall -y ${extra_pip_args} waldiez autogen-agentchat
+        python3 -m pip uninstall -y waldiez autogen-agentchat
 }
 
 use_python_from_git() {
