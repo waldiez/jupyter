@@ -2,6 +2,14 @@
 .REPORTS_DIR := coverage
 .PACKAGE_NAME := waldiez_jupyter
 .PACKAGE_MANAGER := yarn
+ifeq ($(OS),Windows_NT)
+  PYTHON_PATH := $(shell where python 2>NUL || where py 2>NUL)
+else
+  PYTHON_PATH := $(shell command -v python || command -v python3)
+endif
+
+PYTHON_NAME := $(notdir $(firstword $(PYTHON_PATH)))
+PYTHON := $(basename $(PYTHON_NAME))
 
 .PHONY: help
 help:
@@ -60,16 +68,16 @@ forlint: format lint
 
 .PHONY: clean
 clean:
-	python scripts/clean.py
+	$(PYTHON) scripts/clean.py
 	${.PACKAGE_MANAGER} run clean:all
 
 .PHONY: requirements
 requirements:
-	python scripts/requirements.py
+	$(PYTHON) scripts/requirements.py
 
 .PHONY: test
 test:
-	python -c 'import os; os.makedirs("coverage", exist_ok=True);'
+	$(PYTHON) -c 'import os; os.makedirs("coverage", exist_ok=True);'
 	pytest \
 		-c pyproject.toml \
 		--capture=sys \
@@ -84,25 +92,25 @@ test:
 
 .PHONY: .pre-dev
 .pre-dev:
-	python -m pip install -e .
+	$(PYTHON) -m pip install -e .
 	jupyter labextension develop --overwrite .
 
 .PHONY: dev
 dev: .pre-dev
-	python scripts/run.py
+	$(PYTHON) scripts/run.py
 
 .PHONY: dev-react
 dev-react:
-	python scripts/run.py --react
+	$(PYTHON) scripts/run.py --react
 
 .PHONY: dev-stop
 dev-stop:
-	python scripts/run.py --stop
+	$(PYTHON) scripts/run.py --stop
 
 .PHONY: build-py
 build-py:
-	python -m pip install build
-	python -m build
+	$(PYTHON) -m pip install build
+	$(PYTHON) -m build
 
 .PHONY: build-js
 build-js:
@@ -118,8 +126,8 @@ all: requirements forlint test build
 
 .PHONY: image
 image:
-	python scripts/image.py
+	$(PYTHON) scripts/image.py
 
 .PHONY: dev-image
 dev-image:
-	python scripts/image.py --dev --no-cache
+	$(PYTHON) scripts/image.py --dev --no-cache
