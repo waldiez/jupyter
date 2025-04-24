@@ -109,7 +109,7 @@ const getNewPythonExecutable = () => {
     const resolvedDir = path.resolve(__rootDir, possibleVenvNames[0]);
     execSync(`${pyThonExec} -m venv ${resolvedDir}`);
     const pythonPath = getVenvPythonExecutable(resolvedDir);
-    execSync(`${pythonPath} -m pip install --upgrade pip uv`);
+    execSync(`${pythonPath} -m pip install --upgrade pip`);
     return pythonPath;
 };
 

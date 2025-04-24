@@ -2,14 +2,8 @@
 .REPORTS_DIR := coverage
 .PACKAGE_NAME := waldiez_jupyter
 .PACKAGE_MANAGER := yarn
-ifeq ($(OS),Windows_NT)
-  PYTHON_PATH := $(shell where python 2>NUL || where py 2>NUL)
-else
-  PYTHON_PATH := $(shell command -v python || command -v python3)
-endif
 
-PYTHON_NAME := $(notdir $(firstword $(PYTHON_PATH)))
-PYTHON := $(basename $(PYTHON_NAME))
+PYTHON := ${.PACKAGE_MANAGER} python
 
 .PHONY: help
 help:
@@ -77,7 +71,6 @@ requirements:
 
 .PHONY: test
 test:
-	$(PYTHON) -c 'import os; os.makedirs("coverage", exist_ok=True);'
 	pytest \
 		-c pyproject.toml \
 		--capture=sys \
