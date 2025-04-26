@@ -52,9 +52,7 @@ jobs:
           fi
           echo "docker_tag=$tag" >> $GITHUB_OUTPUT
 
-      - name: Build and push jupyter
-        # manually, after publishing waldiez_jupyter on pypi
-        if: github.event_name == 'workflow_dispatch'
+      - name: Build and push waldiez/jupyter
         uses: docker/build-push-action@v6
         with:
           platforms: |
