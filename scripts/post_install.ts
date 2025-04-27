@@ -15,9 +15,14 @@ const nodeModules = path.resolve(__dirname, "..", "node_modules");
 
 if (fs.existsSync(uiTests)) {
     execSync(`cd ${uiTests} && yarn install`, { stdio: "inherit" });
+} else {
+    console.error("ui-tests directory does not exist. Skipping yarn install.");
 }
 if (fs.existsSync(patchDir)) {
     const src = path.resolve(patchDir, "entities");
     const dest = path.resolve(nodeModules, "@types", "entities");
+    fs.ensureDirSync(path.resolve(nodeModules, "@types"));
     fs.copySync(src, dest, { overwrite: true });
+} else {
+    console.error("patch directory does not exist. Skipping copy.");
 }

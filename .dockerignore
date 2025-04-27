@@ -37,3 +37,4 @@ waldiez_jupyter/labextension/*
 !requirements/*.txt
 !LICENSE
 !README.md
+!patch

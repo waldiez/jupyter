@@ -46,7 +46,7 @@ WORKDIR /tmp/package/waldiez_jupyter
 
 RUN touch yarn.lock && \
     yarn install && \
-    yarn build:lib:prod && \
+    yarn postinstall && \
     yarn build && \
     python3 -m build
 
