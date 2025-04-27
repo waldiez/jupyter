@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -98,7 +98,7 @@
         "@jupyterlab/translation": "^4.4.1",
         "@jupyterlab/ui-components": "^4.4.1",
         "@jupyterlab/ui-components-extension": "^4.4.1",
-        "@waldiez/react": "^0.4.4"
+        "@waldiez/react": "^0.4.5"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
