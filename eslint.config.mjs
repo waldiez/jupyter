@@ -84,7 +84,7 @@ const defaultConfig = eslintTs.config({
 
 export default [
     {
-        ignores: ["node_modules", "dist", "lib", "**/.venv/**", "**/*.js", "patch"],
+        ignores: ["node_modules", "dist", "lib", ".local", "**/.venv/**", "**/*.js", "patch"],
     },
     ...defaultConfig,
     // overrides

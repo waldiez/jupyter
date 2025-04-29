@@ -89,7 +89,13 @@ WORKDIR /home/user/app
 RUN corepack enable && \
     yarn set version stable
 
-RUN sh /home/user/app/scripts/build_dev.sh && rm -rf /home/user/app
+ARG REACT_BRANCH=main
+ARG PYTHON_BRANCH=main
+
+ENV REACT_BRANCH=${REACT_BRANCH}
+ENV PYTHON_BRANCH=${PYTHON_BRANCH}
+RUN sh /home/user/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} && \
+    rm -rf /home/user/app
 COPY --chown=user:user scripts/start.sh /home/user/app/scripts/start.sh
 RUN chmod +x /home/user/app/scripts/start.sh
 

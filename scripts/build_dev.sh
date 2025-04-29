@@ -5,11 +5,14 @@ HERE="$(dirname "$(readlink -f "$0")")"
 ROOT_DIR="$(dirname "$HERE")"
 DOT_LOCAL="${ROOT_DIR}/.local"
 
+PY_GIT_REPO="https://github.com/waldiez/waldiez.git"
+REACT_GIT_REPO="https://github.com/waldiez/waldiez.git"
+
 react_branch="main"
 python_branch="main"
+dry_run="false"
 react_build=""
 python_build=""
-dry_run="false"
 
 if [ ! -d "$DOT_LOCAL" ]; then
     mkdir -p "$DOT_LOCAL"
@@ -129,7 +132,7 @@ use_react_from_git() {
     if [ -f "${DOT_LOCAL}/waldiez.tgz" ]; then
         rm -f "${DOT_LOCAL}/waldiez.tgz"
     fi
-    git clone https://github.com/waldiez/react.git -b "$react_branch" "${DOT_LOCAL}/waldiez-react"
+    git clone "${REACT_GIT_REPO}" -b "$react_branch" "${DOT_LOCAL}/waldiez-react"
     cd "${DOT_LOCAL}/waldiez-react" || exit 1
     bun install
     bun run build
@@ -231,7 +234,7 @@ use_python_from_git() {
     if [ -d "${DOT_LOCAL}/waldiez-py" ]; then
         rm -rf "${DOT_LOCAL}/waldiez-py"
     fi
-    git clone https://github.com/waldiez/python.git -b "$python_branch" "${DOT_LOCAL}/waldiez-py"
+    git clone "${PY_GIT_REPO}" -b "$python_branch" "${DOT_LOCAL}/waldiez-py"
     cd "${DOT_LOCAL}/waldiez-py" || exit 1
     python3 -m pip install --upgrade ${extra_pip_args} pip setuptools wheel build
     python3 -m pip install ${extra_pip_args} -r requirements/main.txt
