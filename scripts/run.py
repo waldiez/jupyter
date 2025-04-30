@@ -26,18 +26,6 @@ JUPYTER_COMMAND = str(BIN_DIR / f"jupyter{EXE_}")
 PYTHON_COMMAND = str(BIN_DIR / f"python{EXE_}")
 
 
-def activate_venv() -> None:
-    """Activate the virtual environment."""
-    if not BIN_DIR.is_dir() or not (BIN_DIR / f"python{EXE_}").is_file():
-        return
-    # pylint: disable=inconsistent-quotes
-    os.environ["PATH"] = f"{BIN_DIR}{os.pathsep}{os.environ['PATH']}"
-
-    if sys.platform == "win32":
-        os.environ["VIRTUAL_ENV"] = str(VENV_DIR)
-        os.environ["PROMPT"] = f"({VENV_DIR.name}) $P$G"
-
-
 def _do_start_jupyter() -> None:
     os.environ["PYTHONUNBUFFERED"] = "1"
     cmd = [JUPYTER_COMMAND, "lab", "-y", "--no-browser", "--autoreload"]
@@ -145,5 +133,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    activate_venv()
     main()
