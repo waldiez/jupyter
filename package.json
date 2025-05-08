@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.4.6",
+    "version": "0.4.7",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -17,15 +17,15 @@
     "contributors": [
         {
             "name": "Panagiotis Kasnesis",
-            "email": "pkasnesis@thingenious.io"
+            "email": "pkasnesis@waldiez.io"
         },
         {
             "name": "Lazaros Toumanidis",
-            "email": "laztoum@protonmail.com"
+            "email": "laztoum@waldiez.io"
         },
         {
             "name": "Stella Ioannidou",
-            "email": "stella@humancentered.gr"
+            "email": "stella@waldiez.io"
         }
     ],
     "files": [
@@ -98,7 +98,7 @@
         "@jupyterlab/translation": "^4.4.2",
         "@jupyterlab/ui-components": "^4.4.2",
         "@jupyterlab/ui-components-extension": "^4.4.2",
-        "@waldiez/react": "^0.4.6"
+        "@waldiez/react": "^0.4.7"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
