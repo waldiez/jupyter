@@ -96,8 +96,8 @@ ENV REACT_BRANCH=${REACT_BRANCH}
 ENV PYTHON_BRANCH=${PYTHON_BRANCH}
 RUN sh /home/user/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} && \
     rm -rf /home/user/app
-COPY --chown=user:user scripts/start.sh /home/user/app/scripts/start.sh
-RUN chmod +x /home/user/app/scripts/start.sh
+COPY --chown=user:user scripts/start.sh /home/user/app/start.sh
+RUN chmod +x /home/user/app/start.sh
 
 RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
     echo '{"@jupyterlab/apputils-extension:themes":{"theme": "JupyterLab Dark"}}' > /home/user/.local/share/jupyter/lab/settings/overrides.json
@@ -109,4 +109,4 @@ WORKDIR /home/user/notebooks
 ENV TINI_SUBREAPER=true
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/home/user/app/scripts/start.sh"]
+CMD ["/home/user/app/start.sh"]
