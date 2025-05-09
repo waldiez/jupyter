@@ -1,6 +1,6 @@
 {
     "name": "waldiez-ui-tests",
-    "version": "0.4.5",
+    "version": "0.4.7",
     "description": "JupyterLab waldiez Integration Tests",
     "private": true,
     "scripts": {
@@ -9,7 +9,7 @@
         "test:update": "yarn playwright test --update-snapshots"
     },
     "devDependencies": {
-        "@jupyterlab/galata": "^5.4.1",
+        "@jupyterlab/galata": "^5.4.2",
         "@playwright/test": "^1.52.0"
     }
 }

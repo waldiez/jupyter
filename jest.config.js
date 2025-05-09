@@ -31,6 +31,7 @@ const esModules = [
     "@rjsf",
     "@xyflow/",
     "@waldiez/react/",
+    "react-error-boundary",
     "react-hotkeys-hook",
 ].join("|");
 
