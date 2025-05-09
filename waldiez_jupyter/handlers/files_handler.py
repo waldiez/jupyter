@@ -24,7 +24,7 @@ from jupyter_server.base.handlers import APIHandler
 from tornado.web import HTTPError, authenticated
 from waldiez import WaldiezExporter
 
-# pylint: disable=broad-except
+# pylint: disable=broad-exception-caught
 
 
 class FilesHandler(APIHandler):
@@ -62,12 +62,19 @@ class FilesHandler(APIHandler):
 
         Example URL:
         /waldiez/files?path=relative/to/example.waldiez
+        /waldiez/files?view=path/to/an/image.png
         """
-        file_path_art = self.get_query_argument("path", None)
-        if not file_path_art:
+        if not self.request.arguments:
+            raise HTTPError(400, reason="No args in request")
+        view_arg = self.get_query_argument("view", None)
+        if view_arg:
+            self._send_image(view_arg)
+            return
+        path_arg = self.get_query_argument("path", None)
+        if not path_arg:
             raise HTTPError(400, reason="No path in request")
         try:
-            file_path = self._get_file_path(file_path_art)
+            file_path = self._get_file_path(path_arg)
         except FileNotFoundError as error:
             raise HTTPError(404, reason=str(error)) from error
         self.finish(json.dumps({"path": str(file_path)}))
@@ -99,6 +106,24 @@ class FilesHandler(APIHandler):
         results = _handle_export(files, target_extension)
         self.log.info("Exported: %s", results)
         self.finish(json.dumps({"files": results}))
+
+    def _send_image(self, file_path: str) -> None:
+        """Send an image file.
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the image file.
+        """
+        try:
+            actual_file_path = self._get_file_path(file_path)
+        except FileNotFoundError as error:
+            raise HTTPError(404, reason=str(error)) from error
+        with open(actual_file_path, "rb") as image_file:
+            self.set_header("Content-Type", "image/png")
+            self.write(image_file.read())
+            self.flush()
+        self.log.info("Sent image: %s", file_path)
 
     def _gather_post_data(self) -> Tuple[List[str], str]:
         """Gather the data from the POST request.
