@@ -67,22 +67,22 @@ const inVenv = (pythonExecutable: string): boolean => {
  * if no compatible python is found
  */
 const getCompatiblePythonExecutable = (): { path: string | null; virtualEnv: boolean } => {
-    let pyThonExec: string | null = null;
+    let pythonExec: string | null = null;
     for (const pyCmd of possiblePys) {
         try {
             execSync(`${pyCmd} --version`);
             if (isPyGte310lte314(pyCmd)) {
-                pyThonExec = pyCmd;
+                pythonExec = pyCmd;
                 break;
             }
         } catch (_) {
             continue;
         }
     }
-    if (!pyThonExec) {
+    if (!pythonExec) {
         return { path: null, virtualEnv: false };
     }
-    return { path: pyThonExec, virtualEnv: inVenv(pyThonExec) };
+    return { path: pythonExec, virtualEnv: inVenv(pythonExec) };
 };
 /**
  * Get the python executable from the virtual environment directory
@@ -109,7 +109,7 @@ const getNewPythonExecutable = () => {
     const resolvedDir = path.resolve(__rootDir, possibleVenvNames[0]);
     execSync(`${pyThonExec} -m venv ${resolvedDir}`);
     const pythonPath = getVenvPythonExecutable(resolvedDir);
-    execSync(`${pythonPath} -m pip install --upgrade pip`);
+    execSync(`${pythonPath} -m pip install --upgrade pip jupyter`);
     return pythonPath;
 };
 
@@ -171,6 +171,22 @@ const showHelp = () => {
 };
 
 /**
+ * Get the actual path of the python executable
+ * @param pythonExecutable the python executable
+ * @returns the actual path of the python executable
+ */
+const getActualPath = (pythonExecutable: string): string => {
+    const cmd = "import sys; print(sys.executable)";
+    try {
+        const output = execSync(`${pythonExecutable} -c "${cmd}"`).toString();
+        return output.trim();
+    } catch (err) {
+        console.error("Error getting actual path of python executable:", (err as Error).message);
+        process.exit(1);
+    }
+};
+
+/**
  * Main function
  */
 const main = () => {
@@ -179,9 +195,12 @@ const main = () => {
         if (cmd_args.length === 0 || cmd_args[0] === "-h" || cmd_args[0] === "--help") {
             showHelp();
         }
-        const pythonExec = getPythonExecutable();
+        const pythonExec = getActualPath(getPythonExecutable());
         const cmd_args_str = cmd_args.join(" ");
-        execSync(`${pythonExec} ${cmd_args_str}`, { stdio: "inherit" });
+        console.log(`\x1b[36mRunning command: ${pythonExec} ${cmd_args_str}`);
+        execSync(`${pythonExec} ${cmd_args_str}`, {
+            stdio: "inherit",
+        });
     } catch (err) {
         console.error("Error:", (err as Error).message);
         process.exit(1);
