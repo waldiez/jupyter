@@ -3,7 +3,14 @@
 .PACKAGE_NAME := waldiez_jupyter
 .PACKAGE_MANAGER := yarn
 
-PYTHON := ${.PACKAGE_MANAGER} python
+ifeq ($(OS),Windows_NT)
+  PYTHON_PATH := $(shell where python 2>NUL || where py 2>NUL)
+else
+  PYTHON_PATH := $(shell command -v python || command -v python3)
+endif
+
+PYTHON_NAME := $(notdir $(firstword $(PYTHON_PATH)))
+PYTHON := $(basename $(PYTHON_NAME))
 
 .PHONY: help
 help:
