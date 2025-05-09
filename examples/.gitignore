@@ -4,6 +4,7 @@
 .ipynb_checkpoints/
 waldiez_out/
 documents/
+/dev/
 # do not ignore these extensions
 !.gitignore
 !README.md
