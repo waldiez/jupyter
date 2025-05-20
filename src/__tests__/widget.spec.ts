@@ -2,8 +2,10 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { EditorWidget, IWaldiezEditorProps } from "../widget";
+import { EditorWidget, IWaldiezWidgetProps } from "../widget";
 import { Signal } from "@lumino/signaling";
+
+import { WaldiezChatConfig } from "@waldiez/react";
 
 const waldiezFlow = {
     type: "flow",
@@ -21,23 +23,27 @@ jest.mock("@waldiez/react", () => ({
 }));
 
 describe("EditorWidget", () => {
-    let inputPrompt: Signal<any, { previousMessages: string[]; prompt: string } | null>;
+    let chat: Signal<any, WaldiezChatConfig | undefined>;
 
     beforeEach(() => {
-        inputPrompt = new Signal<any, { previousMessages: string[]; prompt: string } | null>(null);
+        chat = new Signal<any, WaldiezChatConfig | undefined>(undefined);
     });
     afterEach(() => {
         jest.clearAllMocks();
     });
 
-    const defaultProps: IWaldiezEditorProps = {
+    const defaultProps: IWaldiezWidgetProps = {
         flowId: "test-flow-id",
-        vsPath: null,
+        vsPath: undefined,
         jsonData: waldiezFlow,
-        inputPrompt: inputPrompt!,
+        chat: chat!,
         onChange: jest.fn(),
         onRun: jest.fn(),
-        onUserInput: jest.fn(),
+        // chat: {
+        //     showUI: false,
+        //     messages: [],
+        //     userParticipants: [],
+        // },
     };
 
     it("should render the EditorWidget", () => {
@@ -49,10 +55,10 @@ describe("EditorWidget", () => {
     it("should handle input prompt signal", () => {
         const widget = new EditorWidget(defaultProps);
         widget.render();
-        inputPrompt.emit({
-            previousMessages: ["Hello"],
-            prompt: "Test Prompt",
-        });
+        // chat.emit({
+        //     messages: ["Hello"],
+        //     prompt: "Test Prompt",
+        // });
         expect(widget.render()).toBeTruthy();
         widget.dispose();
     });

@@ -1,9 +1,54 @@
 {
-    "pylint.args": ["--rcfile=pyproject.toml"],
-    "pylint.importStrategy": "fromEnvironment",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[toml]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "yaml.format.indent": 2,
     "mypy.runUsingActiveInterpreter": true,
     "mypy-type-checker.args": ["--config pyproject.toml"],
+    "yaml.customTags": ["tag:yaml.org,2002:python/name:pymdownx.superfences.fence_code_format"],
     "yaml.format.printWidth": 100,
+    "prettier.configPath": "package.json",
+    "mypy-type-checker.importStrategy": "fromEnvironment",
+    "pylint.args": ["--rcfile=pyproject.toml"],
+    "pylint.importStrategy": "fromEnvironment",
     "python.envFile": "",
     "files.eol": "\n",
     "npm.packageManager": "yarn",

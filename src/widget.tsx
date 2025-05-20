@@ -7,7 +7,7 @@ import { ISignal } from "@lumino/signaling";
 
 import { JSX } from "react";
 
-import { Waldiez, WaldiezProps, importFlow } from "@waldiez/react";
+import { Waldiez, WaldiezChatConfig, WaldiezProps, importFlow } from "@waldiez/react";
 import "@waldiez/react/dist/@waldiez.css";
 
 /**
@@ -24,15 +24,14 @@ import "@waldiez/react/dist/@waldiez.css";
  * @param inputPrompt The input prompt signal
  * @returns The props for the Waldiez editor widget
  */
-export interface IWaldiezEditorProps {
+export interface IWaldiezWidgetProps {
     flowId: string;
-    vsPath: string | null;
+    vsPath?: string;
     jsonData: Record<string, any>;
+    chat: ISignal<any, WaldiezChatConfig | undefined>;
     onRun?: (flow: string) => void;
     onChange?: (content: string) => void;
-    onUserInput?: (userInput: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
-    inputPrompt: ISignal<any, { previousMessages: string[]; prompt: string } | null>;
 }
 
 /**
@@ -44,14 +43,15 @@ export interface IWaldiezEditorProps {
  * @param props The props for the widget
  */
 export class EditorWidget extends ReactWidget {
-    private _inputPrompt: ISignal<any, { previousMessages: string[]; prompt: string } | null>;
+    private _chat: ISignal<any, WaldiezChatConfig | undefined>;
+    // private _onUserInput: (userInput: WaldiezChatUserInput) => void;
 
     private _waldiez: WaldiezProps;
 
-    constructor(props: IWaldiezEditorProps) {
+    constructor(props: IWaldiezWidgetProps) {
         super();
         this.addClass("jp-waldiez-widget");
-        this._inputPrompt = props.inputPrompt;
+        this._chat = props.chat;
         const flow = importFlow(props.jsonData);
         this._waldiez = {
             ...flow,
@@ -59,7 +59,6 @@ export class EditorWidget extends ReactWidget {
             storageId: flow.storageId ?? props.flowId,
             onChange: props.onChange,
             onRun: props.onRun,
-            onUserInput: props.onUserInput,
             onUpload: props.onUpload,
             monacoVsPath: props.vsPath,
         };
@@ -68,9 +67,9 @@ export class EditorWidget extends ReactWidget {
     render(): JSX.Element {
         return (
             <UseSignal
-                signal={this._inputPrompt}
+                signal={this._chat}
                 initialArgs={null}
-                children={(_, inputPrompt) => <Waldiez {...this._waldiez} inputPrompt={inputPrompt} />}
+                children={(_, chat) => <Waldiez {...this._waldiez} chat={chat !== null ? chat : undefined} />}
             />
         );
     }

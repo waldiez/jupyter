@@ -98,7 +98,7 @@
         "@jupyterlab/translation": "^4.4.2",
         "@jupyterlab/ui-components": "^4.4.2",
         "@jupyterlab/ui-components-extension": "^4.4.2",
-        "@waldiez/react": "^0.4.7"
+        "@waldiez/react": "file:./.local/waldiez-react-0.4.7.tgz"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
@@ -195,6 +195,39 @@
         "**/__tests__",
         "ui-tests"
     ],
+    "prettier": {
+        "tabWidth": 4,
+        "printWidth": 110,
+        "arrowParens": "avoid",
+        "bracketSpacing": true,
+        "singleQuote": false,
+        "trailingComma": "all",
+        "endOfLine": "lf",
+        "plugins": [
+            "@trivago/prettier-plugin-sort-imports"
+        ],
+        "importOrderSeparation": true,
+        "importOrderSortSpecifiers": true,
+        "importOrder": [
+            "^react",
+            "^react-dom",
+            "@waldiez/react",
+            "^@waldiez/jupyter"
+        ],
+        "overrides": [
+            {
+                "files": [
+                    "**/*.yml",
+                    "**/*.yaml",
+                    "**/*.md",
+                    "**/*.css"
+                ],
+                "options": {
+                    "tabWidth": 2
+                }
+            }
+        ]
+    },
     "stylelint": {
         "extends": [
             "stylelint-config-recommended",

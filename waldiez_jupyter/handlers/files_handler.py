@@ -18,7 +18,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Awaitable, List, Tuple
+from typing import Any, Awaitable
 
 from jupyter_server.base.handlers import APIHandler
 from tornado.web import HTTPError, authenticated
@@ -121,16 +121,16 @@ class FilesHandler(APIHandler):
             raise HTTPError(404, reason=str(error)) from error
         with open(actual_file_path, "rb") as image_file:
             self.set_header("Content-Type", "image/png")
-            self.write(image_file.read())
+            self.write(image_file.read())  # pyright: ignore
             self.flush()
         self.log.info("Sent image: %s", file_path)
 
-    def _gather_post_data(self) -> Tuple[List[str], str]:
+    def _gather_post_data(self) -> tuple[list[str], str]:
         """Gather the data from the POST request.
 
         Returns
         -------
-        Tuple[List[str], str]
+        tuple[list[str], str]
             The list of files and the target extension.
 
         Raises
@@ -141,12 +141,15 @@ class FilesHandler(APIHandler):
         input_data = self.get_json_body()
         if not input_data:
             raise HTTPError(400, reason="No data in request")
-        files = input_data.get("files", [])
+        files_: Any = input_data.get("files", [])
         target_extension = input_data.get("extension", "")
         if target_extension not in ("py", "ipynb"):
             raise HTTPError(400, reason="Invalid extension")
-        if not isinstance(files, list) or not files:
+        if not isinstance(files_, list) or not files_:
             raise HTTPError(400, reason="No files in request")
+        files: list[str] = [
+            file for file in files_ if isinstance(file, str)  # pyright: ignore
+        ]
         try:
             return self._get_file_paths(files), target_extension
         except BaseException as error:
@@ -178,21 +181,21 @@ class FilesHandler(APIHandler):
             return Path(os.path.abspath(joined))
         raise FileNotFoundError(f"File not found: {file}")
 
-    def _get_file_paths(self, files: List[str]) -> List[str]:
+    def _get_file_paths(self, files: list[str]) -> list[str]:
         """Get the actual paths of the files.
 
         Parameters
         ----------
-        files : List[str]
+        files : list[str]
             The list of files.
         Returns
         -------
-        List[str]
+        list[str]
             The list of actual paths of the files.
         """
-        file_paths = []
+        file_paths: list[str] = []
         for file in files:
-            if not isinstance(file, str) or not file.endswith(".waldiez"):
+            if not file.endswith(".waldiez"):
                 continue
             try:
                 actual_file_path = self._get_file_path(file)
@@ -222,7 +225,7 @@ def _relative_to_cwd(file_path: Path) -> str:
     return file_path_str
 
 
-def _handle_export(files: list[str], target_extension: str) -> List[str]:
+def _handle_export(files: list[str], target_extension: str) -> list[str]:
     """Handle the export.
 
     Parameters
@@ -234,10 +237,10 @@ def _handle_export(files: list[str], target_extension: str) -> List[str]:
 
     Returns
     -------
-    List[str]
+    list[str]
         The list of files that were exported.
     """
-    file_paths = []
+    file_paths: list[str] = []
     for file in files:
         file_path = Path(file).resolve()
         try:

@@ -4285,7 +4285,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.32.1"
     "@typescript-eslint/parser": "npm:^8.32.1"
-    "@waldiez/react": "npm:^0.4.7"
+    "@waldiez/react": "file:./.local/waldiez-react-0.4.7.tgz"
     add: "npm:^2.0.6"
     all-contributors-cli: "npm:^6.26.1"
     copyfiles: "npm:^2.4.1"
@@ -4321,19 +4321,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.4.7":
+"@waldiez/react@file:./.local/waldiez-react-0.4.7.tgz::locator=%40waldiez%2Fjupyter%40workspace%3A.":
   version: 0.4.7
-  resolution: "@waldiez/react@npm:0.4.7"
+  resolution: "@waldiez/react@file:./.local/waldiez-react-0.4.7.tgz#./.local/waldiez-react-0.4.7.tgz::hash=1e43b4&locator=%40waldiez%2Fjupyter%40workspace%3A."
   dependencies:
     "@monaco-editor/react": "npm:^4.7.0"
-    "@xyflow/react": "npm:^12.6.0"
+    "@xyflow/react": "npm:^12.6.4"
     jszip: "npm:^3.10.1"
     microdiff: "npm:^1.5.0"
     nanoid: "npm:^5.1.5"
     rc-slider: "npm:^11.1.8"
     react-error-boundary: "npm:^6.0.0"
     react-fast-compare: "npm:^3.2.2"
-    react-hotkeys-hook: "npm:^5.0.1"
+    react-hotkeys-hook: "npm:^5.1.0"
     react-icons: "npm:^5.5.0"
     react-select: "npm:^5.10.1"
     zundo: "npm:^2.3.0"
@@ -4341,7 +4341,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/93b275f446e85311c8a6abde723245fece6b0c9200e95038023955fce7474f24a82a64ae5ca215b50a5f6848e67f31839a75fb911d6b96db1852d71e242a95f0
+  checksum: 10/e5bcd58fc7907079dfa87eb8bf06e895322529d38ce79a8bca7bbd19f13dd13a65fc317aa2d3a3163dc05f9c81090726e7467e0b96c47cfbb731352a35ca0c84
   languageName: node
   linkType: hard
 
@@ -4543,7 +4543,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyflow/react@npm:^12.6.0":
+"@xyflow/react@npm:^12.6.4":
   version: 12.6.4
   resolution: "@xyflow/react@npm:12.6.4"
   dependencies:
@@ -10293,7 +10293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.0.1":
+"react-hotkeys-hook@npm:^5.1.0":
   version: 5.1.0
   resolution: "react-hotkeys-hook@npm:5.1.0"
   peerDependencies:

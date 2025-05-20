@@ -105,7 +105,14 @@ export class WaldiezLogger {
      * @memberof WaldiezLogger
      */
     log(
-        msg: IStreamMsg | IErrorMsg | IInputRequestMsg | IExecuteReplyMsg | IExecuteRequestMsg | ILogPayload,
+        msg:
+            | IStreamMsg
+            | IErrorMsg
+            | IInputRequestMsg
+            | IExecuteReplyMsg
+            | IExecuteRequestMsg
+            | ILogPayload
+            | string,
     ): void {
         if (typeof msg === "string") {
             this._logData({
@@ -113,6 +120,7 @@ export class WaldiezLogger {
                 level: "info",
                 type: "text",
             });
+            return;
         }
         if ("level" in msg) {
             this._logData(msg);
