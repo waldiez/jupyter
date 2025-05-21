@@ -3,7 +3,7 @@
  * Copyright 2024 - 2025 Waldiez & contributors
  */
 import { WaldiezLogger } from "./logger";
-import { URLExt } from "@jupyterlab/coreutils";
+import { WaldiezMessageProcessor } from "./messageProcessor";
 import { Kernel } from "@jupyterlab/services";
 import {
     IErrorMsg,
@@ -46,6 +46,7 @@ const getUploadsRoot = (filePath: string): string => {
     // Join with uploads directory
     return dirPath + separator + "uploads";
 };
+
 /**
  * The runner class to run a waldiez file through a kernel.
  * It listens for stdin and iopub messages.
@@ -62,15 +63,26 @@ export class WaldiezRunner {
     private _messages: WaldiezChatMessage[] = [];
     private _userParticipants: string[] = [];
     private _onInputRequest: (requestId: string) => void;
+    private _onMessagesUpdate: (isInputRequest: boolean) => void;
+    private _onEnd: () => void;
     private _requestId: string | null = null;
     private _expectingUserInput: boolean = false;
     private _uploadsRoot: string | null = null;
 
-    constructor({ logger, onStdin, baseUrl, onInputRequest }: WaldiezRunner.IOptions) {
+    constructor({
+        logger,
+        onStdin,
+        baseUrl,
+        onInputRequest,
+        onMessagesUpdate,
+        onEnd,
+    }: WaldiezRunner.IOptions) {
         this._logger = logger;
         this._onStdin = onStdin;
         this._baseUrl = baseUrl;
+        this._onMessagesUpdate = onMessagesUpdate;
         this._onInputRequest = onInputRequest;
+        this._onEnd = onEnd;
     }
 
     /**
@@ -124,11 +136,13 @@ export class WaldiezRunner {
         this._future = undefined;
         this._messages = [];
         this._userParticipants = [];
+        this._requestId = null;
+        this._expectingUserInput = false;
+        this._onMessagesUpdate(false);
     }
 
     /**
      * Get previous messages to pass with the input prompt.
-     * @param inputPrompt The input prompt
      * @returns The previous messages
      * @public
      * @memberof WaldiezRunner
@@ -136,6 +150,7 @@ export class WaldiezRunner {
     getPreviousMessages() {
         return this._messages;
     }
+
     /**
      * Get the names of the participants that are marked
      *  as 'users' (i.e. have replied to the input request).
@@ -146,17 +161,7 @@ export class WaldiezRunner {
     getUserParticipants() {
         return this._userParticipants;
     }
-    /**
-     * Remove ANSI escape sequences from a string.
-     * @param str The string to remove ANSI escape sequences from
-     * @returns The string without ANSI escape sequences
-     * @private
-     * @memberof WaldiezRunner
-     */
-    private _remove_ansi(str: string): string {
-        // eslint-disable-next-line no-control-regex
-        return str.replace(/\u001b\[[0-9;]*m/g, "");
-    }
+
     /**
      * Check if the message is an input request.
      * @param msg The message to check
@@ -174,6 +179,7 @@ export class WaldiezRunner {
         }
         return false;
     }
+
     /**
      * Listen for stdin, iopub and reply messages.
      * @private
@@ -185,13 +191,16 @@ export class WaldiezRunner {
             this.reset();
             return;
         }
+
         this._future.onStdin = msg => {
             const requestMsg = msg as IInputRequestMsg;
             requestMsg.metadata = {
                 request_id: this._requestId,
             };
             this._onStdin(requestMsg);
+            this._expectingUserInput = true;
         };
+
         this._future.onIOPub = msg => {
             const msgType = msg.header.msg_type;
             if (msgType === "stream") {
@@ -201,21 +210,22 @@ export class WaldiezRunner {
                     if (requestId) {
                         this._requestId = requestId;
                         this._onInputRequest(requestId);
+                        this._expectingUserInput = true;
                     }
-                    this._addMessageIfNeeded(streamMsg);
+                    this._processMessage(streamMsg.content.text);
                 }
                 this._logger.log(streamMsg);
             } else if (msgType === "error") {
                 this._logger.log(msg as IErrorMsg);
             }
         };
+
         this._future.onReply = msg => {
-            // this._messages.push(msg.content.status);
-            // this._logger.log(msg);
             if (msg.content.status !== "ok") {
                 this._logger.log(`error: ${msg}`);
             }
         };
+
         this._future.done
             .catch(err => {
                 console.error("Error while running the waldiez file", err);
@@ -236,155 +246,62 @@ export class WaldiezRunner {
                 this.reset();
             });
     }
+
     /**
-     * Replace image URLs in the content with the correct path.
-     * @param content The content to replace
-     * @param uploadsRoot The root path of the uploads
-     * @param requestId The request id
-     * @returns The content with the replaced URLs
+     * Process a message using the WaldiezMessageProcessor.
+     * @param rawMessage The raw message to process
      * @private
      * @memberof WaldiezRunner
      */
-    private _replaceImageUrls(content: any[], uploadsRoot: string | null, requestId: string): any[] {
-        if (!uploadsRoot) {
-            console.error("Uploads root is not set");
-            return content;
-        }
-        const newUrl =
-            URLExt.join(this._baseUrl, "waldiez", "files") + `?view=${uploadsRoot}/${requestId}.png`;
-        return content.map(item => {
-            if (item.type === "image_url" && item.image_url.url) {
-                return {
-                    ...item,
-                    image_url: {
-                        ...item.image_url,
-                        url: newUrl,
-                    },
-                };
-            }
-            return item;
-        });
-    }
-    /**
-     * Add a message to the list of messages if it is not already present.
-     * @param msg The message to add
-     * @private
-     * @memberof WaldiezRunner
-     */
-    private _addMessageIfNeeded(msg: IStreamMsg) {
-        const message = this._remove_ansi(msg.content.text);
-        let messageObject: Record<string, any> | null = null;
-        try {
-            messageObject = JSON.parse(message);
-        } catch (_) {
-            // Ignore JSON parse error (we might spam with pre-start prints)
-        }
-        if (!messageObject) {
-            // console.error("No message:", message);
+    private _processMessage(rawMessage: string) {
+        if (!this._running) {
             return;
         }
-        switch (messageObject?.type) {
-            case "input_request": {
-                this._expectingUserInput = true;
-                this._requestId = messageObject.request_id;
-                let prompt = messageObject.prompt;
-                if (prompt === ">" || prompt === "> ") {
-                    prompt = "Enter your message to start the conversation:";
-                }
-                const chatMessage: WaldiezChatMessage = {
-                    id: messageObject.request_id,
-                    timestamp: new Date().toISOString(),
-                    request_id: this._requestId || messageObject.request_id,
-                    type: "input_request",
-                    content: [
-                        {
-                            type: "text",
-                            text: prompt,
-                        },
-                    ],
-                };
-                this._messages.push(chatMessage);
-                break;
+
+        const result = WaldiezMessageProcessor.process(rawMessage, {
+            uploadsRoot: this._uploadsRoot,
+            baseUrl: this._baseUrl,
+            requestId: this._requestId,
+        });
+
+        if (!result) {
+            return;
+        }
+
+        if (result.message) {
+            // Add message to the list
+            this._messages.push(result.message);
+
+            // Track user participants if this is a text message after an input request
+            if (
+                this._expectingUserInput &&
+                result.message.type === "text" &&
+                result.message.sender &&
+                !this._userParticipants.includes(result.message.sender)
+            ) {
+                this._userParticipants.push(result.message.sender);
+                this._expectingUserInput = false;
             }
-            case "text":
-                if (
-                    messageObject.content &&
-                    messageObject.content?.content &&
-                    messageObject.content?.sender &&
-                    messageObject.content?.recipient
-                ) {
-                    if (this._expectingUserInput) {
-                        if (typeof messageObject.content.sender === "string") {
-                            if (!this._userParticipants.includes(messageObject.content.sender)) {
-                                this._userParticipants.push(messageObject.content.sender);
-                            }
-                        }
-                        this._expectingUserInput = false;
-                    }
-                    const messageId =
-                        messageObject?.id || messageObject.content.content.uuid || new Date().toISOString();
-                    const messageTimestamp = messageObject?.timestamp || new Date().toISOString();
-                    const messageType = messageObject?.type || "text";
-                    const sender = messageObject?.content?.sender;
-                    const recipient = messageObject?.content?.recipient;
-                    if (typeof messageObject.content.content === "string") {
-                        const message: WaldiezChatMessage = {
-                            id: messageId,
-                            timestamp: messageTimestamp,
-                            type: messageType,
-                            content: [
-                                {
-                                    type: "text",
-                                    text: messageObject.content.content,
-                                },
-                            ],
-                            sender,
-                            recipient,
-                        };
-                        this._messages.push(message);
-                    } else if (Array.isArray(messageObject.content.content)) {
-                        let content = messageObject.content.content;
-                        if (this._requestId) {
-                            content = this._replaceImageUrls(
-                                messageObject.content.content,
-                                this._uploadsRoot,
-                                this._requestId,
-                            );
-                        }
-                        const message: WaldiezChatMessage = {
-                            id: messageId,
-                            timestamp: messageTimestamp,
-                            type: messageType,
-                            content,
-                            sender,
-                            recipient,
-                        };
-                        this._messages.push(message);
-                    } else if (typeof messageObject.content.content === "object") {
-                        let content = [messageObject.content.content];
-                        if (this._requestId) {
-                            content = this._replaceImageUrls(content, this._uploadsRoot, this._requestId);
-                        }
-                        const message: WaldiezChatMessage = {
-                            id: messageId,
-                            timestamp: messageTimestamp,
-                            type: "text",
-                            content,
-                            sender,
-                            recipient,
-                        };
-                        this._messages.push(message);
-                    }
-                    if (this._requestId) {
-                        this._requestId = null;
-                    }
-                }
-                break;
-            default:
-                // console.error("Unknown message type", messageObject.type);
-                // console.error("Message content", messageObject);
-                break;
-            // TODO: test tools, other agents and add other types
+
+            // Check if this is an input request
+            if (result.message.type === "input_request") {
+                this._expectingUserInput = true;
+            }
+
+            // Notify about message update
+            this._onMessagesUpdate(result.message.type === "input_request");
+        }
+
+        // Update request ID if needed
+        if (result.requestId !== undefined) {
+            this._requestId = result.requestId;
+        }
+
+        // Handle workflow end
+        if (result.isWorkflowEnd) {
+            this._running = false;
+            this._onEnd();
+            this._logger.log("Workflow finished");
         }
     }
 }
@@ -399,5 +316,7 @@ export namespace WaldiezRunner {
         logger: WaldiezLogger;
         onStdin: (msg: IInputRequestMsg) => void;
         onInputRequest: (requestId: string) => void;
+        onMessagesUpdate: (isInputRequest: boolean) => void;
+        onEnd: () => void;
     }
 }

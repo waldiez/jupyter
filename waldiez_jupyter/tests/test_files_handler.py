@@ -101,6 +101,8 @@ async def test_export_to_py(
     assert (data_dir / "flow.py").exists()
     (data_dir / "flow.py").unlink()
     (jp_root_dir / "flow.waldiez").unlink()
+    if (data_dir / "waldiez_flow_api_keys.py").exists():
+        (data_dir / "waldiez_flow_api_keys.py").unlink()
     if (data_dir / "test_flow_api_keys.py").exists():
         (data_dir / "test_flow_api_keys.py").unlink()
     if (data_dir / "waldiez_api_keys.py").exists():

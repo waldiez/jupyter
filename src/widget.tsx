@@ -69,7 +69,9 @@ export class EditorWidget extends ReactWidget {
             <UseSignal
                 signal={this._chat}
                 initialArgs={null}
-                children={(_, chat) => <Waldiez {...this._waldiez} chat={chat !== null ? chat : undefined} />}
+                children={(_, chat) => {
+                    return <Waldiez {...this._waldiez} chat={chat !== null ? chat : undefined} />;
+                }}
             />
         );
     }

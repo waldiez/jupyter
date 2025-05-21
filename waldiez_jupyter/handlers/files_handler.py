@@ -141,17 +141,18 @@ class FilesHandler(APIHandler):
         input_data = self.get_json_body()
         if not input_data:
             raise HTTPError(400, reason="No data in request")
-        files_: Any = input_data.get("files", [])
+        files: Any = input_data.get("files", [])
         target_extension = input_data.get("extension", "")
         if target_extension not in ("py", "ipynb"):
             raise HTTPError(400, reason="Invalid extension")
-        if not isinstance(files_, list) or not files_:
+        if not isinstance(files, list) or not files:
             raise HTTPError(400, reason="No files in request")
-        files: list[str] = [
-            file for file in files_ if isinstance(file, str)  # pyright: ignore
-        ]
+        files_list: list[str] = []
+        for file in files:  # pyright: ignore
+            if isinstance(file, str):
+                files_list.append(file)
         try:
-            return self._get_file_paths(files), target_extension
+            return self._get_file_paths(files_list), target_extension
         except BaseException as error:
             raise HTTPError(400, reason="Error getting file paths") from error
 

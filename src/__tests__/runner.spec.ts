@@ -31,6 +31,8 @@ jest.mock("../logger", () => {
 });
 const onStdin = jest.fn();
 const onInputRequest = jest.fn();
+const onMessagesUpdate = jest.fn();
+const onEnd = jest.fn();
 const mockKernelConnectionSuccess = {
     requestExecute: jest.fn().mockReturnValue({
         onIOPub: jest.fn(),
@@ -56,6 +58,17 @@ const mockKernelConnectionFail = {
     status: "idle",
 } as unknown as Kernel.IKernelConnection;
 
+const getRunner = (logger: WaldiezLogger) => {
+    return new WaldiezRunner({
+        baseUrl: "http://localhost:8888",
+        logger,
+        onStdin,
+        onInputRequest,
+        onMessagesUpdate,
+        onEnd,
+    });
+};
+
 describe("WaldiezRunner", () => {
     let app: jest.Mocked<JupyterLab>;
     let rendermime: IRenderMimeRegistry;
@@ -75,31 +88,16 @@ describe("WaldiezRunner", () => {
         jest.clearAllMocks();
     });
     it("should be created", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         expect(runner).toBeTruthy();
     });
     it("should run a waldiez file", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         expect(runner.running).toBe(true);
     });
     it("should not run a waldiez file if one is already running", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         expect(runner.running).toBe(true);
         const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -108,12 +106,7 @@ describe("WaldiezRunner", () => {
         consoleWarnSpy.mockRestore();
     });
     it("should log an error if the kernel request fails", async () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionFail, "path/to/file.waldiez");
         expect(runner.running).toBe(true);
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
@@ -128,34 +121,19 @@ describe("WaldiezRunner", () => {
         }
     });
     it("should not run a waldiez file if the kernel does not support requestExecute", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionNoRequestExecute, "path/to/file.waldiez");
         expect(runner.running).toBe(false);
     });
     it("should reset the runner", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         expect(runner.running).toBe(true);
         runner.reset();
         expect(runner.running).toBe(false);
     });
     it("should handle stdin messages", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         expect(runner["_future"]).toBeDefined();
         runner["_future"]!.onStdin(inputRequestMessage);
@@ -164,12 +142,7 @@ describe("WaldiezRunner", () => {
     });
 
     it("should handle IOPub stream messages", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         const msgContent = {
             type: "text",
@@ -191,12 +164,7 @@ describe("WaldiezRunner", () => {
         // expect(runner["_messages"][0] as any).toEqual(msgContent.content);
     });
     it("should handle IOPub error messages", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         const loggerLogSpy = jest.spyOn(logger, "log");
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         runner["_future"]!.onIOPub(errorMsg);
@@ -204,12 +172,7 @@ describe("WaldiezRunner", () => {
         loggerLogSpy.mockRestore();
     });
     it("should handle reply messages correctly", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         // const loggerLogSpy = jest.spyOn(logger, "log");
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         runner["_future"]!.onReply(executeReplyMessage);
@@ -217,12 +180,7 @@ describe("WaldiezRunner", () => {
         // expect(loggerLogSpy).toHaveBeenCalledWith(executeReplyMessage);
     });
     it("should filter and return previous messages correctly", () => {
-        const runner = new WaldiezRunner({
-            baseUrl: "http://localhost:8888",
-            logger,
-            onStdin,
-            onInputRequest,
-        });
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         // runner["_messages"] = [
         //     "Installing requirements...",

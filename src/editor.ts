@@ -85,16 +85,9 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             baseUrl: this._serverSettings.baseUrl,
             onInputRequest: this._onInputRequest.bind(this),
             onStdin: this._onStdin.bind(this),
+            onMessagesUpdate: this._onMessagesUpdate.bind(this),
+            onEnd: this._onEnd.bind(this),
         });
-        // this._chat = {
-        //     showUI: false,
-        //     messages: [],
-        //     userParticipants: [],
-        //     handlers: {
-        //         onUserInput: this._onUserInput.bind(this),
-        //         onInterrupt: this._onInterruptKernel,
-        //     },
-        // };
         this.context.ready.then(this._onContextReady.bind(this));
         this.context.sessionContext.statusChanged.connect(this._onSessionStatusChanged, this);
         this._initCommands();
@@ -259,14 +252,27 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             activeRequest: {
                 request_id,
                 prompt: this._stdinRequest?.content.prompt ?? "> ",
-                // password: this._stdinRequest?.content.password ?? false,
+                password: this._stdinRequest?.content.password ?? false,
             },
             handlers: {
                 onUserInput: this._onUserInput.bind(this),
-                onInterrupt: this._onInterruptKernel.bind(this),
+                onInterrupt: this._handleInterrupt.bind(this),
             },
         };
         this._chat.emit(chat);
+    }
+    //
+    private _handleInterrupt(): void {
+        this._stdinRequest = null;
+        this._inputRequestId = null;
+        this._runner.reset();
+        this._chat.emit({
+            showUI: false,
+            messages: [],
+            userParticipants: [],
+            activeRequest: undefined,
+        });
+        this._onInterruptKernel();
     }
     //
     private _getWaldiezWidget(vsPath?: string): EditorWidget {
@@ -315,7 +321,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             );
             this._stdinRequest = null;
         }
-        this._chat.emit(undefined);
+        // this._chat.emit(undefined);
     }
     //
     private _onRun(_contents: string) {
@@ -342,6 +348,36 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 });
             });
     }
+    private _onEnd(): void {
+        this._chat.emit({
+            showUI: false,
+            messages: this._runner.getPreviousMessages(),
+            userParticipants: this._runner.getUserParticipants(),
+            activeRequest: undefined,
+        });
+    }
+    //
+    private _onMessagesUpdate(isInputRequest: boolean): void {
+        const messages = this._runner.getPreviousMessages();
+        this._chat.emit({
+            showUI: messages.length > 0,
+            messages,
+            userParticipants: this._runner.getUserParticipants(),
+            activeRequest: isInputRequest
+                ? {
+                      request_id: this._inputRequestId ?? this._getRequestIdFromPreviousMessages(messages),
+                      prompt: this._stdinRequest?.content.prompt ?? "> ",
+                      password: this._stdinRequest?.content.password ?? false,
+                  }
+                : undefined,
+            handlers: {
+                onUserInput: this._onUserInput.bind(this),
+                onInterrupt: this._handleInterrupt.bind(this),
+            },
+        });
+    }
+
+    //
     private _getRequestIdFromPreviousMessages(previousMessages: WaldiezChatMessage[]): string {
         const inputRequestMessage = previousMessages.find(msg => msg.type === "input_request");
         if (inputRequestMessage) {
