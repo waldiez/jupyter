@@ -177,7 +177,6 @@ class FilesHandler(APIHandler):
         if os.path.exists(file) and os.path.isfile(file):
             return Path(os.path.abspath(file))
         joined = os.path.join(self.contents_manager.root_dir, file)
-        self.log.error("Joined: %s", joined)
         if os.path.exists(joined) and os.path.isfile(joined):
             return Path(os.path.abspath(joined))
         raise FileNotFoundError(f"File not found: {file}")
