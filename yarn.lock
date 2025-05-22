@@ -4477,7 +4477,7 @@ __metadata:
 
 "@waldiez/react@file:./.local/waldiez-react-0.4.7.tgz::locator=%40waldiez%2Fjupyter%40workspace%3A.":
   version: 0.4.7
-  resolution: "@waldiez/react@file:./.local/waldiez-react-0.4.7.tgz#./.local/waldiez-react-0.4.7.tgz::hash=abd0f8&locator=%40waldiez%2Fjupyter%40workspace%3A."
+  resolution: "@waldiez/react@file:./.local/waldiez-react-0.4.7.tgz#./.local/waldiez-react-0.4.7.tgz::hash=bdd068&locator=%40waldiez%2Fjupyter%40workspace%3A."
   dependencies:
     "@monaco-editor/react": "npm:^4.7.0"
     "@xyflow/react": "npm:^12.6.4"
@@ -4499,7 +4499,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/10eea81175fb8fa423423045bc42873737744cef00110015b5ebab3bbe71855b83b8a34b58c5c79935262284acc4c161123cee96dd415aaa1618ff25e73c4182
+  checksum: 10/4264330f0e5e43e8f11b6e313b77c7c6a1042ed3191e58e858d53184dad6b37403fe641911bdf4be65330e24f32d90ae93487c2c64ad512c98982f69075b6847
   languageName: node
   linkType: hard
 
@@ -14071,8 +14071,8 @@ __metadata:
   linkType: hard
 
 "zustand@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "zustand@npm:5.0.4"
+  version: 5.0.5
+  resolution: "zustand@npm:5.0.5"
   peerDependencies:
     "@types/react": ">=18.0.0"
     immer: ">=9.0.6"
@@ -14087,7 +14087,7 @@ __metadata:
       optional: true
     use-sync-external-store:
       optional: true
-  checksum: 10/aa1eef07766c1dbed0e492239e8083fbb905738a73dc2818e5a5dbf002f28ae5645902d9cc0e867a03d9ad871621185899f4f2799728e83598c30b37127b58f5
+  checksum: 10/ae10e1da74e0abbc669401f30baa1088b779c54a2a9c30f1c62d03a4f4d1b9ac9b60933eca01e3d3871d644d387a289005b45607339f253cd3fadf7e3a390724
   languageName: node
   linkType: hard
 
