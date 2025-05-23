@@ -62,6 +62,9 @@ export class WaldiezMessageProcessor {
                 return WaldiezMessageProcessor._handleGroupChatRun(data);
             case "generate_code_execution_reply":
                 return WaldiezMessageProcessor._handleGenerateCodeExecutionReply(data);
+            case "select_speaker":
+            case "select_speaker_invalid_input":
+                return WaldiezMessageProcessor._handleSpeakerSelection(data);
             default:
                 // Ignore unknown message types
                 return undefined;
@@ -301,6 +304,82 @@ export class WaldiezMessageProcessor {
         }
 
         return undefined;
+    }
+
+    /**
+     * Process a speaker selection message
+     * @param data The message data
+     * @returns The processed message or undefined
+     * @private
+     */
+    /*
+    const handleSelectSpeaker = (data: WebSocketResponse) => {
+        if (
+            data.content &&
+            typeof data.content === "object" &&
+            data.content !== null &&
+            "uuid" in data.content &&
+            typeof data.content.uuid === "string" &&
+            "agents" in data.content &&
+            Array.isArray(data.content.agents) &&
+            data.content.agents.every(agent => typeof agent === "string")
+        ) {
+            const chatMessage: WaldiezChatMessage = {
+                id: data.content.uuid,
+                timestamp: new Date().toISOString(),
+                type: "system",
+                content: [
+                    {
+                        type: "text",
+                        text: get_speakerSelectionMd(data.content.agents),
+                    },
+                ],
+            };
+            setMessages(prevMessages => [...prevMessages, chatMessage]);
+        }
+    };
+    */
+    private static _handleSpeakerSelection(data: any):
+        | {
+              message: WaldiezChatMessage;
+          }
+        | undefined {
+        if (
+            data.content &&
+            typeof data.content === "object" &&
+            data.content !== null &&
+            "uuid" in data.content &&
+            typeof data.content.uuid === "string" &&
+            "agents" in data.content &&
+            Array.isArray(data.content.agents) &&
+            data.content.agents.every((agent: unknown) => typeof agent === "string")
+        ) {
+            const chatMessage: WaldiezChatMessage = {
+                id: data.content.uuid,
+                timestamp: new Date().toISOString(),
+                type: "system",
+                content: [
+                    {
+                        type: "text",
+                        text: this._generateSpeakerSelectionMd(data.content.agents),
+                    },
+                ],
+            };
+            return { message: chatMessage };
+        }
+        return undefined;
+    }
+
+    /**
+     * Generate a markdown string for speaker selection
+     * @param agents The list of agents
+     * @returns The generated markdown string
+     * @private
+     */
+    private static _generateSpeakerSelectionMd(agents: string[]): string {
+        return `## Select a speaker\n\nPlease select a speaker from the following list:\n\n${agents
+            .map((agent, index) => `- [${index + 1}] ${agent}`)
+            .join("\n")}\n\n**Note:** You can select a speaker by entering the corresponding number.`;
     }
 
     /**
