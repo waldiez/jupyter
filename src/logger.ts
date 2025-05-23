@@ -99,6 +99,18 @@ export class WaldiezLogger {
         return this._widget;
     }
     /**
+     * Remove ANSI escape sequences from a string.
+     * @param str The string to remove ANSI escape sequences from
+     * @returns The string without ANSI escape sequences
+     * @private
+     * @memberof WaldiezRunner
+     */
+    private _remove_ansi(str: string): string {
+        // return str.replace(/\u001b\[[0-9;]*m/g, "");
+        // eslint-disable-next-line no-control-regex
+        return str.replace(/\u001b\[[\x20-\x3f]*[\x40-\x7e]/g, "");
+    }
+    /**
      * Log a message to the log console.
      * @param msg The message to log
      * @public
@@ -333,6 +345,11 @@ export class WaldiezLogger {
         this._logData(payload);
     }
     private _logData(payload: ILogPayload): void {
+        const withoutAnsi =
+            typeof payload.data === "string"
+                ? this._remove_ansi(payload.data)
+                : this._remove_ansi(JSON.stringify(payload.data));
+        payload.data = withoutAnsi;
         this._getLogger().log(payload);
     }
     private _getLogger(): ILogger {
