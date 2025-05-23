@@ -312,33 +312,6 @@ export class WaldiezMessageProcessor {
      * @returns The processed message or undefined
      * @private
      */
-    /*
-    const handleSelectSpeaker = (data: WebSocketResponse) => {
-        if (
-            data.content &&
-            typeof data.content === "object" &&
-            data.content !== null &&
-            "uuid" in data.content &&
-            typeof data.content.uuid === "string" &&
-            "agents" in data.content &&
-            Array.isArray(data.content.agents) &&
-            data.content.agents.every(agent => typeof agent === "string")
-        ) {
-            const chatMessage: WaldiezChatMessage = {
-                id: data.content.uuid,
-                timestamp: new Date().toISOString(),
-                type: "system",
-                content: [
-                    {
-                        type: "text",
-                        text: get_speakerSelectionMd(data.content.agents),
-                    },
-                ],
-            };
-            setMessages(prevMessages => [...prevMessages, chatMessage]);
-        }
-    };
-    */
     private static _handleSpeakerSelection(data: any):
         | {
               message: WaldiezChatMessage;
