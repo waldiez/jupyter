@@ -243,7 +243,7 @@ class FilesHandler(APIHandler):
         except BaseException as error:
             self.log.error("Error exporting to .py: %s", error)
             return ""
-        return str(file_path)
+        return self._relative_to_cwd(file_path)
 
     def _to_ipynb(self, exporter: WaldiezExporter, file_path: Path) -> str:
         """Export the file to Jupyter Notebook format.
@@ -326,5 +326,5 @@ class FilesHandler(APIHandler):
         if not file_paths:
             self.log.error("No files were exported")
             return []
-        self.log.info("Exported files: %s", file_paths)
+        self.log.debug("Exported files: %s", file_paths)
         return file_paths
