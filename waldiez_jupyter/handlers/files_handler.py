@@ -15,7 +15,6 @@ POST:
 """
 
 import json
-import logging
 import os
 from pathlib import Path
 from typing import Any, Awaitable
@@ -103,7 +102,7 @@ class FilesHandler(APIHandler):
             raise error
         if not files:
             raise HTTPError(400, reason="No valid files in the request")
-        results = _handle_export(files, target_extension)
+        results = self._handle_export(files, target_extension)
         self.log.info("Exported: %s", results)
         self.finish(json.dumps({"files": results}))
 
@@ -205,66 +204,127 @@ class FilesHandler(APIHandler):
             file_paths.append(str(actual_file_path))
         return file_paths
 
+    @staticmethod
+    def _relative_to_cwd(file_path: Path) -> str:
+        """Get the relative path to the current working directory.
 
-def _relative_to_cwd(file_path: Path) -> str:
-    """Get the relative path to the current working directory.
+        Parameters
+        ----------
+        file_path : Path
+            The path to the file.
 
-    Parameters
-    ----------
-    file_path : Path
-        The path to the file.
+        Returns
+        -------
+        str
+            The relative path to the current working directory.
+        """
+        file_path_str = str(file_path).replace(str(Path.cwd().resolve()), "")
+        if file_path_str.startswith(os.path.sep):
+            file_path_str = file_path_str[len(os.path.sep) :]
+        return file_path_str
 
-    Returns
-    -------
-    str
-        The relative path to the current working directory.
-    """
-    file_path_str = str(file_path).replace(str(Path.cwd().resolve()), "")
-    if file_path_str.startswith(os.path.sep):
-        file_path_str = file_path_str[len(os.path.sep) :]
-    return file_path_str
+    def _to_py(self, exporter: WaldiezExporter, file_path: Path) -> str:
+        """Export the file to Python code.
 
+        Parameters
+        ----------
+        exporter : WaldiezExporter
+            The exporter instance.
+        file_path : Path
+            The path to the file.
 
-def _handle_export(files: list[str], target_extension: str) -> list[str]:
-    """Handle the export.
+        Returns
+        -------
+        str
+            The path of the exported file.
+        """
+        try:
+            exporter.export(file_path, force=True)
+        except BaseException as error:
+            self.log.error("Error exporting to .py: %s", error)
+            return ""
+        return str(file_path)
 
-    Parameters
-    ----------
-    files : list[str]
-        The list of files to export.
-    target_extension : str
-        The target extension to export to.
+    def _to_ipynb(self, exporter: WaldiezExporter, file_path: Path) -> str:
+        """Export the file to Jupyter Notebook format.
 
-    Returns
-    -------
-    list[str]
-        The list of files that were exported.
-    """
-    file_paths: list[str] = []
-    for file in files:
+        Parameters
+        ----------
+        exporter : WaldiezExporter
+            The exporter instance.
+        file_path : Path
+            The path to the file.
+
+        Returns
+        -------
+        str
+            The path of the exported file.
+        """
+        try:
+            exporter.export(file_path, force=True)
+        except BaseException as error:
+            self.log.error("Error exporting to .ipynb: %s", error)
+            return ""
+        return self._relative_to_cwd(file_path)
+
+    def _export_file(self, file: str, target_extension: str) -> str:
+        """§Export a single file to the specified extension.
+
+        Parameters
+        ----------
+        file : str
+            The file to export.
+        target_extension : str
+            The target extension to export to.
+
+        Returns
+        -------
+        str
+            The path of the exported file.
+        """
         file_path = Path(file).resolve()
         try:
             exporter = WaldiezExporter.load(file_path)
-        except BaseException as error:  # pragma: no cover
-            logging.debug("Error loading file: %s", error)
-            continue
+        except BaseException as error:
+            self.log.error("Error loading file: %s", error)
+            return ""
         if target_extension == "py":
             file_path = file_path.with_suffix(".py")
-            try:
-                exporter.export(file_path, force=True)
-            except BaseException as error:  # pragma: no cover
-                logging.debug("Error exporting to .py: %s", error)
-                continue
-            to_cwd = _relative_to_cwd(file_path)
-            file_paths.append(to_cwd)
-        elif target_extension == "ipynb":
+            return self._to_py(exporter, file_path)
+        if target_extension == "ipynb":
             file_path = file_path.with_suffix(".ipynb")
-            try:
-                exporter.export(file_path, force=True)
-            except BaseException as error:  # pragma: no cover
-                logging.debug("Error exporting to .ipynb: %s", error)
+            return self._to_ipynb(exporter, file_path)
+        self.log.error("Invalid target extension: %s", target_extension)
+        return ""
+
+    def _handle_export(
+        self, files: list[str], target_extension: str
+    ) -> list[str]:
+        """Handle the export.
+
+        Parameters
+        ----------
+        files : list[str]
+            The list of files to export.
+        target_extension : str
+            The target extension to export to.
+
+        Returns
+        -------
+        list[str]
+            The list of files that were exported.
+        """
+        file_paths: list[str] = []
+        for file in files:
+            file_path = Path(file).resolve()
+            if not file_path.is_file() or file_path.suffix != ".waldiez":
+                self.log.error("Invalid file: %s", file)
                 continue
-            exporter.export(file_path, force=True)
-            to_cwd = _relative_to_cwd(file_path)
-            file_paths.append(to_cwd)
-    return file_paths
+            converted = self._export_file(file, target_extension)
+            if converted:
+                file_paths.append(converted)
+        if not file_paths:
+            self.log.error("No files were exported")
+            return []
+        self.log.info("Exported files: %s", file_paths)
+        return file_paths
