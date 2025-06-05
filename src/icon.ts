@@ -4,7 +4,7 @@
  */
 import { LabIcon } from "@jupyterlab/ui-components";
 
-import waldiez_logo from "@waldiez/react/dist/logo.svg";
+import waldiez_logo from "@waldiez/react/dist/icon.svg";
 
 /**
  * The waldiez icon.

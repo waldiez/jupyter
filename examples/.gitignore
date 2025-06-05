@@ -1,4 +1,4 @@
-**
+*
 !*/
 .local/
 .ipynb_checkpoints/
@@ -13,5 +13,5 @@ documents/
 !CODEOWNERS
 !*.waldiez
 !*.waldiezModel
-!*.waldiezSkill
+!*.waldiezTool
 !*.waldiezAgent

@@ -46,6 +46,7 @@ module.exports = {
     moduleNameMapper: {
         yjs: "<rootDir>/node_modules/yjs",
         "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-        "\\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$": "<rootDir>/jest.fileMock.js",
+        "\\.(png|jpg|jpeg|gif|woff|woff2|ttf|eot)$": "<rootDir>/jest.fileMock.js",
+        "\\.svg$": "<rootDir>/jest.svgMock.js",
     },
 };
