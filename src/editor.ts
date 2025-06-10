@@ -315,6 +315,11 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     // - response: send user's input to kernel
     private _onUserInput(userInput: WaldiezChatUserInput): void {
         if (this._stdinRequest) {
+            this._logger.log({
+                data: JSON.stringify(userInput),
+                level: "info",
+                type: "text",
+            });
             this.context.sessionContext.session?.kernel?.sendInputReply(
                 { value: JSON.stringify(userInput), status: "ok" },
                 this._stdinRequest.parent_header as any,

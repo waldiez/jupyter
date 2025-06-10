@@ -92,10 +92,14 @@ if [ -n "${JUPYTER_PASSWORD}" ]; then
     PASSWORD_REQUIRED="True"
 fi
 
-PYTHONUNBUFFERED=1 jupyter lab \
+export SHELL=/bin/bash
+export TERM=xterm-256color
+export PYTHONUNBUFFERED=1
+
+jupyter lab \
     --no-browser \
     --ip="*" \
-    --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
+    --ServerApp.terminado_settings="{'shell_command': ['/bin/bash']}" \
     --IdentityProvider.token="${JUPYTER_TOKEN}" \
     --IdentityProvider.hashed_password="${HASHED_PASSWORD}" \
     --IdentityProvider.password_required="${PASSWORD_REQUIRED}" \

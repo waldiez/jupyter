@@ -19,9 +19,9 @@ CONTAINER_COMMAND=docker # or podman
 $CONTAINER_COMMAND run \
   --rm \
   -it \
-  -p 10000:8888 \
+  -p 8888:8888 \
   -v ${PWD}/notebooks:/home/user/notebooks \
-  ghcr.io/waldiez/jupyter:latest
+  waldiez/jupyter:latest
 
 # with selinux and/or podman, you might get permission errors, so you can try:
 $CONTAINER_COMMAND run \
@@ -30,7 +30,7 @@ $CONTAINER_COMMAND run \
   -p 10000:8888 \
   -v ${PWD}/notebooks:/home/user/notebooks \
   --userns=keep-id \
-  --security-opt label=disable ghcr.io/waldiez/jupyter:latest
+  --security-opt label=disable waldiez/jupyter:latest
 ```
 
 Then open your browser at `http://localhost:10000` and you should see the JupyterLab interface.

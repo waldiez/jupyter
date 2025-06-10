@@ -272,14 +272,8 @@ export class WaldiezRunner {
             // Add message to the list
             this._messages.push(result.message);
 
-            // Track user participants if this is a text message after an input request
-            if (
-                this._expectingUserInput &&
-                result.message.type === "text" &&
-                result.message.sender &&
-                !this._userParticipants.includes(result.message.sender)
-            ) {
-                this._userParticipants.push(result.message.sender);
+            // Check if this is a text message after an input request
+            if (this._expectingUserInput && result.message.type === "text" && result.message.sender) {
                 this._expectingUserInput = false;
             }
 
@@ -302,6 +296,12 @@ export class WaldiezRunner {
             this._running = false;
             this._onEnd();
             this._logger.log("Workflow finished");
+        }
+        if (result.userParticipants && result.userParticipants.length > 0) {
+            // Update user participants
+            this._userParticipants = Array.from(
+                new Set([...this._userParticipants, ...result.userParticipants]),
+            );
         }
     }
 }

@@ -89,7 +89,32 @@ RUN apt update && \
     tini \
     zip \
     unzip \
-    graphviz && \
+    jq \
+    graphviz \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
+    libgdk-pixbuf2.0-0 \
+    libnspr4 \
+    libnss3 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    xdg-utils \
+    xvfb \
+    firefox-esr \
+    chromium && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    rm nodesource_setup.sh && \
+    apt install -y nodejs && \
+    npm install -g corepack && \
+    corepack enable && \
+    yarn set version stable && \
+    npx playwright install-deps && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen en_US.UTF-8 && \
     apt clean && \
@@ -102,47 +127,75 @@ ENV LANG=en_US.UTF-8 \
     LC_CTYPE=en_US.UTF-8 \
     TZ=Etc/UTC
 
-# install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
-    apt install -y nodejs && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives/*
+# Add ChromeDriver
+RUN CHROME_VERSION=$(chromium --version | grep -oP '\d+\.\d+\.\d+') && \
+    echo "Chrome version: $CHROME_VERSION" && \
+    DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
+    jq -r --arg ver "$CHROME_VERSION" '.channels.Stable.version') && \
+    echo "Driver version: $DRIVER_VERSION" && \
+    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${DRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
+    unzip /tmp/chromedriver.zip -d /usr/local/bin && \
+    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf /tmp/chromedriver.zip /usr/local/bin/chromedriver-linux64
+
+
+# Add GeckoDriver (for Firefox)
+RUN GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') && \
+    curl -Lo /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz" && \
+    tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/geckodriver && \
+    rm /tmp/geckodriver.tar.gz
 
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
 
 # add a non-root user
 ARG GROUP_ID=1000
 ENV GROUP_ID=${GROUP_ID}
-RUN addgroup --system --gid ${GROUP_ID} user
+RUN addgroup --system --gid ${GROUP_ID} waldiez
 ARG USER_ID=1000
 ENV USER_ID=${USER_ID}
-RUN adduser --disabled-password --gecos '' --shell /bin/bash --uid ${USER_ID} --gid ${GROUP_ID} user
-RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
-RUN mkdir -p /home/user/notebooks /home/user/tmp /home/user/.local/bin && \
-    chown -R user:user /home/user
-ENV PATH=/home/user/.local/bin:${PATH}
+RUN adduser --disabled-password --gecos '' --shell /bin/bash --uid ${USER_ID} --gid ${GROUP_ID} waldiez
+RUN echo "waldiez ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-waldiez
+RUN mkdir -p /home/waldiez/notebooks /home/waldiez/tmp /home/waldiez/.local/bin && \
+    chown -R waldiez:waldiez /home/waldiez
 
-USER user
+USER waldiez
+
+ENV PATH=/home/waldiez/.local/bin:${PATH}
+ENV PIP_USER=1
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
+# Set display for headless operations if needed
+ENV DISPLAY=:99
+
 RUN pip install --upgrade pip jupyterhub jupyterlab ipywidgets ipykernel
+RUN npx playwright install chromium firefox
 
-COPY --chown=user:user scripts /home/user/scripts
-RUN chmod +x /home/user/scripts/start.sh
+COPY --chown=waldiez:waldiez scripts /home/waldiez/scripts
+RUN chmod +x /home/waldiez/scripts/start.sh
 
-COPY --from=builder --chown=user:user /tmp/package/waldiez_jupyter/dist/*.whl /home/user/tmp/
-RUN pip install --user /home/user/tmp/*.whl && \
-    rm -rf /home/user/tmp
+COPY --from=builder --chown=waldiez:waldiez /tmp/package/waldiez_jupyter/dist/*.whl /home/waldiez/tmp/
+RUN pip install /home/waldiez/tmp/*.whl && \
+    rm -rf /home/waldiez/tmp
 
-RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
-    echo '{"@jupyterlab/apputils-extension:themes":{"theme": "JupyterLab Dark"}}' > /home/user/.local/share/jupyter/lab/settings/overrides.json
-
+RUN mkdir -p /home/waldiez/.local/share/jupyter/lab/settings && \
+    cat > /home/waldiez/.local/share/jupyter/lab/settings/overrides.json <<EOF
+{
+    "@jupyterlab/apputils-extension:themes": {
+        "theme": "JupyterLab Dark"
+    },
+    "@jupyterlab/terminal-extension:plugin": {
+        "shellCommand": "/bin/bash"
+    }
+}
+EOF
 
 EXPOSE 8888
-VOLUME /home/user/notebooks
-WORKDIR /home/user/notebooks
+VOLUME /home/waldiez/notebooks
+WORKDIR /home/waldiez/notebooks
 
 ENV TINI_SUBREAPER=true
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/home/user/scripts/start.sh"]
+CMD ["/home/waldiez/scripts/start.sh"]

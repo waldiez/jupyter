@@ -29,6 +29,7 @@ export class WaldiezMessageProcessor {
               message?: WaldiezChatMessage;
               requestId?: string | null;
               isWorkflowEnd?: boolean;
+              userParticipants?: string[];
           }
         | undefined {
         // Remove ANSI escape sequences
@@ -52,7 +53,7 @@ export class WaldiezMessageProcessor {
                 return WaldiezMessageProcessor._handleInputRequest(data, options.requestId);
             }
             case "print":
-                return WaldiezMessageProcessor._checkEnd(data);
+                return WaldiezMessageProcessor._checkEndOrParticipants(data);
             case "text":
             case "tool_call":
                 return WaldiezMessageProcessor._handleTextMessage(data, options);
@@ -67,6 +68,8 @@ export class WaldiezMessageProcessor {
                 return WaldiezMessageProcessor._handleSpeakerSelection(data);
             default:
                 // Ignore unknown message types
+                console.warn(`Unknown message type: ${data.type}`);
+                console.debug("Raw message data:", data);
                 return undefined;
         }
     }
@@ -87,7 +90,17 @@ export class WaldiezMessageProcessor {
      * @param data The message object to check
      * @private
      */
-    private static _checkEnd(data: any): { isWorkflowEnd: boolean } | undefined {
+    private static _checkEndOrParticipants(
+        data: any,
+    ): { isWorkflowEnd: boolean; userParticipants: string[] } | undefined {
+        // example participants message:
+        // {"id": "2650f2de91c04639adf3cf187a5ab718", "type": "print",
+        // "timestamp": "2025-06-09T15:58:56.196007", "
+        // data": "{\"participants\":[{\"name\":\"user_proxy\",
+        // \"humanInputMode\":\"ALWAYS\",\"agentType\":\"user_proxy\"},
+        // {\"name\":\"assistant_1\",\"humanInputMode\":\"NEVER\",\"agentType\":\"assistant\"},
+        // {\"name\":\"assistant_2\",\"humanInputMode\":\"NEVER\",\"agentType\":\"assistant\"},
+        // {\"name\":\"assistant_3\",\"humanInputMode\":\"NEVER\",\"agentType\":\"assistant\"}]}\n"}
         if (
             data.content &&
             typeof data.content === "object" &&
@@ -97,7 +110,26 @@ export class WaldiezMessageProcessor {
         ) {
             const dataContent = data.content.data;
             if (dataContent.includes("<Waldiez> - Workflow finished")) {
-                return { isWorkflowEnd: true };
+                return { isWorkflowEnd: true, userParticipants: [] };
+            }
+            if (dataContent.includes("participants")) {
+                // Extract participants from the data content
+                try {
+                    const parsedData = JSON.parse(dataContent);
+                    if (
+                        parsedData.participants &&
+                        Array.isArray(parsedData.participants) &&
+                        parsedData.participants.length > 0 &&
+                        parsedData.participants.every((p: any) => "name" in p && typeof p.name === "string")
+                    ) {
+                        return {
+                            isWorkflowEnd: false,
+                            userParticipants: parsedData.participants.map((p: any) => p.name),
+                        };
+                    }
+                } catch (error) {
+                    console.error("Failed to parse participants data:", error);
+                }
             }
         }
         return undefined;

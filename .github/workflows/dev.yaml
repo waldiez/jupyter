@@ -1,0 +1,253 @@
+---
+name: Lint, test (dev)
+
+env:
+  HUSKY: 0
+
+# yamllint disable rule:truthy
+on:
+  pull_request:
+    branches: [dev]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  build-waldiez:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.waldiez-cache.outputs.cache-hit }}
+    steps:
+      - name: Get waldiez dev branch commit
+        id: waldiez-commit
+        run: |
+          COMMIT=$(curl -s https://api.github.com/repos/waldiez/waldiez/commits/dev | jq -r '.sha[0:7]')
+          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+
+      - name: Cache waldiez build
+        id: waldiez-cache
+        uses: actions/cache@v4
+        with:
+          path: waldiez-react.tgz
+          key: waldiez-react-${{ steps.waldiez-commit.outputs.commit }}
+
+      - name: Setup bun
+        if: steps.waldiez-cache.outputs.cache-hit != 'true'
+        uses: oven-sh/setup-bun@v2
+
+      - name: Build waldiez
+        if: steps.waldiez-cache.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch dev https://github.com/waldiez/waldiez.git
+          cd waldiez
+          bun install
+          bun run archive
+          cp out/archive/waldiez-react-*.tgz ../waldiez-react.tgz
+
+      - name: Upload waldiez artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: waldiez-react
+          path: waldiez-react.tgz
+          retention-days: 1
+
+  lint-py:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      - name: Cache waldiez install
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip-waldiez
+          key: waldiez-pip-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --cache-dir ~/.cache/pip -r requirements/main.txt
+          python -m pip install --cache-dir ~/.cache/pip -r requirements/dev.txt
+          python -m pip install --cache-dir ~/.cache/pip -r requirements/test.txt
+          python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
+
+      - name: pylint
+        run: pylint --rcfile=pyproject.toml .
+      - name: isort
+        run: isort --check-only .
+      - name: black
+        run: black --check --config pyproject.toml .
+      - name: mypy
+        run: mypy --config pyproject.toml .
+      - name: flake8
+        run: flake8 --config=.flake8
+      - name: pydocstyle
+        run: pydocstyle --config pyproject.toml .
+      - name: bandit
+        run: bandit -r -c pyproject.toml .
+      - name: yamllint
+        run: yamllint -c .yamllint.yaml .
+      - name: ruff
+        run: ruff check --config pyproject.toml .
+
+  lint-js:
+    runs-on: ubuntu-latest
+    needs: build-waldiez
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-lint-js-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
+          restore-keys: |
+            pip-lint-js-${{ runner.os }}-
+
+      - name: Download waldiez artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: waldiez-react
+
+      - name: Set Yarn version
+        run: yarn set version stable
+
+      - name: Install jupyterlab
+        run: python -m pip install --upgrade pip jupyterlab
+
+      - name: Install dependencies
+        run: |
+          yarn remove @waldiez/react || true
+          yarn add @waldiez/react@file:waldiez-react.tgz
+          yarn install --immutable
+
+      - name: Run linters
+        run: yarn lint
+
+  test-py:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/AppData/Local/pip/Cache
+            ~/Library/Caches/pip
+          key: pip-test-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
+          restore-keys: |
+            pip-test-${{ runner.os }}-
+
+      - name: Cache waldiez install
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip-waldiez
+            ~/AppData/Local/pip-waldiez/Cache
+            ~/Library/Caches/pip-waldiez
+          key: waldiez-pip-test-${{ runner.os }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --cache-dir ~/.cache/pip -r requirements/main.txt
+          python -m pip install --cache-dir ~/.cache/pip -r requirements/test.txt
+          python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
+
+      - name: Run tests
+        run: python -m pytest -c pyproject.toml --cov=waldiez_jupyter --cov-report lcov:coverage/lcov.info
+
+  test-js:
+    runs-on: ubuntu-latest
+    needs: build-waldiez
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: yarn-test-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
+          restore-keys: |
+            yarn-test-${{ runner.os }}-
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-test-js-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
+          restore-keys: |
+            pip-test-js-${{ runner.os }}-
+
+      - name: Download waldiez artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: waldiez-react
+
+      - name: Set Yarn version
+        run: yarn set version stable
+
+      - name: Install jupyterlab
+        run: python -m pip install --upgrade pip waldiez jupyterlab
+
+      - name: Install dependencies
+        run: |
+          yarn remove @waldiez/react || true
+          yarn add @waldiez/react@file:waldiez-react.tgz
+          yarn install --immutable
+
+      - name: Run tests
+        run: yarn test

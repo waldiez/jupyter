@@ -14,6 +14,7 @@ ENV DEBIAN_FRONTEND="noninteractive"
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
 # install system dependencies
+# install system dependencies
 RUN apt update && \
     apt upgrade -y && \
     apt install -y --no-install-recommends \
@@ -37,28 +38,63 @@ RUN apt update && \
     tini \
     zip \
     unzip \
-    graphviz && \
+    graphviz \
+    jq \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
+    libgdk-pixbuf2.0-0 \
+    libnspr4 \
+    libnss3 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    xdg-utils \
+    xvfb \
+    firefox-esr \
+    chromium && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    rm nodesource_setup.sh && \
+    apt install -y nodejs && \
+    npm install -g corepack && \
+    corepack enable && \
+    yarn set version stable && \
+    npx playwright install-deps && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen en_US.UTF-8 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
-# locale environment variables
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LC_CTYPE=en_US.UTF-8 \
     TZ=Etc/UTC
 
-# install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
-    apt install -y nodejs && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives/*
+# Add ChromeDriver
+RUN CHROME_VERSION=$(chromium --version | grep -oP '\d+\.\d+\.\d+') && \
+    echo "Chrome version: $CHROME_VERSION" && \
+    DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
+    jq -r --arg ver "$CHROME_VERSION" '.channels.Stable.version') && \
+    echo "Driver version: $DRIVER_VERSION" && \
+    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${DRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
+    unzip /tmp/chromedriver.zip -d /usr/local/bin && \
+    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf /tmp/chromedriver.zip /usr/local/bin/chromedriver-linux64
 
+
+# Add GeckoDriver (for Firefox)
+RUN GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') && \
+    curl -Lo /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz" && \
+    tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/geckodriver && \
+    rm /tmp/geckodriver.tar.gz
 RUN npm install -g corepack
 
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
@@ -66,24 +102,32 @@ RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashr
 # add a non-root user
 ARG GROUP_ID=1000
 ENV GROUP_ID=${GROUP_ID}
-RUN addgroup --system --gid ${GROUP_ID} user
+RUN addgroup --system --gid ${GROUP_ID} waldiez
 ARG USER_ID=1000
 ENV USER_ID=${USER_ID}
-RUN adduser --disabled-password --gecos '' --shell /bin/bash --uid ${USER_ID} --gid ${GROUP_ID} user
-RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
-RUN mkdir -p /home/user/notebooks /home/user/tmp /home/user/.local/bin && \
-    chown -R user:user /home/user
-ENV PATH=/home/user/.local/bin:${PATH}
+RUN adduser --disabled-password --gecos '' --shell /bin/bash --uid ${USER_ID} --gid ${GROUP_ID} waldiez
+RUN echo "waldiez ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-waldiez
+RUN mkdir -p /home/waldiez/notebooks /home/waldiez/tmp /home/waldiez/.local/bin && \
+    chown -R waldiez:waldiez /home/waldiez
 
-USER user
+# Switch to the non-root user
+USER waldiez
+
+ENV PATH=/home/waldiez/.local/bin:${PATH}
+ENV PIP_USER=1
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
+# Set display for headless operations if needed
+ENV DISPLAY=:99
+RUN npx playwright install chromium firefox
 
 # install bun
 RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=/home/user/.bun/bin:${PATH}
+ENV PATH=/home/waldiez/.bun/bin:${PATH}
 
-COPY --chown=user:user . /home/user/app
+COPY --chown=waldiez:waldiez . /home/waldiez/app
 
-WORKDIR /home/user/app
+WORKDIR /home/waldiez/app
 
 # enable yarn (after a package.json is present)
 RUN corepack enable && \
@@ -94,19 +138,28 @@ ARG PYTHON_BRANCH=main
 
 ENV REACT_BRANCH=${REACT_BRANCH}
 ENV PYTHON_BRANCH=${PYTHON_BRANCH}
-RUN sh /home/user/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} && \
-    rm -rf /home/user/app
-COPY --chown=user:user scripts/start.sh /home/user/app/start.sh
-RUN chmod +x /home/user/app/start.sh
+RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} && \
+    rm -rf /home/waldiez/app
+COPY --chown=waldiez:waldiez scripts/start.sh /home/waldiez/app/start.sh
+RUN chmod +x /home/waldiez/app/start.sh
 
-RUN mkdir -p /home/user/.local/share/jupyter/lab/settings && \
-    echo '{"@jupyterlab/apputils-extension:themes":{"theme": "JupyterLab Dark"}}' > /home/user/.local/share/jupyter/lab/settings/overrides.json
+RUN mkdir -p /home/waldiez/.local/share/jupyter/lab/settings && \
+    cat > /home/waldiez/.local/share/jupyter/lab/settings/overrides.json <<EOF
+{
+    "@jupyterlab/apputils-extension:themes": {
+        "theme": "JupyterLab Dark"
+    },
+    "@jupyterlab/terminal-extension:plugin": {
+        "shellCommand": "/bin/bash"
+    }
+}
+EOF
 
 EXPOSE 8888
-VOLUME /home/user/notebooks
-WORKDIR /home/user/notebooks
+VOLUME /home/waldiez/notebooks
+WORKDIR /home/waldiez/notebooks
 
 ENV TINI_SUBREAPER=true
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["/home/user/app/start.sh"]
+CMD ["/home/waldiez/app/start.sh"]
