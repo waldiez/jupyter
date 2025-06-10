@@ -39,19 +39,19 @@ jobs:
       - name: Build waldiez
         if: steps.waldiez-cache.outputs.cache-hit != 'true'
         run: |
+          mkdir -p ./.local
           git clone --depth 1 --branch dev https://github.com/waldiez/waldiez.git
           cd waldiez
           bun install
           bun run build:lib
           bun run archive
-          mkdir -p ../.local
           cp out/archive/waldiez-react-*.tgz ../.local/waldiez-react.tgz
 
       - name: Upload waldiez artifact
         uses: actions/upload-artifact@v4
         with:
           name: waldiez-react
-          path: ./local/waldiez-react.tgz
+          path: ./.local/waldiez-react.tgz
           retention-days: 1
 
   lint-py:
