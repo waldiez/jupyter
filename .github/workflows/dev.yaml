@@ -151,7 +151,7 @@ jobs:
         run: |
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
-          yarn install --immutable
+          rm yarn.lock && touch yarn.lock && yarn install
 
       - name: Run linters
         run: yarn lint
@@ -247,7 +247,7 @@ jobs:
         run: |
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
-          yarn install --immutable
+          rm yarn.lock && touch yarn.lock && yarn install
 
       - name: Run tests
         run: yarn test
