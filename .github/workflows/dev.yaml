@@ -29,7 +29,7 @@ jobs:
         id: waldiez-cache
         uses: actions/cache@v4
         with:
-          path: ./local/waldiez-react.tgz
+          path: ./.local/waldiez-react.tgz
           key: waldiez-react-${{ steps.waldiez-commit.outputs.commit }}
 
       - name: Setup bun
@@ -153,7 +153,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn remove @waldiez/react || true
-          yarn add @waldiez/react@file:./local/waldiez-react.tgz
+          yarn add @waldiez/react@file:./.local/waldiez-react.tgz
           yarn install --no-immutable
 
       - name: Run linters
@@ -249,7 +249,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn remove @waldiez/react || true
-          yarn add @waldiez/react@file:./local/waldiez-react.tgz
+          yarn add @waldiez/react@file:./.local/waldiez-react.tgz
           yarn install --no-immutable
 
       - name: Run tests
