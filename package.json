@@ -43,7 +43,7 @@
     },
     "scripts": {
         "prepare": "node .husky/install.mjs",
-        "postinstall": "node --import=tsx scripts/post_install.ts && yarn requirements",
+        "postinstall": "node --import=tsx scripts/post_install.ts",
         "python": "node --import=tsx scripts/python.ts",
         "requirements": "yarn python -m pip install -r requirements/all.txt",
         "jupyter": "yarn python -m jupyter",

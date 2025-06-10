@@ -42,8 +42,10 @@ jobs:
           git clone --depth 1 --branch dev https://github.com/waldiez/waldiez.git
           cd waldiez
           bun install
+          bun run build:lib
           bun run archive
-          cp out/archive/waldiez-react-*.tgz ../waldiez-react.tgz
+          mkdir -p ../.local
+          cp out/archive/waldiez-react-*.tgz ../.local/waldiez-react.tgz
 
       - name: Upload waldiez artifact
         uses: actions/upload-artifact@v4
@@ -150,7 +152,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn remove @waldiez/react || true
-          yarn add @waldiez/react@file:waldiez-react.tgz
+          yarn add @waldiez/react@file:./local/waldiez-react.tgz
           yarn install --no-immutable
 
       - name: Run linters
@@ -246,7 +248,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn remove @waldiez/react || true
-          yarn add @waldiez/react@file:waldiez-react.tgz
+          yarn add @waldiez/react@file:./local/waldiez-react.tgz
           yarn install --no-immutable
 
       - name: Run tests
