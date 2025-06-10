@@ -131,14 +131,13 @@ jobs:
         with:
           name: waldiez-react
 
-      - name: Set Yarn version
-        run: yarn set version stable
-
       - name: Install jupyterlab
         run: python -m pip install --upgrade pip jupyterlab
 
-      - name: Install dependencies
+      - name: Set Yarn version and install dependencies
         run: |
+          corepack enable
+          yarn set version stable
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
           rm yarn.lock && touch yarn.lock && yarn install
