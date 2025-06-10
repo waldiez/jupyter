@@ -118,16 +118,6 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            .yarn/cache
-            .yarn/install-state.gz
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
-
       - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
@@ -152,6 +142,7 @@ jobs:
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
           rm yarn.lock && touch yarn.lock && yarn install
+          rm -f waldiez-react.tgz
 
       - name: Run linters
         run: yarn lint
@@ -214,15 +205,7 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            .yarn/cache
-            .yarn/install-state.gz
-          key: yarn-test-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
-          restore-keys: |
-            yarn-test-${{ runner.os }}-
+      # Skip Yarn caching for jobs that modify dependencies dynamically
 
       - name: Cache pip dependencies
         uses: actions/cache@v4
@@ -248,6 +231,7 @@ jobs:
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
           rm yarn.lock && touch yarn.lock && yarn install
+          rm -f waldiez-react.tgz
 
       - name: Run tests
         run: yarn test
