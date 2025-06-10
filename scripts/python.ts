@@ -114,24 +114,42 @@ const getNewPythonExecutable = () => {
 };
 
 /**
+ * Check if we are in a CI environment
+ * @returns true if we are in a CI environment, false otherwise
+ */
+const inCIEnv = (): boolean => {
+    return process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+};
+
+/**
  * Get the python executable
  * @returns the python executable
  */
 const tryGetPythonExecutable = (): string | null => {
     let { path: pythonPath, virtualEnv: found } = getCompatiblePythonExecutable();
-    if (found) {
+    // if in CI, we don't need a new virtual environment
+    const inCi = inCIEnv();
+    if (inCi && pythonPath) {
+        // if we are in CI and we found a compatible python, return it
         return pythonPath;
     }
-    for (const venvName of possibleVenvNames) {
-        const venvDir = path.join(__rootDir, venvName);
-        const venvPythonPath = getVenvPythonExecutable(venvDir);
-        if (fs.existsSync(venvPythonPath)) {
-            pythonPath = venvPythonPath;
-            found = true;
-            break;
+    if (found) {
+        // found: in venv already
+        // if we are not in CI and we found a compatible python, return it
+        return pythonPath;
+    }
+    if (!inCi) {
+        for (const venvName of possibleVenvNames) {
+            const venvDir = path.join(__rootDir, venvName);
+            const venvPythonPath = getVenvPythonExecutable(venvDir);
+            if (fs.existsSync(venvPythonPath)) {
+                pythonPath = venvPythonPath;
+                found = true;
+                break;
+            }
         }
     }
-    return found === true ? pythonPath : getNewPythonExecutable();
+    return inCi && found === true ? pythonPath : getNewPythonExecutable();
 };
 
 /**

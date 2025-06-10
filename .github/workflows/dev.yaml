@@ -118,6 +118,16 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
+
       - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
@@ -131,17 +141,17 @@ jobs:
         with:
           name: waldiez-react
 
+      - name: Set Yarn version
+        run: yarn set version stable
+
       - name: Install jupyterlab
         run: python -m pip install --upgrade pip jupyterlab
 
-      - name: Set Yarn version and install dependencies
+      - name: Install dependencies
         run: |
-          corepack enable
-          yarn set version stable
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
-          rm yarn.lock && touch yarn.lock && yarn install
-          rm -f waldiez-react.tgz
+          yarn install --no-immutable
 
       - name: Run linters
         run: yarn lint
@@ -204,7 +214,15 @@ jobs:
       - name: Enable corepack
         run: corepack enable
 
-      # Skip Yarn caching for jobs that modify dependencies dynamically
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: yarn-test-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
+          restore-keys: |
+            yarn-test-${{ runner.os }}-
 
       - name: Cache pip dependencies
         uses: actions/cache@v4
@@ -229,8 +247,7 @@ jobs:
         run: |
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:waldiez-react.tgz
-          rm yarn.lock && touch yarn.lock && yarn install
-          rm -f waldiez-react.tgz
+          yarn install --no-immutable
 
       - name: Run tests
         run: yarn test
