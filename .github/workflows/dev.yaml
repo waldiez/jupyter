@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: waldiez-react
-          path: waldiez-react.tgz
+          path: ./local/waldiez-react.tgz
           retention-days: 1
 
   lint-py:
