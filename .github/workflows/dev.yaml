@@ -33,7 +33,7 @@ jobs:
           key: waldiez-react-${{ steps.waldiez-commit.outputs.commit }}
 
       - name: Setup bun
-        if: steps.waldiez-cache.outputs.cache-hit != 'true'
+        # if: steps.waldiez-cache.outputs.cache-hit != 'true'
         uses: oven-sh/setup-bun@v2
 
       - name: Build waldiez
