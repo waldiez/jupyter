@@ -13,15 +13,14 @@ import url from "url";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const __rootDir = path.join(__dirname, "..");
 
-// this dir: scripts
-const __rootDir = path.resolve(__dirname, "..");
 const __me = path.relative(__rootDir, __filename);
 
 const isWindows = process.platform === "win32";
 const possibleVenvNames = [".venv", "venv"];
 // we might want to set the order to our preferred python version
-const possiblePys = ["python", "python3", "python3.12", "python3.10", "python3.11", "python3.13"];
+const possiblePys = ["python3.12", "python3.10", "python3.11", "python3.13", "python3", "python"];
 
 /**
  * Check if the python version is greater than or equal to 3.10 and less than 3.14
@@ -31,7 +30,9 @@ const possiblePys = ["python", "python3", "python3.12", "python3.10", "python3.1
 const isPyGte310lte314 = (pyCmd: string) => {
     let pythonVersion: string;
     try {
-        pythonVersion = execSync(`${pyCmd} --version`).toString();
+        pythonVersion = execSync(`${pyCmd} --version`, {
+            stdio: ["pipe", "pipe", "ignore"],
+        }).toString();
     } catch (_) {
         return false;
     }
@@ -51,8 +52,11 @@ const isPyGte310lte314 = (pyCmd: string) => {
 const inVenv = (pythonExecutable: string): boolean => {
     try {
         const toRun =
-            "import sys; print((hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)))";
-        const output = execSync(`${pythonExecutable} -c "${toRun}"`).toString();
+            "import os,sys; print(hasattr(sys, 'base_prefix') and os.path.realpath(sys.base_prefix) != os.path.realpath(sys.prefix))";
+        const output = execSync(`${pythonExecutable} -c "${toRun}"`, {
+            encoding: "utf-8",
+            stdio: ["pipe", "pipe", "ignore"],
+        }).toString();
         return output.trim() === "True";
     } catch (_) {
         console.error("Error checking if in virtual environment");
@@ -139,8 +143,14 @@ const tryGetPythonExecutable = (): string | null => {
         return pythonPath;
     }
     if (!inCi) {
+        const dirsToCheck: string[] = [];
         for (const venvName of possibleVenvNames) {
-            const venvDir = path.join(__rootDir, venvName);
+            const inExamples = path.join(__rootDir, "examples", venvName);
+            dirsToCheck.push(inExamples);
+            dirsToCheck.push(path.join(__rootDir, venvName));
+        }
+        // check if any of the possible venv directories exist
+        for (const venvDir of dirsToCheck) {
             const venvPythonPath = getVenvPythonExecutable(venvDir);
             if (fs.existsSync(venvPythonPath)) {
                 pythonPath = venvPythonPath;
@@ -149,7 +159,7 @@ const tryGetPythonExecutable = (): string | null => {
             }
         }
     }
-    return inCi && found === true ? pythonPath : getNewPythonExecutable();
+    return pythonPath || getNewPythonExecutable();
 };
 
 /**
