@@ -142,7 +142,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: waldiez-react
-          path: ./local/waldiez-react.tgz
+          path: ./.local/waldiez-react.tgz
 
       - name: Set Yarn version
         run: yarn set version stable
@@ -239,6 +239,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: waldiez-react
+          path: ./.local/waldiez-react.tgz
 
       - name: Set Yarn version
         run: yarn set version stable
