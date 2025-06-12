@@ -163,24 +163,6 @@ export class WaldiezRunner {
         return this._userParticipants;
     }
 
-    // /**
-    //  * Check if the message is an input request.
-    //  * @param msg The message to check
-    //  * @returns The request id if the message is an input request, false otherwise
-    //  * @private
-    //  * @memberof WaldiezRunner
-    //  */
-    // private _isInputRequest(raw_content: string): string | false {
-    //     const regex =
-    //         /{.*?"type"\s*:\s*"input_request".*?"request_id"\s*:\s*"(.*?)".*?}|{.*?"request_id"\s*:\s*"(.*?)".*?"type"\s*:\s*"input_request".*?}/s;
-    //     const match = raw_content.match(regex);
-    //     if (match) {
-    //         const requestId = match[1] || match[2];
-    //         return requestId;
-    //     }
-    //     return false;
-    // }
-
     /**
      * Listen for stdin, iopub and reply messages.
      * @private
@@ -207,12 +189,6 @@ export class WaldiezRunner {
             if (msgType === "stream") {
                 const streamMsg = msg as IStreamMsg;
                 if (streamMsg.content.name === "stdout") {
-                    // const requestId = this._isInputRequest(streamMsg.content.text);
-                    // if (requestId) {
-                    //     this._requestId = requestId;
-                    //     this._onInputRequest(requestId);
-                    //     this._expectingUserInput = true;
-                    // }
                     this._processMessage(streamMsg.content.text);
                 }
                 this._logger.log(streamMsg);
@@ -278,7 +254,7 @@ export class WaldiezRunner {
             this._expectingUserInput = false;
         }
         // Update request ID if needed
-        if (result.requestId) {
+        if (result.message && result.message.type === "input_request" && result.requestId) {
             this._requestId = result.requestId;
             this._onInputRequest(result.requestId);
             this._expectingUserInput = true;
@@ -320,31 +296,3 @@ export namespace WaldiezRunner {
         onEnd: () => void;
     }
 }
-
-/*
-[Log] Processing message: (lib_index_js.8eda56c74fdbf787ff2d.js, line 1977)
-"{\"id\": \"7bd2c3e5-1e47-4754-8b37-1a2193eacd14\", \"type\": \"input_request\", \"timestamp\": \"2025-06-12T12:15:03.361291\", \"request_id\": \"c6f3f84577dc4a6b9147c66e1ae280f8\", \"prompt\": \"Replying as user_proxy. Provide feedback to chat_manager. Press enter to skip and use auto-reply, or type 'exit' to end the conversation: \", \"password\": false}
-
-[Log] Processed result: (lib_index_js.8eda56c74fdbf787ff2d.js, line 1986)
-Object
-
-message: {id: "c6f3f84577dc4a6b9147c66e1ae280f8", timestamp: "2025-06-12T12:15:03.361291", request_id: "c6f3f84577dc4a6b9147c66e1ae280f8", type: "input_request", content: [{type: "text", text: "Replying as user_proxy. Provide feedback to chat_m…o-reply, or type 'exit' to end the conversation: "}], …}
-
-requestId: "c6f3f84577dc4a6b9147c66e1ae280f8"
-
-Object Prototype
-
-
-[Log] Processing message: (lib_index_js.8eda56c74fdbf787ff2d.js, line 1977)
-"{\"type\": \"termination\", \"content\": {\"uuid\": \"f43aecc4-0bc9-4200-b237-1e309212a47b\", \"termination_reason\": \"No reply generated\"}}
-"
-
-[Log] Processed result: (lib_index_js.8eda56c74fdbf787ff2d.js, line 1986)
-Object
-
-message: {id: "o3aK64OYASm5w1F42WNMT", timestamp: "2025-06-12T09:15:14.430Z", type: "system", content: [{type: "text", text: "No reply generated"}]}
-
-Object Prototype
-
-"
-*/
