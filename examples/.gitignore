@@ -1,17 +1,8 @@
 *
 !*/
-.local/
-.ipynb_checkpoints/
-waldiez_out/
-documents/
-/dev/
-# do not ignore these extensions
-!.gitignore
-!README.md
-!LICENSE
-!NOTICE.md
-!CODEOWNERS
-!*.waldiez
-!*.waldiezModel
-!*.waldiezTool
-!*.waldiezAgent
+!**/*.waldiez
+!**/*.py
+!**/*.ipynb
+**/*_api_keys.py
+**/*_secrets.py
+dev/
