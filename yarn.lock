@@ -5219,7 +5219,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.34.0"
     "@typescript-eslint/parser": "npm:^8.34.0"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git"
+    "@waldiez/react": "file:./.local/waldiez-react.tgz"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.0.0"
     copyfiles: "npm:^2.4.1"
@@ -5255,9 +5255,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git":
+"@waldiez/react@file:./.local/waldiez-react.tgz::locator=%40waldiez%2Fjupyter%40workspace%3A.":
   version: 0.4.8
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=c7c146b4cdc82001f53df27f6bb153cd14229bf2"
+  resolution: "@waldiez/react@file:./.local/waldiez-react.tgz#./.local/waldiez-react.tgz::hash=ff0926&locator=%40waldiez%2Fjupyter%40workspace%3A."
   dependencies:
     "@monaco-editor/react": "npm:^4.7.0"
     "@radix-ui/react-checkbox": "npm:^1.3.2"
@@ -5280,7 +5280,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/ca7d5f982ffe5663fde982448a6969e7803e75e8c60a5eb726fb9f67946b89b3cdc0f80d85d2fda7ecc74b090af8771728a5930969eafcfdacaecb3c58312752
+  checksum: 10/7cebbcfb4db37c518f6833defb7a1694be2079d1cb7000f88c510d047189fea2ba7755a2c2ac9bc7e48c7c43d58a17c1819783e0459da00599b44546f10eb165
   languageName: node
   linkType: hard
 

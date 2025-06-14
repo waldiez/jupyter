@@ -265,14 +265,14 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _handleInterrupt(): void {
         this._stdinRequest = null;
         this._inputRequestId = null;
-        this._runner.reset();
         this._chat.emit({
             showUI: false,
-            messages: [],
-            userParticipants: [],
+            messages: this._runner.getPreviousMessages(),
+            userParticipants: this._runner.getUserParticipants(),
             activeRequest: undefined,
         });
-        this._onInterruptKernel();
+        this._onRestartKernel();
+        this._runner.reset();
     }
     //
     private _getWaldiezWidget(vsPath?: string): EditorWidget {

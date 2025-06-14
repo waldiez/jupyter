@@ -136,12 +136,9 @@ export class WaldiezRunner {
      */
     reset() {
         this._running = false;
-        this._future = undefined;
-        this._messages = [];
-        this._userParticipants = [];
         this._requestId = null;
         this._expectingUserInput = false;
-        this._onMessagesUpdate(false);
+        // this._onMessagesUpdate(false);
     }
 
     /**
@@ -205,25 +202,21 @@ export class WaldiezRunner {
             }
         };
 
-        this._future.done
-            .catch(err => {
-                console.error("Error while running the waldiez file", err);
-                if (!err) {
-                    err = {
-                        channel: "iopub",
-                        content: {
-                            name: "stderr",
-                            text: "Failed to run the waldiez file",
-                        },
-                        header: { msg_type: "stream" },
-                        metadata: {},
-                    };
-                }
-                this._logger.log(err as IStreamMsg);
-            })
-            .finally(() => {
-                this.reset();
-            });
+        this._future.done.catch(err => {
+            console.error("Error while running the waldiez file", err);
+            if (!err) {
+                err = {
+                    channel: "iopub",
+                    content: {
+                        name: "stderr",
+                        text: "Failed to run the waldiez file",
+                    },
+                    header: { msg_type: "stream" },
+                    metadata: {},
+                };
+            }
+            this._logger.log(err as IStreamMsg);
+        });
     }
 
     /**
