@@ -18,10 +18,6 @@ if [ ! -d "$DOT_LOCAL" ]; then
     mkdir -p "$DOT_LOCAL"
 fi
 cd "$ROOT_DIR" || exit 1
-if [ -f "${ROOT_DIR}/.venv/bin/activate" ]; then
-    # shellcheck disable=SC1091
-    . "${ROOT_DIR}/.venv/bin/activate"
-fi
 
 ensure_bun() {
     if ! command -v bun > /dev/null 2>&1; then
@@ -220,7 +216,7 @@ if [ "$in_venv" != "True" ]; then
 fi
 
 before_python_whl() {
-    before_requirements_packages="pip setuptools wheel build jupyterhub jupyterlab ipywidgets ipykernel"
+    before_requirements_packages="pip setuptools wheel build jupyter jupyterhub jupyterlab ipywidgets ipykernel"
     python3 -m pip install --upgrade $extra_pip_args $before_requirements_packages
     python3 -m pip install ${extra_pip_args} -r ${requirements_file}
     python3 -m build --wheel . && \

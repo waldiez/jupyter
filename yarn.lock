@@ -5241,7 +5241,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.4.7
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=722e82174e3607354299de55493ecbfbd962d544"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=cb910772fb43189ffee41493b016cfc8a6496871"
   dependencies:
     "@monaco-editor/react": "npm:^4.7.0"
     "@radix-ui/react-checkbox": "npm:^1.3.2"
@@ -5264,7 +5264,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/490d65307c4eeb20158cd93b109b5d97bcd3750ac68fe4e65a4812d0ff001e4bee1e62aced563ef1424906ac761fb5fa9aaa6585c87e32450d3d5abc0b602cef
+  checksum: 10/95195beda1043d886a1f384097ce04fd48238f91ce1ed9e227d93225bc54ed759ea7789f24ae8c4fb19071e87d75a6abb46992e0366fbb97297d39967209e97b
   languageName: node
   linkType: hard
 
