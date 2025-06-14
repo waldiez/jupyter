@@ -114,7 +114,6 @@ RUN mkdir -p /home/waldiez/notebooks /home/waldiez/tmp /home/waldiez/.local/bin 
 USER waldiez
 
 ENV PATH=/home/waldiez/.local/bin:${PATH}
-ENV PIP_USER=1
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 # Set display for headless operations if needed
