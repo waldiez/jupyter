@@ -27,6 +27,8 @@ export const getCodeToExecute = (filePath: string) => {
         "stream = StructuredIOStream(uploads_root=uploads_root)\n" +
         "with IOStream.set_default(stream):\n" +
         "    runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
+        "    if runner.is_async:\n" +
+        "        stream.is_async = True\n" +
         "    runner.run(uploads_root=uploads_root)\n"
     );
 };
