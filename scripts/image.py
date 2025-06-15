@@ -23,9 +23,9 @@ os.environ["PYTHONUNBUFFERED"] = "1"
 
 _MY_ARCH = platform.machine()
 if _MY_ARCH == "x86_64":
-    _MY_ARCH = "amd64"
+    _MY_ARCH = "amd64"  # pyright: ignore
 elif _MY_ARCH in ("aarch64", "arm64"):
-    _MY_ARCH = "arm64"
+    _MY_ARCH = "arm64"  # pyright: ignore
 _ROOT_DIR = Path(__file__).parent.parent.resolve()
 _DEFAULT_IMAGE = os.environ.get("IMAGE_NAME", "waldiez/jupyter")
 _FALLBACK_TAG = "dev" if "--dev" in sys.argv else "latest"
@@ -298,7 +298,7 @@ def main() -> None:
         If an error occurs.
     """
     args, _ = cli().parse_known_args()
-    build_args = args.build_args or []
+    build_args: list[str] = args.build_args or []
     container_file = "Containerfile.dev" if args.dev else "Containerfile"
     platform_arg = args.platform
     container_command = args.container_command

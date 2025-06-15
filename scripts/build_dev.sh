@@ -131,7 +131,7 @@ use_react_from_git() {
     git clone "${REACT_GIT_REPO}" -b "$react_branch" "${DOT_LOCAL}/waldiez-react"
     cd "${DOT_LOCAL}/waldiez-react" || exit 1
     bun install
-    bun run build
+    bun run archive
     mv out/archive/waldiez-react-*.tgz "${DOT_LOCAL}/waldiez.tgz"
     react_build=".local/waldiez.tgz"
     rm -rf "${DOT_LOCAL}/waldiez-react"

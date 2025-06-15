@@ -12,12 +12,12 @@ import re
 import subprocess  # nosemgrep # nosec
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Protocol, Tuple
+from typing import Any, Protocol
 
 
 ROOT_DIR = Path(__file__).parent.parent
-EXCLUDED_EXTRAS: List[str] = []
-EXCLUDED_PACKAGES: List[str] = []  # we might need a version not yet published
+EXCLUDED_EXTRAS: list[str] = []
+EXCLUDED_PACKAGES: list[str] = []  # we might need a version not yet published
 
 # toml uses 'r' mode, tomllib uses 'rb' mode
 OPEN_MODE = "rb" if sys.version_info >= (3, 11) else "r"
@@ -26,7 +26,11 @@ OPEN_MODE = "rb" if sys.version_info >= (3, 11) else "r"
 class TomlLoader(Protocol):
     """Protocol for TOML loaders."""
 
-    def __call__(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def __call__(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> dict[str, Any]:  # pyright: ignore
         """Load TOML data from a file."""
 
 
@@ -79,7 +83,7 @@ def get_loader() -> TomlLoader:
         raise ImportError("Failed to import the `toml` library.") from error
 
 
-def _write_all_dot_txt(project_dir: Path, extras: List[str]) -> None:
+def _write_all_dot_txt(project_dir: Path, extras: list[str]) -> None:
     """Generate requirements/all.txt with references to all requirements."""
     if not os.path.exists(project_dir / "requirements"):
         os.makedirs(project_dir / "requirements")
@@ -113,7 +117,7 @@ def get_package_name(requirement: str) -> str:
     return re.split(r"[<=>;]", requirement)[0]
 
 
-def _write_main_txt(project_dir: Path, main_requirements: List[str]) -> None:
+def _write_main_txt(project_dir: Path, main_requirements: list[str]) -> None:
     """Write the main requirements file."""
     with open(
         project_dir / "requirements" / "main.txt",
@@ -129,7 +133,7 @@ def _write_main_txt(project_dir: Path, main_requirements: List[str]) -> None:
 
 
 def _write_extra_txt(
-    project_dir: Path, extra: str, extra_requirements: List[str], has_main: bool
+    project_dir: Path, extra: str, extra_requirements: list[str], has_main: bool
 ) -> None:
     """Write an extra requirements file."""
     with open(
@@ -148,24 +152,27 @@ def _write_extra_txt(
 
 
 def _write_requirements_txt(
-    project_dir: Path, toml_data: Dict[str, Any]
-) -> Tuple[bool, List[str]]:
+    project_dir: Path, toml_data: dict[str, Any]
+) -> tuple[bool, list[str]]:
     """Write requirements/*.txt file.
 
     Parameters
     ----------
     project_dir : Path
         The project directory.
-    toml_data : Dict[str, Any]
+    toml_data : dict[str, Any]
         The parsed pyproject.toml data.
 
     Returns
     -------
-    Tuple[bool, List[str]]
+    tuple[bool, list[str]]
         A tuple of whether the main requirements were found and
         a list of extra keys.
     """
     has_main = True
+    extra_keys: list[str] = []
+    extra_requirements: dict[str, list[str]] = {}
+    main_requirements: list[str] = []
     try:
         main_requirements = toml_data["project"]["dependencies"]
     except KeyError:
@@ -212,7 +219,7 @@ def main() -> None:
     for file in os.listdir(ROOT_DIR / "requirements"):
         print(f"  - {file}")
     if "--install" in sys.argv:
-        to_install = ["-r", os.path.join("requirements", "all.txt")]
+        to_install: list[str] = ["-r", os.path.join("requirements", "all.txt")]
         if not has_main:
             to_install = []
             for key in keys:
