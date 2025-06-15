@@ -99,7 +99,7 @@
         "@jupyterlab/translation": "^4.4.3",
         "@jupyterlab/ui-components": "^4.4.3",
         "@jupyterlab/ui-components-extension": "^4.4.3",
-        "@waldiez/react": "file:./.local/waldiez-react.tgz"
+        "@waldiez/react": "^0.4.8"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.18.6",
