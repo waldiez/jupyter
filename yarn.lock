@@ -5234,7 +5234,7 @@ __metadata:
     jest: "npm:^30.0.0"
     jest-fetch-mock: "npm:^3.0.3"
     jest-fixed-jsdom: "npm:^0.0.9"
-    lint-staged: "npm:^16.1.0"
+    lint-staged: "npm:^16.1.2"
     mini-css-extract-plugin: "npm:^2.9.2"
     mkdirp: "npm:^3.0.1"
     npm-run-all: "npm:^4.1.5"
@@ -10624,7 +10624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^16.1.0":
+"lint-staged@npm:^16.1.2":
   version: 16.1.2
   resolution: "lint-staged@npm:16.1.2"
   dependencies:
