@@ -47,7 +47,7 @@
         "python": "node --import=tsx scripts/python.ts",
         "requirements": "yarn python -m pip install -r requirements/all.txt",
         "jupyter:install": "yarn python -m pip install -qqq jupyter",
-        "jupyter": "jupyter:install && yarn python -m jupyter",
+        "jupyter": "yarn jupyter:install && yarn python -m jupyter",
         "before:build": "yarn clean && yarn lint",
         "build:dev": "yarn build:lib && yarn build:labextension:dev",
         "build": "yarn before:build && yarn clean && yarn build:lib:prod && yarn build:labextension",
