@@ -138,7 +138,10 @@ export class WaldiezRunner {
         this._running = false;
         this._requestId = null;
         this._expectingUserInput = false;
-        // this._onMessagesUpdate(false);
+        if (this._future) {
+            this._future.dispose();
+            this._future = undefined;
+        }
     }
 
     /**
@@ -215,7 +218,10 @@ export class WaldiezRunner {
                     metadata: {},
                 };
             }
-            this._logger.log(err as IStreamMsg);
+            const errorMsg = typeof err === "string" ? err : JSON.stringify(err);
+            this._logger.log(`Error: ${errorMsg}`);
+            this._running = false;
+            this._onEnd();
         });
     }
 

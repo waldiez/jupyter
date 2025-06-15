@@ -129,6 +129,9 @@ describe("WaldiezRunner", () => {
         const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         expect(runner.running).toBe(true);
+        if (runner["_future"]) {
+            runner["_future"].dispose = jest.fn();
+        }
         runner.reset();
         expect(runner.running).toBe(false);
     });

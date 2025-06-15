@@ -168,11 +168,13 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
     }
     //
-    private _onContentChanged(contents: string): void {
+    private _onContentChanged(contents: string, markDirty: boolean = true): void {
         const currentContents = this.context.model.toString();
         if (contents !== currentContents) {
             this.context.model.fromString(contents);
-            this.context.model.dirty = true;
+            if (markDirty) {
+                this.context.model.dirty = true;
+            }
         }
     }
     //
@@ -329,7 +331,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         // this._chat.emit(undefined);
     }
     //
-    private _onRun(_contents: string) {
+    private _onRun(contents: string) {
         const kernel = this.context.sessionContext.session?.kernel;
         if (!kernel) {
             showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE);
@@ -338,9 +340,8 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         if (!this._logger.isVisible) {
             this._logger.toggle();
         }
-        if (this.context.model.dirty) {
-            this.context.save();
-        }
+        this._onContentChanged(contents, false);
+        this._chat.emit(undefined);
         getWaldiezActualPath(this.context.path)
             .then(actualPath => {
                 this._runner.run(kernel, actualPath);
