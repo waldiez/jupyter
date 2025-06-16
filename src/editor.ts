@@ -267,6 +267,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _handleInterrupt(): void {
         this._stdinRequest = null;
         this._inputRequestId = null;
+        this._runner.reset();
         this._chat.emit({
             showUI: false,
             messages: this._runner.getPreviousMessages(),
@@ -274,7 +275,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             activeRequest: undefined,
         });
         this._onRestartKernel();
-        this._runner.reset();
     }
     //
     private _getWaldiezWidget(vsPath?: string): EditorWidget {

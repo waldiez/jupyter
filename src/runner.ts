@@ -19,17 +19,11 @@ import { WaldiezChatMessage, WaldiezChatMessageProcessor } from "@waldiez/react"
 export const getCodeToExecute = (filePath: string) => {
     return (
         "from pathlib import Path\n" +
-        "from autogen.io import IOStream\n" +
         "from waldiez import WaldiezRunner\n" +
-        "from waldiez.io import StructuredIOStream\n\n" +
         `file_path = Path(r"${filePath}").as_posix()\n` +
         'uploads_root = Path(file_path).parent / "uploads"\n' +
-        "stream = StructuredIOStream(uploads_root=uploads_root)\n" +
-        "with IOStream.set_default(stream):\n" +
-        "    runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
-        "    if runner.is_async:\n" +
-        "        stream.is_async = True\n" +
-        "    runner.run(uploads_root=uploads_root)\n"
+        "runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
+        "runner.run(uploads_root=uploads_root, structured_io=True)\n"
     );
 };
 
@@ -241,7 +235,7 @@ export class WaldiezRunner {
               `?view=${this._uploadsRoot}/${this._requestId}.png`
             : undefined;
         const result = WaldiezChatMessageProcessor.process(rawMessage, this._requestId, newImgurl);
-
+        // If the result is undefined, it means the message was not processed
         if (!result) {
             return;
         }
@@ -267,7 +261,14 @@ export class WaldiezRunner {
             // Notify about the new message
             this._onMessagesUpdate(this._expectingUserInput);
         }
-
+        const endMessage = this._raw_has_ending(rawMessage);
+        if (endMessage) {
+            // If the raw message has an ending, add it to the messages
+            this._messages.push(endMessage);
+            // Notify about the new message
+            this._onMessagesUpdate(this._expectingUserInput);
+            result.isWorkflowEnd = true; // Mark as workflow end
+        }
         // Handle workflow end
         if (result.isWorkflowEnd) {
             this._running = false;
@@ -280,6 +281,47 @@ export class WaldiezRunner {
                 new Set([...this._userParticipants, ...result.participants.users]),
             );
         }
+    }
+    /**
+     * Check if the raw message has an ending.
+     * @param rawMessage The raw message to check
+     * @returns Whether the raw message has an ending
+     * @private
+     * @memberof WaldiezRunner
+     */
+    private _raw_has_ending(rawMessage: string): WaldiezChatMessage | null {
+        // <Waldiez> - Workflow finished
+        // <Waldiez> - Workflow stopped by user
+        // <Waldiez> - Workflow execution failed:
+        if (rawMessage.includes("<Waldiez> - Workflow ")) {
+            let parsedMessage: string = "Workflow finished";
+            try {
+                const parsedMessageObject = JSON.parse(rawMessage);
+                if (
+                    typeof parsedMessageObject === "object" &&
+                    parsedMessageObject &&
+                    "data" in parsedMessageObject &&
+                    typeof parsedMessageObject.data === "string"
+                ) {
+                    parsedMessage = parsedMessageObject.data.replace("<Waldiez> - ", "").replace("\n", "");
+                }
+            } catch (_) {
+                parsedMessage = rawMessage.replace("<Waldiez> - ", "").replace("\n", "");
+            }
+            const message: WaldiezChatMessage = {
+                type: "system",
+                id: "workflow-end",
+                timestamp: new Date().toISOString(),
+                content: [
+                    {
+                        type: "text",
+                        text: parsedMessage,
+                    },
+                ],
+            };
+            return message;
+        }
+        return null;
     }
 }
 
