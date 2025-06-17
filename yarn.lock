@@ -4708,13 +4708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.14":
-  version: 29.5.14
-  resolution: "@types/jest@npm:29.5.14"
+"@types/jest@npm:^30.0.0":
+  version: 30.0.0
+  resolution: "@types/jest@npm:30.0.0"
   dependencies:
-    expect: "npm:^29.0.0"
-    pretty-format: "npm:^29.0.0"
-  checksum: 10/59ec7a9c4688aae8ee529316c43853468b6034f453d08a2e1064b281af9c81234cec986be796288f1bbb29efe943bc950e70c8fa8faae1e460d50e3cf9760f9b
+    expect: "npm:^30.0.0"
+    pretty-format: "npm:^30.0.0"
+  checksum: 10/cdeaa924c68b5233d9ff92861a89e7042df2b0f197633729bcf3a31e65bd4e9426e751c5665b5ac2de0b222b33f100a5502da22aefce3d2c62931c715e88f209
   languageName: node
   linkType: hard
 
@@ -4768,7 +4768,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.0.1":
+"@types/node@npm:*, @types/node@npm:^24.0.3":
   version: 24.0.3
   resolution: "@types/node@npm:24.0.3"
   dependencies:
@@ -4905,7 +4905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.34.1, @typescript-eslint/eslint-plugin@npm:^8.34.0":
+"@typescript-eslint/eslint-plugin@npm:8.34.1, @typescript-eslint/eslint-plugin@npm:^8.34.1":
   version: 8.34.1
   resolution: "@typescript-eslint/eslint-plugin@npm:8.34.1"
   dependencies:
@@ -4926,7 +4926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:8.34.1, @typescript-eslint/parser@npm:^8.34.0":
+"@typescript-eslint/parser@npm:8.34.1, @typescript-eslint/parser@npm:^8.34.1":
   version: 8.34.1
   resolution: "@typescript-eslint/parser@npm:8.34.1"
   dependencies:
@@ -5219,13 +5219,13 @@ __metadata:
     "@testing-library/react": "npm:^16.3.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^5.2.2"
     "@types/babel__preset-env": "npm:^7.10.0"
-    "@types/jest": "npm:^29.5.14"
+    "@types/jest": "npm:^30.0.0"
     "@types/json-schema": "npm:^7.0.15"
-    "@types/node": "npm:^24.0.1"
+    "@types/node": "npm:^24.0.3"
     "@types/react": "npm:^18.3.23"
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
-    "@typescript-eslint/eslint-plugin": "npm:^8.34.0"
-    "@typescript-eslint/parser": "npm:^8.34.0"
+    "@typescript-eslint/eslint-plugin": "npm:^8.34.1"
+    "@typescript-eslint/parser": "npm:^8.34.1"
     "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.0.0"
@@ -5256,7 +5256,7 @@ __metadata:
     ts-jest: "npm:^29.4.0"
     tsx: "npm:^4.20.3"
     typescript: "npm:^5.8.3"
-    typescript-eslint: "npm:^8.34.0"
+    typescript-eslint: "npm:^8.34.1"
     yarn-deduplicate: "npm:^6.0.2"
     yjs: "npm:^13.6.27"
   languageName: unknown
@@ -5264,7 +5264,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.4.9
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=4673e84d79b880b11521ee1386b31bc19480576b"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=c1e616081645d7d028ad4f555e42fb1707526ce5"
   dependencies:
     "@fontsource/fredoka": "npm:^5.2.8"
     "@monaco-editor/react": "npm:^4.7.0"
@@ -5288,7 +5288,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/767c96c338729dac3d522d2921b4cfb42ed191f1a45a8f42884db3a5917fe3ff3a4afe48e211fd6db959d0b111005b17bc1e325983a11f8baccfe69fd5a41571
+  checksum: 10/00dfb55b87cdded308880486a417efea93e83d6bb226f0db5db5328a8581624cad8aa1041b6fb62e992fb4ba3100714462c28315cc38d9c60dd3dbab4e29c21f
   languageName: node
   linkType: hard
 
@@ -7800,7 +7800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expect@npm:30.0.0":
+"expect@npm:30.0.0, expect@npm:^30.0.0":
   version: 30.0.0
   resolution: "expect@npm:30.0.0"
   dependencies:
@@ -7814,7 +7814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expect@npm:^29.0.0, expect@npm:^29.7.0":
+"expect@npm:^29.7.0":
   version: 29.7.0
   resolution: "expect@npm:29.7.0"
   dependencies:
@@ -12424,7 +12424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:30.0.0":
+"pretty-format@npm:30.0.0, pretty-format@npm:^30.0.0":
   version: 30.0.0
   resolution: "pretty-format@npm:30.0.0"
   dependencies:
@@ -12435,7 +12435,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^29.0.0, pretty-format@npm:^29.7.0":
+"pretty-format@npm:^29.7.0":
   version: 29.7.0
   resolution: "pretty-format@npm:29.7.0"
   dependencies:
@@ -14370,7 +14370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.34.0":
+"typescript-eslint@npm:^8.34.1":
   version: 8.34.1
   resolution: "typescript-eslint@npm:8.34.1"
   dependencies:
