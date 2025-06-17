@@ -5264,7 +5264,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.4.9
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=45d30408fef370145c3277f7155a411282e3a618"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=4673e84d79b880b11521ee1386b31bc19480576b"
   dependencies:
     "@fontsource/fredoka": "npm:^5.2.8"
     "@monaco-editor/react": "npm:^4.7.0"

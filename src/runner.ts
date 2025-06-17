@@ -23,7 +23,7 @@ export const getCodeToExecute = (filePath: string) => {
         `file_path = Path(r"${filePath}").as_posix()\n` +
         'uploads_root = Path(file_path).parent / "uploads"\n' +
         "runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
-        "runner.run(uploads_root=uploads_root, structured_io=True)\n"
+        "runner.run(uploads_root=uploads_root, structured_io=True, threaded=True)\n"
     );
 };
 
