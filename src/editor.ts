@@ -5,12 +5,13 @@
 import { CommandIDs } from "./commands";
 import { PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "./constants";
 import { WaldiezLogger } from "./logger";
-import { getWaldiezActualPath, uploadFile } from "./rest";
+import { getWaldiezActualPath, handleExport, uploadFile } from "./rest";
 import { WaldiezRunner } from "./runner";
 import { EditorWidget } from "./widget";
 import { ISessionContext, showErrorMessage } from "@jupyterlab/apputils";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { DocumentModel, DocumentWidget } from "@jupyterlab/docregistry";
+import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { ILogPayload } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import { Kernel, ServerConnection } from "@jupyterlab/services";
@@ -36,6 +37,7 @@ import { WaldiezChatConfig, WaldiezChatMessage, WaldiezChatUserInput } from "@wa
 export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _commands: CommandRegistry;
     private _settingsRegistry: ISettingRegistry;
+    private _fileBrowserFactory: IFileBrowserFactory;
     private _inputRequestId: string | null = null;
     private _stdinRequest: IInputRequestMsg | null = null;
     private _chat: Signal<this, WaldiezChatConfig | undefined>;
@@ -55,6 +57,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         super(options);
         this._commands = options.commands;
         this._settingsRegistry = options.settingregistry;
+        this._fileBrowserFactory = options.fileBrowserFactory;
         this._chat = new Signal<this, WaldiezChatConfig | undefined>(this);
         this._logger = new WaldiezLogger({
             commands: this._commands,
@@ -292,6 +295,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             chat: this._chat,
             onChange: this._onContentChanged.bind(this),
             onRun: this._onRun.bind(this),
+            onConvert: this._onConvert.bind(this),
             onUpload: this.onUpload,
         });
     }
@@ -391,6 +395,11 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
         return "<unknown>";
     }
+
+    //
+    private _onConvert(_flow: string, to: "py" | "ipynb"): void {
+        handleExport(this._fileBrowserFactory, to);
+    }
 }
 
 export namespace WaldiezEditor {
@@ -399,5 +408,6 @@ export namespace WaldiezEditor {
         editorServices: IEditorServices;
         settingregistry: ISettingRegistry;
         commands: CommandRegistry;
+        fileBrowserFactory: IFileBrowserFactory;
     }
 }

@@ -44,7 +44,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 test = [
     "coverage==7.9.1",
     "filelock==3.18.0",
-    "pytest==8.4.0",
+    "pytest==8.4.1",
     "pytest-datadir==1.7.2",
     "pytest-cov==6.2.1",
     "pytest-html==4.1.1",
@@ -66,7 +66,7 @@ dev = [
     "pydocstyle==6.3.0",
     "pylint==3.3.7",
     "python-dotenv==1.1.0",
-    "ruff==0.11.13",
+    "ruff==0.12.0",
     "types-PyYAML==6.0.12.20250516",
     "toml==0.10.2; python_version <= '3.10'",
     "types-toml==0.10.8.20240310",

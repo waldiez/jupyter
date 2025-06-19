@@ -6,6 +6,7 @@ import { FACTORY_NAME } from "./constants";
 import { WaldiezEditor } from "./editor";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { ABCWidgetFactory, DocumentModel, DocumentRegistry } from "@jupyterlab/docregistry";
+import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { ITranslator } from "@jupyterlab/translation";
@@ -26,6 +27,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
     private _rendermime: IRenderMimeRegistry;
     private _editorServices: IEditorServices;
     private _settingRegistry: ISettingRegistry;
+    private _fileBrowserFactory: IFileBrowserFactory;
 
     /**
      * Constructor of WaldiezEditorFactory.
@@ -40,6 +42,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
         this._rendermime = options.rendermime;
         this._editorServices = options.editorServices;
         this._settingRegistry = options.settingRegistry;
+        this._fileBrowserFactory = options.fileBrowserFactory;
     }
 
     /**
@@ -76,6 +79,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
             settingregistry: this._settingRegistry,
             content: panel,
             commands: this._commands,
+            fileBrowserFactory: this._fileBrowserFactory,
         });
         return editor;
     }
@@ -93,6 +97,7 @@ export namespace WaldiezEditorFactory {
         rendermime: IRenderMimeRegistry;
         editorServices: IEditorServices;
         settingRegistry: ISettingRegistry;
+        fileBrowserFactory: IFileBrowserFactory;
         commands: CommandRegistry;
     }
 }

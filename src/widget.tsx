@@ -30,6 +30,7 @@ export interface IWaldiezWidgetProps {
     jsonData: Record<string, any>;
     chat: ISignal<any, WaldiezChatConfig | undefined>;
     onRun?: (flow: string) => void;
+    onConvert?: (flow: string, to: "py" | "ipynb") => void;
     onChange?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
 }
@@ -59,6 +60,7 @@ export class EditorWidget extends ReactWidget {
             storageId: flow.storageId ?? props.flowId,
             onChange: props.onChange,
             onRun: props.onRun,
+            onConvert: props.onConvert,
             onUpload: props.onUpload,
             monacoVsPath: props.vsPath,
         };

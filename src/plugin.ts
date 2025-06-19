@@ -64,6 +64,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell
             rendermime,
             editorServices,
             settingRegistry,
+            fileBrowserFactory,
         });
         if (launcher) {
             launcher.add({
