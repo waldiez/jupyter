@@ -20,7 +20,7 @@ $CONTAINER_COMMAND run \
   --rm \
   -it \
   -p 8888:8888 \
-  -v ${PWD}/notebooks:/home/user/notebooks \
+  -v ${PWD}/notebooks:/home/waldiez/notebooks \
   waldiez/jupyter:latest
 
 # with selinux and/or podman, you might get permission errors, so you can try:
@@ -28,7 +28,7 @@ $CONTAINER_COMMAND run \
   --rm \
   -it \
   -p 10000:8888 \
-  -v ${PWD}/notebooks:/home/user/notebooks \
+  -v ${PWD}/notebooks:/home/waldiez/notebooks \
   --userns=keep-id \
   --security-opt label=disable waldiez/jupyter:latest
 ```
