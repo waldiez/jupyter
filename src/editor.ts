@@ -177,6 +177,8 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             this.context.model.fromString(contents);
             if (markDirty) {
                 this.context.model.dirty = true;
+            } else {
+                this.context.save();
             }
         }
     }
