@@ -188,12 +188,12 @@ const getPythonExecutable = (): string => {
  * Show help
  */
 const showHelp = () => {
-    console.info(`\x1b[36mUsage: node --import=tsx ${__me} <args>`);
+    console.info(`\x1b[36mUsage: node --import=tsx ${__me} <args>\x1b[0m`);
     console.info(
         "\x1b[36m\nExamples: \n" +
             "\nyarn python --version\n" +
             "node --import=tsx scripts/python.ts -m pip install -r requirements/all.txt\n" +
-            "bun scripts/python.ts path/to/file.py\n",
+            "bun scripts/python.ts path/to/file.py\n\x1b[0m",
     );
     process.exit(0);
 };
@@ -225,7 +225,7 @@ const main = () => {
         }
         const pythonExec = getActualPath(getPythonExecutable());
         const cmd_args_str = cmd_args.join(" ");
-        console.log(`\x1b[36mRunning command: ${pythonExec} ${cmd_args_str}`);
+        console.log(`\x1b[36mRunning command: ${pythonExec} ${cmd_args_str}\x1b[0m`);
         execSync(`${pythonExec} ${cmd_args_str}`, {
             stdio: "inherit",
         });
