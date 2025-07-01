@@ -131,3 +131,7 @@ image:
 .PHONY: dev-image
 dev-image:
 	$(PYTHON) scripts/image.py --dev --no-cache
+
+.PHONY: dev-dev-image
+dev-dev-image:
+	$(PYTHON) scripts/image.py --dev --no-cache --build-args REACT_BRANCH=dev --build-args PYTHON_BRANCH=dev
