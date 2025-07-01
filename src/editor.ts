@@ -264,6 +264,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             handlers: {
                 onUserInput: this._onUserInput.bind(this),
                 onInterrupt: this._handleInterrupt.bind(this),
+                onClose: this._handleClose.bind(this),
             },
         };
         this._chat.emit(chat);
@@ -280,6 +281,18 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             activeRequest: undefined,
         });
         this._onRestartKernel();
+    }
+    //
+    private _handleClose(): void {
+        this._stdinRequest = null;
+        this._inputRequestId = null;
+        this._runner.reset();
+        this._chat.emit({
+            showUI: false,
+            messages: this._runner.getPreviousMessages(),
+            userParticipants: this._runner.getUserParticipants(),
+            activeRequest: undefined,
+        });
     }
     //
     private _getWaldiezWidget(vsPath?: string): EditorWidget {
@@ -385,6 +398,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             handlers: {
                 onUserInput: this._onUserInput.bind(this),
                 onInterrupt: this._handleInterrupt.bind(this),
+                onClose: this._handleClose.bind(this),
             },
         });
     }
