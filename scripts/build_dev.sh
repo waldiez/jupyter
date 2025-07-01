@@ -8,8 +8,8 @@ DOT_LOCAL="${ROOT_DIR}/.local"
 PY_GIT_REPO="https://github.com/waldiez/waldiez.git"
 REACT_GIT_REPO="https://github.com/waldiez/waldiez.git"
 
-react_branch="main"
-python_branch="main"
+react_branch="dev"
+python_branch="dev"
 dry_run="false"
 react_build=""
 python_build=""
@@ -40,26 +40,26 @@ while [ $# -gt 0 ]; do
         --react-branch)
             shift
             react_branch="$1"
-            ;;
+        ;;
         --python-branch)
             shift
             python_branch="$1"
-            ;;
+        ;;
         --dry-run)
             dry_run="true"
-            ;;
+        ;;
         --help)
             echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
             echo "  --react-branch <branch>   Specify the react branch to use (default: main)"
             echo "  --python-branch <branch>  Specify the python branch to use (default: main)"
             echo "  --dry-run                 Do not install anything, just show what would be done"
             exit 0
-            ;;
+        ;;
         *)
             echo "Unknown option: $1"
             echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
             exit 1
-            ;;
+        ;;
     esac
     shift
 done
@@ -68,8 +68,8 @@ check_local_react_build() {
     found_file=""
     for file in "${DOT_LOCAL}"/*; do
         if [ -f "$file" ] && \
-            printf '%s\n' "$file" | grep -q 'waldiez-react' && \
-            (printf '%s\n' "$file" | grep -qE '\.tgz$|\.tar\.gz$'); then
+        printf '%s\n' "$file" | grep -q 'waldiez-react' && \
+        (printf '%s\n' "$file" | grep -qE '\.tgz$|\.tar\.gz$'); then
             found_file="$file"
             break
         fi
@@ -85,8 +85,8 @@ check_local_python_build() {
     found_file=""
     for file in "${DOT_LOCAL}"/*; do
         if [ -f "$file" ] && \
-            printf '%s\n' "$file" | grep -q 'waldiez' && \
-            (printf '%s\n' "$file" | grep -qE '\.whl$'); then
+        printf '%s\n' "$file" | grep -q 'waldiez' && \
+        (printf '%s\n' "$file" | grep -qE '\.whl$'); then
             found_file="$file"
             break
         fi
@@ -181,9 +181,9 @@ build_js_lib
 find_main_requirements() {
     if [ -f "${ROOT_DIR}/requirements/main.txt" ]; then
         echo "${ROOT_DIR}/requirements/main.txt"
-    elif [ -f "${ROOT_DIR}/requirements.txt" ]; then
+        elif [ -f "${ROOT_DIR}/requirements.txt" ]; then
         echo "${ROOT_DIR}/requirements.txt"
-    elif [ -f "/tmp/requirements.txt" ]; then
+        elif [ -f "/tmp/requirements.txt" ]; then
         echo "/tmp/requirements.txt"
     else
         echo ""
@@ -220,8 +220,8 @@ before_python_whl() {
     python3 -m pip install --upgrade $extra_pip_args $before_requirements_packages
     python3 -m pip install ${extra_pip_args} -r ${requirements_file}
     python3 -m build --wheel . && \
-        python3 -m pip install --force ${extra_pip_args} dist/*.whl && \
-        python3 -m pip uninstall -y waldiez autogen-agentchat
+    python3 -m pip install --force ${extra_pip_args} dist/*.whl && \
+    python3 -m pip uninstall -y waldiez autogen-agentchat
 }
 
 use_python_from_git() {
