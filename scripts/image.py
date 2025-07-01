@@ -322,6 +322,34 @@ def check_other_platform(container_command: str, platform_arg: str) -> bool:
     return is_other_platform
 
 
+def _get_build_args(args: argparse.Namespace) -> list[str]:
+    """Get the build arguments from the environment variables.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+
+    Returns
+    -------
+    List[str]
+        The build arguments.
+    """
+    build_args: list[str] = args.build_args or []
+    if args.dev is True:
+        react_branch = os.environ.get("REACT_BRANCH", "main")
+        python_branch = os.environ.get("PYTHON_BRANCH", "main")
+        for arg in build_args:
+            if arg.startswith("REACT_BRANCH="):
+                react_branch = arg.split("=")[1]
+            elif arg.startswith("PYTHON_BRANCH="):
+                python_branch = arg.split("=")[1]
+
+        build_args.append(f"REACT_BRANCH={react_branch}")
+        build_args.append(f"PYTHON_BRANCH={python_branch}")
+        build_args = list(set(build_args))  # remove duplicates
+    return build_args
+
+
 def main() -> None:
     """Parse the CLI arguments and build the container image.
 
@@ -335,7 +363,7 @@ def main() -> None:
         If an error occurs.
     """
     args, _ = cli().parse_known_args()
-    build_args: list[str] = args.build_args or []
+    build_args: list[str] = _get_build_args(args)
     container_file = "Containerfile.dev" if args.dev else "Containerfile"
     platform_arg = args.platform
     container_command = args.container_command
