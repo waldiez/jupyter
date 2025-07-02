@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -99,7 +99,7 @@
         "@jupyterlab/translation": "^4.4.4",
         "@jupyterlab/ui-components": "^4.4.4",
         "@jupyterlab/ui-components-extension": "^4.4.4",
-        "@waldiez/react": "^0.5.1"
+        "@waldiez/react": "^0.5.2"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.18.6",
