@@ -134,10 +134,18 @@ RUN corepack enable && \
 
 ARG REACT_BRANCH=main
 ARG PYTHON_BRANCH=main
+# api.waldiez.io
+ARG API_URL_BASE="api"
 
 ENV REACT_BRANCH=${REACT_BRANCH}
 ENV PYTHON_BRANCH=${PYTHON_BRANCH}
-RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} && \
+ENV API_URL_BASE=${API_URL_BASE}
+RUN echo "Building waldiez/jupyter with the following parameters:" \
+    && echo "REACT_BRANCH=${REACT_BRANCH}" \
+    && echo "PYTHON_BRANCH=${PYTHON_BRANCH}" \
+    && echo "API_URL_BASE=${API_URL_BASE}"
+# build the application
+RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} --api-url-base ${API_URL_BASE} && \
     rm -rf /home/waldiez/app
 COPY --chown=waldiez:waldiez scripts/start.sh /home/waldiez/app/start.sh
 RUN chmod +x /home/waldiez/app/start.sh

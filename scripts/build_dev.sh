@@ -11,6 +11,7 @@ REACT_GIT_REPO="https://github.com/waldiez/waldiez.git"
 react_branch="dev"
 python_branch="dev"
 dry_run="false"
+api_url_base="api"
 react_build=""
 python_build=""
 
@@ -48,6 +49,10 @@ while [ $# -gt 0 ]; do
         --dry-run)
             dry_run="true"
         ;;
+        --api-url-base)
+            shift
+            api_url_base="$1"
+        ;;
         --help)
             echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
             echo "  --react-branch <branch>   Specify the react branch to use (default: main)"
@@ -63,6 +68,8 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
+api_url_base="https://${api_url_base%/}.waldiez.io"
 
 check_local_react_build() {
     found_file=""
@@ -130,6 +137,10 @@ use_react_from_git() {
     fi
     git clone "${REACT_GIT_REPO}" -b "$react_branch" "${DOT_LOCAL}/waldiez-react"
     cd "${DOT_LOCAL}/waldiez-react" || exit 1
+    echo "Using React branch: $react_branch"
+    echo "Using API URL base: $api_url_base"
+    echo "HUB_API_URL=${api_url_base}" > .env
+    . ./.env
     bun install
     bun run archive
     mv out/archive/waldiez-react-*.tgz "${DOT_LOCAL}/waldiez.tgz"
