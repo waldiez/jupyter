@@ -14,7 +14,7 @@ import {
     IStreamMsg,
 } from "@jupyterlab/services/lib/kernel/messages";
 
-import { WaldiezChatMessage, WaldiezChatMessageProcessor } from "@waldiez/react";
+import { WaldiezChatMessage, WaldiezChatMessageProcessor, WaldiezTimelineData } from "@waldiez/react";
 
 export const getCodeToExecute = (filePath: string) => {
     return (
@@ -58,9 +58,11 @@ export class WaldiezRunner {
     private _logger: WaldiezLogger;
     private _baseUrl: string;
     private _messages: WaldiezChatMessage[] = [];
+    private _timelineData: WaldiezTimelineData | undefined = undefined;
     private _userParticipants: string[] = [];
     private _onInputRequest: (requestId: string) => void;
     private _onMessagesUpdate: (isInputRequest: boolean) => void;
+    private _onTimelineData?: (data: WaldiezTimelineData) => void;
     private _onEnd: () => void;
     private _requestId: string | null = null;
     private _expectingUserInput: boolean = false;
@@ -72,12 +74,14 @@ export class WaldiezRunner {
         baseUrl,
         onInputRequest,
         onMessagesUpdate,
+        onTimelineData,
         onEnd,
     }: WaldiezRunner.IOptions) {
         this._logger = logger;
         this._onStdin = onStdin;
         this._baseUrl = baseUrl;
         this._onMessagesUpdate = onMessagesUpdate;
+        this._onTimelineData = onTimelineData;
         this._onInputRequest = onInputRequest;
         this._onEnd = onEnd;
     }
@@ -110,6 +114,10 @@ export class WaldiezRunner {
         this._running = true;
         this._messages = [];
         this._userParticipants = [];
+        this._requestId = null;
+        this._expectingUserInput = false;
+        this._future = undefined;
+        this._timelineData = undefined;
         this._uploadsRoot = getUploadsRoot(filePath);
 
         const code = getCodeToExecute(filePath);
@@ -159,6 +167,30 @@ export class WaldiezRunner {
         return this._userParticipants;
     }
 
+    /**
+     * Get the timeline data.
+     * @returns The timeline data
+     * @public
+     * @memberof WaldiezRunner
+     */
+    getTimelineData(): WaldiezTimelineData | undefined {
+        return this._timelineData;
+    }
+
+    /**
+     * Set the timeline data.
+     * @param data The timeline data to set
+     * @public
+     * @memberof WaldiezRunner
+     */
+    setTimelineData(data: WaldiezTimelineData | undefined) {
+        this._timelineData = data;
+        if (!data) {
+            return;
+        }
+        // Notify about the timeline data
+        this._onTimelineData?.(data);
+    }
     /**
      * Listen for stdin, iopub and reply messages.
      * @private
@@ -239,6 +271,12 @@ export class WaldiezRunner {
         if (!result) {
             return;
         }
+        if (result.timeline) {
+            // Notify about the timeline data
+            this.setTimelineData(result.timeline);
+            this._expectingUserInput = true;
+            return;
+        }
         // Check if this is a text message after an input request
         if (
             this._expectingUserInput &&
@@ -270,7 +308,7 @@ export class WaldiezRunner {
             result.isWorkflowEnd = true; // Mark as workflow end
         }
         // Handle workflow end
-        if (result.isWorkflowEnd) {
+        if (result.isWorkflowEnd && this._timelineData !== undefined) {
             this._running = false;
             this._onEnd();
             this._logger.log("Workflow finished");
@@ -336,6 +374,7 @@ export namespace WaldiezRunner {
         onStdin: (msg: IInputRequestMsg) => void;
         onInputRequest: (requestId: string) => void;
         onMessagesUpdate: (isInputRequest: boolean) => void;
+        onTimelineData?: (data: WaldiezTimelineData) => void;
         onEnd: () => void;
     }
 }

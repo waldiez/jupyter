@@ -98,8 +98,7 @@
         "@jupyterlab/settingregistry": "^4.4.4",
         "@jupyterlab/translation": "^4.4.4",
         "@jupyterlab/ui-components": "^4.4.4",
-        "@jupyterlab/ui-components-extension": "^4.4.4",
-        "@waldiez/react": "^0.5.2"
+        "@jupyterlab/ui-components-extension": "^4.4.4"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -121,6 +120,7 @@
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.35.1",
         "@typescript-eslint/parser": "^8.35.1",
+        "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev",
         "all-contributors-cli": "^6.26.1",
         "babel-jest": "^30.0.4",
         "copyfiles": "^2.4.1",

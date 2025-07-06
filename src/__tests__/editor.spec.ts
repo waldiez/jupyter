@@ -31,6 +31,9 @@ jest.mock("../runner", () => {
             run: jest.fn(),
             reset: jest.fn(),
             getUserParticipants: jest.fn(),
+            getTimelineData: jest.fn(),
+            setTimelineData: jest.fn(),
+            timelineData: undefined,
         })),
     };
 });

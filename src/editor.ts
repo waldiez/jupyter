@@ -22,7 +22,12 @@ import { CommandRegistry } from "@lumino/commands";
 import { Signal } from "@lumino/signaling";
 import { SplitPanel } from "@lumino/widgets";
 
-import { WaldiezChatConfig, WaldiezChatMessage, WaldiezChatUserInput } from "@waldiez/react";
+import {
+    WaldiezChatConfig,
+    WaldiezChatMessage,
+    WaldiezChatUserInput,
+    WaldiezTimelineData,
+} from "@waldiez/react";
 
 /**
  * A Waldiez editor.
@@ -89,6 +94,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             onInputRequest: this._onInputRequest.bind(this),
             onStdin: this._onStdin.bind(this),
             onMessagesUpdate: this._onMessagesUpdate.bind(this),
+            onTimelineData: this._onTimelineData.bind(this),
             onEnd: this._onEnd.bind(this),
         });
         this.context.ready.then(this._onContextReady.bind(this));
@@ -113,6 +119,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             this._commands.notifyCommandChanged(this._interruptKernelCommandId);
         }
         this._runner.reset();
+        this._runner.setTimelineData(undefined);
     }
     /**
      * Handle the kernel status change.
@@ -255,6 +262,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         const chat: WaldiezChatConfig = {
             showUI: true,
             messages,
+            timeline: undefined,
             userParticipants: this._runner.getUserParticipants(),
             activeRequest: {
                 request_id,
@@ -274,9 +282,11 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this._stdinRequest = null;
         this._inputRequestId = null;
         this._runner.reset();
+        this._runner.setTimelineData(undefined);
         this._chat.emit({
             showUI: false,
             messages: this._runner.getPreviousMessages(),
+            timeline: undefined,
             userParticipants: this._runner.getUserParticipants(),
             activeRequest: undefined,
         });
@@ -292,6 +302,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             messages: this._runner.getPreviousMessages(),
             userParticipants: this._runner.getUserParticipants(),
             activeRequest: undefined,
+            timeline: this._runner.getTimelineData(),
         });
     }
     //
@@ -377,6 +388,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this._chat.emit({
             showUI: false,
             messages: this._runner.getPreviousMessages(),
+            timeline: this._runner.getTimelineData(),
             userParticipants: this._runner.getUserParticipants(),
             activeRequest: undefined,
         });
@@ -387,6 +399,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this._chat.emit({
             showUI: messages.length > 0,
             messages,
+            timeline: undefined,
             userParticipants: this._runner.getUserParticipants(),
             activeRequest: isInputRequest
                 ? {
@@ -402,7 +415,20 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             },
         });
     }
-
+    //
+    private _onTimelineData(data: WaldiezTimelineData): void {
+        this._chat.emit({
+            showUI: false,
+            messages: this._runner.getPreviousMessages(),
+            timeline: data,
+            userParticipants: this._runner.getUserParticipants(),
+            activeRequest: undefined,
+            handlers: {
+                onUserInput: this._onUserInput.bind(this),
+                onClose: this._handleClose.bind(this),
+            },
+        });
+    }
     //
     private _getRequestIdFromPreviousMessages(previousMessages: WaldiezChatMessage[]): string {
         const inputRequestMessage = previousMessages.find(msg => msg.type === "input_request");
