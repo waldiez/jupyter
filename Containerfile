@@ -127,25 +127,39 @@ ENV LANG=en_US.UTF-8 \
     LC_CTYPE=en_US.UTF-8 \
     TZ=Etc/UTC
 
-# Add ChromeDriver
-RUN CHROME_VERSION=$(chromium --version | grep -oP '\d+\.\d+\.\d+') && \
-    echo "Chrome version: $CHROME_VERSION" && \
-    DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
-    jq -r --arg ver "$CHROME_VERSION" '.channels.Stable.version') && \
-    echo "Driver version: $DRIVER_VERSION" && \
-    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${DRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
+# Add ChromeDriver and Chrome
+RUN LATEST_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
+    jq -r '.channels.Stable.version') && \
+    echo "Installing Chrome and ChromeDriver version: $LATEST_VERSION" && \
+    # Install Chrome
+    curl -Lo /tmp/chrome.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/linux64/chrome-linux64.zip" && \
+    unzip /tmp/chrome.zip -d /opt && \
+    ln -sf /opt/chrome-linux64/chrome /usr/bin/chromium && \
+    # Install ChromeDriver
+    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
-    rm -rf /tmp/chromedriver.zip /usr/local/bin/chromedriver-linux64
+    rm -rf /tmp/chrome.zip /tmp/chromedriver.zip /usr/local/bin/chromedriver-linux64
 
 
 # Add GeckoDriver (for Firefox)
-RUN GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') && \
+RUN wget -q -O - https://packages.mozilla.org/apt/repo-signing-key.gpg | apt-key add - && \
+    echo "deb https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list && \
+    apt-get update && \
+    apt-get install -y firefox && \
+    # Get Firefox version and find compatible GeckoDriver
+    FIREFOX_VERSION=$(firefox --version | grep -oP '\d+\.\d+') && \
+    echo "Firefox version: $FIREFOX_VERSION" && \
+    # Get latest GeckoDriver (it's generally backward compatible)
+    GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') && \
+    echo "GeckoDriver version: $GECKO_VERSION" && \
     curl -Lo /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz" && \
     tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
-    rm /tmp/geckodriver.tar.gz
+    rm /tmp/geckodriver.tar.gz && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
 

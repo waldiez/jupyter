@@ -9,7 +9,7 @@
         "test:update": "yarn playwright test --update-snapshots"
     },
     "devDependencies": {
-        "@jupyterlab/galata": "^5.4.4",
+        "@jupyterlab/galata": "^5.4.5",
         "@playwright/test": "^1.54.1"
     },
     "resolutions": {

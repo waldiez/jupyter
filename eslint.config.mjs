@@ -1,8 +1,8 @@
 import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
+import headers from "eslint-plugin-headers";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslintTs from "typescript-eslint";
-import headers from "eslint-plugin-headers";
 
 // export default eslintTs.config({
 const defaultConfig = eslintTs.config({
@@ -60,7 +60,7 @@ const defaultConfig = eslintTs.config({
             "double",
             {
                 avoidEscape: true,
-                allowTemplateLiterals: false,
+                allowTemplateLiterals: "never",
             },
         ],
         curly: ["error", "all"],
@@ -70,12 +70,13 @@ const defaultConfig = eslintTs.config({
             "error",
             {
                 source: "string",
-                content: "SPDX-License-Identifier: {spdxIdentifier}\nCopyright {startYear} - {currentYear} {owner}",
+                content:
+                    "SPDX-License-Identifier: {spdxIdentifier}\nCopyright {startYear} - {currentYear} {owner}",
                 variables: {
-                    "spdxIdentifier": "Apache-2.0",
-                    "startYear": "2024",
-                    "currentYear": `${new Date().getFullYear()}`,
-                    "owner": "Waldiez & contributors",
+                    spdxIdentifier: "Apache-2.0",
+                    startYear: "2024",
+                    currentYear: `${new Date().getFullYear()}`,
+                    owner: "Waldiez & contributors",
                 },
             },
         ],
