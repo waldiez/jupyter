@@ -104,9 +104,7 @@ RUN apt update && \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
-    xvfb \
-    firefox-esr \
-    chromium && \
+    xvfb && \
     curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
     bash nodesource_setup.sh && \
     rm nodesource_setup.sh && \
@@ -127,24 +125,42 @@ ENV LANG=en_US.UTF-8 \
     LC_CTYPE=en_US.UTF-8 \
     TZ=Etc/UTC
 
+
 # Add ChromeDriver and Chrome
-RUN LATEST_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+    CHROME_ARCH="linux64"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+    CHROME_ARCH="linux64"; \
+    else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    LATEST_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
     jq -r '.channels.Stable.version') && \
-    echo "Installing Chrome and ChromeDriver version: $LATEST_VERSION" && \
+    echo "Installing Chrome and ChromeDriver version: $LATEST_VERSION for $CHROME_ARCH" && \
     # Install Chrome
-    curl -Lo /tmp/chrome.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/linux64/chrome-linux64.zip" && \
+    curl -Lo /tmp/chrome.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/${CHROME_ARCH}/chrome-linux64.zip" && \
     unzip /tmp/chrome.zip -d /opt && \
-    ln -sf /opt/chrome-linux64/chrome /usr/bin/chromium && \
+    ln -sf /opt/chrome-linux64/chrome /usr/bin/google-chrome && \
     # Install ChromeDriver
-    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/linux64/chromedriver-linux64.zip" && \
+    curl -Lo /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${LATEST_VERSION}/${CHROME_ARCH}/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf /tmp/chrome.zip /tmp/chromedriver.zip /usr/local/bin/chromedriver-linux64
 
-
 # Add GeckoDriver (for Firefox)
-RUN wget -q -O - https://packages.mozilla.org/apt/repo-signing-key.gpg | apt-key add - && \
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+    GECKO_ARCH="linux64"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+    GECKO_ARCH="linux-aarch64"; \
+    else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    # Add Mozilla's signing key the modern way
+    curl -fsSL https://packages.mozilla.org/apt/repo-signing-key.gpg | \
+    gpg --dearmor -o /etc/apt/trusted.gpg.d/mozilla.gpg && \
     echo "deb https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list && \
     apt-get update && \
     apt-get install -y firefox && \
@@ -153,8 +169,8 @@ RUN wget -q -O - https://packages.mozilla.org/apt/repo-signing-key.gpg | apt-key
     echo "Firefox version: $FIREFOX_VERSION" && \
     # Get latest GeckoDriver (it's generally backward compatible)
     GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name') && \
-    echo "GeckoDriver version: $GECKO_VERSION" && \
-    curl -Lo /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz" && \
+    echo "GeckoDriver version: $GECKO_VERSION for $GECKO_ARCH" && \
+    curl -Lo /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-${GECKO_ARCH}.tar.gz" && \
     tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
     rm /tmp/geckodriver.tar.gz && \
@@ -184,7 +200,6 @@ ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV DISPLAY=:99
 
 RUN pip install --upgrade pip jupyterhub jupyterlab ipywidgets ipykernel
-RUN npx playwright install chromium firefox
 
 COPY --chown=waldiez:waldiez scripts /home/waldiez/scripts
 RUN chmod +x /home/waldiez/scripts/start.sh
