@@ -222,6 +222,7 @@ export class WaldiezRunner {
                 this._logger.log(streamMsg);
             } else if (msgType === "error") {
                 this._logger.log(msg as IErrorMsg);
+                this._running = false;
             }
         };
 
@@ -258,6 +259,11 @@ export class WaldiezRunner {
      * @memberof WaldiezRunner
      */
     private _processMessage(rawMessage: string) {
+        const isDone = this._workflow_is_done(rawMessage);
+        if (isDone) {
+            this._running = false;
+            this._onEnd();
+        }
         // Check if the runner is running
         if (!this._running) {
             return;
@@ -313,13 +319,6 @@ export class WaldiezRunner {
             this._running = false;
             this._onEnd();
             this._logger.log("Workflow finished");
-        } else {
-            const isDone = this._workflow_is_done(rawMessage);
-            if (isDone) {
-                this._running = false;
-                this._onEnd();
-                this._logger.log("Workflow done running");
-            }
         }
         if (result.participants && result.participants.users.length > 0) {
             // Update user participants
