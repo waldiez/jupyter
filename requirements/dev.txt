@@ -4,7 +4,7 @@ bandit==1.8.6
 black[jupyter]==25.1.0
 flake8==7.3.0
 isort==6.0.1
-jupyterlab==4.4.4
+jupyterlab==4.4.5
 mypy==1.17.0
 pre-commit==4.2.0
 pydocstyle==6.3.0
