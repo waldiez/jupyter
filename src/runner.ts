@@ -274,7 +274,7 @@ export class WaldiezRunner {
         if (result.timeline) {
             // Notify about the timeline data
             this.setTimelineData(result.timeline);
-            this._expectingUserInput = true;
+            this._expectingUserInput = false;
             return;
         }
         // Check if this is a text message after an input request
@@ -304,7 +304,8 @@ export class WaldiezRunner {
             // If the raw message has an ending, add it to the messages
             this._messages.push(endMessage);
             // Notify about the new message
-            this._onMessagesUpdate(this._expectingUserInput);
+            this._expectingUserInput = false;
+            this._onMessagesUpdate(false);
             result.isWorkflowEnd = true; // Mark as workflow end
         }
         // Handle workflow end
@@ -312,6 +313,13 @@ export class WaldiezRunner {
             this._running = false;
             this._onEnd();
             this._logger.log("Workflow finished");
+        } else {
+            const isDone = this._workflow_is_done(rawMessage);
+            if (isDone) {
+                this._running = false;
+                this._onEnd();
+                this._logger.log("Workflow done running");
+            }
         }
         if (result.participants && result.participants.users.length > 0) {
             // Update user participants
@@ -320,6 +328,25 @@ export class WaldiezRunner {
             );
         }
     }
+    private _workflow_is_done(rawMessage: string): WaldiezChatMessage | null {
+        // Check if the raw message indicates that the flow has finished running
+        if (rawMessage.includes("<Waldiez> - Done running the flow.")) {
+            const message: WaldiezChatMessage = {
+                type: "system",
+                id: "flow-done",
+                timestamp: new Date().toISOString(),
+                content: [
+                    {
+                        type: "text",
+                        text: "<Waldiez> - Done running the flow.",
+                    },
+                ],
+            };
+            return message;
+        }
+        return null;
+    }
+    // "<Waldiez> - Done running the flow."
     /**
      * Check if the raw message has an ending.
      * @param rawMessage The raw message to check
