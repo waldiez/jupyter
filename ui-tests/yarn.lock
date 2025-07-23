@@ -1179,13 +1179,13 @@ __metadata:
   linkType: hard
 
 "@lezer/php@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "@lezer/php@npm:1.0.3"
+  version: 1.0.4
+  resolution: "@lezer/php@npm:1.0.4"
   dependencies:
     "@lezer/common": "npm:^1.2.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.1.0"
-  checksum: 10/83d3c8fdbf4fd139096c9db616fa7c5483e375f3fa2b9c5935f5e072097bcb82ae2fc82e973f7d15e62fff3a34b5fdd34556dac7f808e9958a49faae9253365c
+  checksum: 10/d76ea8459958aac41abf53d9dd3e1899d663690134042f4b0095abbb2e404c3841dabbab27edfe29c32c3856c33ab62a238576c7e48701ccbf69bf9bf5e12a04
   languageName: node
   linkType: hard
 
@@ -1989,11 +1989,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 24.0.15
-  resolution: "@types/node@npm:24.0.15"
+  version: 24.1.0
+  resolution: "@types/node@npm:24.1.0"
   dependencies:
     undici-types: "npm:~7.8.0"
-  checksum: 10/0c55b7f4b0cd4f47e43e587e54545c4f188521678328411033595a6f49f81ed54ec3729ce5025936c51250e31504a32a7f20b520ed9dd71f3ab1530f809975e9
+  checksum: 10/02c3d91e1407a93a2363f97a245475fa0f6209d3f3e6ba9fdaabe65389e3e078f648da81b8738125dec6b6bf98c50fb928f36f4e72b8b015817bc21479a868c2
   languageName: node
   linkType: hard
 
