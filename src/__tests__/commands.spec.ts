@@ -28,6 +28,7 @@ describe("Waldiez Commands", () => {
                 currentWidget: {
                     model: {
                         path: "path/to/file.waldiez",
+                        refresh: jest.fn(),
                     },
                     selectedItems: () => [
                         {
@@ -43,6 +44,7 @@ describe("Waldiez Commands", () => {
     });
 
     it("should register commands", async () => {
+        // noinspection DuplicatedCode
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, undefined);
         expect(app.commands.hasCommand(CommandIDs.createNew)).toBe(true);
         expect(app.commands.hasCommand(CommandIDs.openWaldiez)).toBe(true);
@@ -83,6 +85,7 @@ describe("Waldiez Commands", () => {
             };
         });
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, undefined);
+        // noinspection DuplicatedCode
         expect(app.commands.hasCommand(CommandIDs.createNew)).toBe(true);
         expect(app.commands.hasCommand(CommandIDs.openWaldiez)).toBe(true);
         expect(app.commands.hasCommand(CommandIDs.exportToPython)).toBe(true);
@@ -110,10 +113,10 @@ describe("Waldiez Commands", () => {
         // await app.commands.execute(CommandIDs.openWaldiez);
         await app.commands.execute(CommandIDs.exportToPython);
         await app.commands.execute(CommandIDs.exportToJupyter);
-        app.commands.execute(CommandIDs.interruptKernel);
-        app.commands.execute(CommandIDs.restartKernel);
-        app.commands.execute(CommandIDs.changeKernel);
-        app.commands.execute(CommandIDs.shutdownKernel);
-        app.commands.execute(CommandIDs.reconnectToKernel);
+        await app.commands.execute(CommandIDs.interruptKernel);
+        await app.commands.execute(CommandIDs.restartKernel);
+        await app.commands.execute(CommandIDs.changeKernel);
+        await app.commands.execute(CommandIDs.shutdownKernel);
+        await app.commands.execute(CommandIDs.reconnectToKernel);
     });
 });

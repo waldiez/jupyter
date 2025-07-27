@@ -44,10 +44,10 @@ export interface IWaldiezWidgetProps {
  * @param props The props for the widget
  */
 export class EditorWidget extends ReactWidget {
-    private _chat: ISignal<any, WaldiezChatConfig | undefined>;
+    private readonly _chat: ISignal<any, WaldiezChatConfig | undefined>;
     // private _onUserInput: (userInput: WaldiezChatUserInput) => void;
 
-    private _waldiez: WaldiezProps;
+    private readonly _waldiez: WaldiezProps;
 
     constructor(props: IWaldiezWidgetProps) {
         super();

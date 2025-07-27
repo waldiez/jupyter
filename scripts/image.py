@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import List
 
 try:
+    # noinspection PyUnresolvedReferences
     from dotenv import load_dotenv
 except ImportError:
     pass
@@ -304,6 +305,8 @@ def check_other_platform(container_command: str, platform_arg: str) -> bool:
     # with rootless podman, multi-platform builds might not work
     # sudo podman build --arch=... might do, but let's not
     if is_other_platform:
+        # pylint: disable=broad-exception-caught
+        # noinspection PyBroadException
         try:
             run_command(
                 [
@@ -317,7 +320,7 @@ def check_other_platform(container_command: str, platform_arg: str) -> bool:
                     "yes",
                 ]
             )
-        except BaseException:  # pylint: disable=broad-except
+        except BaseException:
             pass
     return is_other_platform
 

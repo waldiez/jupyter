@@ -34,6 +34,7 @@ class TomlLoader(Protocol):
         """Load TOML data from a file."""
 
 
+# noinspection PyTypeChecker
 def get_loader() -> TomlLoader:
     """Get the TOML loader.
 
@@ -55,8 +56,9 @@ def get_loader() -> TomlLoader:
         import toml  # noqa
 
         return toml.load
-    except ImportError as error:
+    except ImportError:
         print("`toml` library not found. Installing it now...")
+        # noinspection PyBroadException
         try:
             subprocess.check_call(  # nosemgrep # nosec
                 [sys.executable, "-m", "pip", "install", "toml"],
@@ -80,7 +82,6 @@ def get_loader() -> TomlLoader:
                     "Please install it manually.\n"
                     "Error: {err}"
                 ) from err
-        raise ImportError("Failed to import the `toml` library.") from error
 
 
 def _write_all_dot_txt(project_dir: Path, extras: list[str]) -> None:
@@ -170,8 +171,6 @@ def _write_requirements_txt(
         a list of extra keys.
     """
     has_main = True
-    extra_keys: list[str] = []
-    extra_requirements: dict[str, list[str]] = {}
     main_requirements: list[str] = []
     try:
         main_requirements = toml_data["project"]["dependencies"]

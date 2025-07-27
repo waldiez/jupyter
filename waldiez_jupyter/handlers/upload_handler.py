@@ -70,7 +70,7 @@ class UploadHandler(APIHandler):
         file_path = self._get_file_path(filename)
         with open(file_path, "wb") as file_obj:
             file_obj.write(file["body"])
-        self.finish(json.dumps({"path": str(file_path)}))
+        await self.finish(json.dumps({"path": str(file_path)}))
 
     def _get_file_path(self, file_name: str) -> Path:
         """Get the actual path of the file.

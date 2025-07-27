@@ -31,9 +31,8 @@ export namespace WALDIEZ_STRINGS {
     export const CHANGE_KERNEL = "Change kernel";
     export const RECONNECT_TO_KERNEL = "Reconnect to kernel";
     export const LOGGER_INITIALIZED = "Waldiez logger initialized";
-    export const AFTER_INSTALL_NOTE =
-        "NOTE: If new packages were added and you are using Jupyter, you might need to restart the kernel.";
     export const NO_KERNEL = "No kernel";
     export const NO_KERNEL_MESSAGE = "Please start a kernel before running the workflow.";
+    export const EXPORT_SUCCESS = (to: "py" | "ipynb") => `Exported to .${to} successfully`;
     export const KERNEL_STATUS_CHANGED = (status: string) => `Kernel status changed to ${status}`;
 }

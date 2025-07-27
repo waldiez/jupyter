@@ -127,7 +127,7 @@ def _download_monaco_editor(
     details : Tuple[str, str, str]
         The version, download url, and SHA-1 sum.
 
-    static_root_path : Union[str, Path]
+    static_dir : Union[str, Path]
         The path to the static files directory.
     """
     http = urllib3.PoolManager()
@@ -193,6 +193,7 @@ def _get_cached_details(
     """
     details_file = static_root_path / DETAILS_JSON
     # pylint: disable=broad-except, too-many-try-statements
+    # noinspection PyBroadException
     try:
         if details_file.exists():
             with open(details_file, "r", encoding="utf-8") as file:

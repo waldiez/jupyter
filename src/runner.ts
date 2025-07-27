@@ -54,16 +54,16 @@ const getUploadsRoot = (filePath: string): string => {
 export class WaldiezRunner {
     private _running: boolean = false;
     private _future?: Kernel.IShellFuture<IExecuteRequestMsg, IExecuteReplyMsg>;
-    private _onStdin: (msg: IInputRequestMsg) => void;
+    private readonly _onStdin: (msg: IInputRequestMsg) => void;
     private _logger: WaldiezLogger;
-    private _baseUrl: string;
+    private readonly _baseUrl: string;
     private _messages: WaldiezChatMessage[] = [];
     private _timelineData: WaldiezTimelineData | undefined = undefined;
     private _userParticipants: string[] = [];
-    private _onInputRequest: (requestId: string) => void;
-    private _onMessagesUpdate: (isInputRequest: boolean) => void;
-    private _onTimelineData?: (data: WaldiezTimelineData) => void;
-    private _onEnd: () => void;
+    private readonly _onInputRequest: (requestId: string) => void;
+    private readonly _onMessagesUpdate: (isInputRequest: boolean) => void;
+    private readonly _onTimelineData?: (data: WaldiezTimelineData) => void;
+    private readonly _onEnd: () => void;
     private _requestId: string | null = null;
     private _expectingUserInput: boolean = false;
     private _uploadsRoot: string | null = null;
@@ -330,7 +330,7 @@ export class WaldiezRunner {
     private _workflow_is_done(rawMessage: string): WaldiezChatMessage | null {
         // Check if the raw message indicates that the flow has finished running
         if (rawMessage.includes("<Waldiez> - Done running the flow.")) {
-            const message: WaldiezChatMessage = {
+            return {
                 type: "system",
                 id: "flow-done",
                 timestamp: new Date().toISOString(),
@@ -341,7 +341,6 @@ export class WaldiezRunner {
                     },
                 ],
             };
-            return message;
         }
         return null;
     }
@@ -372,7 +371,7 @@ export class WaldiezRunner {
             } catch (_) {
                 parsedMessage = rawMessage.replace("<Waldiez> - ", "").replace("\n", "");
             }
-            const message: WaldiezChatMessage = {
+            return {
                 type: "system",
                 id: "workflow-end",
                 timestamp: new Date().toISOString(),
@@ -383,7 +382,6 @@ export class WaldiezRunner {
                     },
                 ],
             };
-            return message;
         }
         return null;
     }

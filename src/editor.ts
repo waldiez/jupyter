@@ -5,7 +5,7 @@
 import { CommandIDs } from "./commands";
 import { PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "./constants";
 import { WaldiezLogger } from "./logger";
-import { getWaldiezActualPath, handleExport, uploadFile } from "./rest";
+import { getWaldiezActualPath, handleConvert, uploadFile } from "./rest";
 import { WaldiezRunner } from "./runner";
 import { EditorWidget } from "./widget";
 import { ISessionContext, showErrorMessage } from "@jupyterlab/apputils";
@@ -27,6 +27,7 @@ import {
     WaldiezChatMessage,
     WaldiezChatUserInput,
     WaldiezTimelineData,
+    showSnackbar,
 } from "@waldiez/react";
 
 /**
@@ -40,18 +41,18 @@ import {
  * @param <DocumentModel> The type of model to use
  */
 export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
-    private _commands: CommandRegistry;
+    private readonly _commands: CommandRegistry;
     private _settingsRegistry: ISettingRegistry;
-    private _fileBrowserFactory: IFileBrowserFactory;
+    private readonly _fileBrowserFactory: IFileBrowserFactory;
     private _inputRequestId: string | null = null;
     private _stdinRequest: IInputRequestMsg | null = null;
-    private _chat: Signal<this, WaldiezChatConfig | undefined>;
-    private _logger: WaldiezLogger;
+    private readonly _chat: Signal<this, WaldiezChatConfig | undefined>;
+    private readonly _logger: WaldiezLogger;
     private _runner: WaldiezRunner;
-    private _restartKernelCommandId: string;
-    private _interruptKernelCommandId: string;
-    private _restartKernelButton: CommandToolbarButton;
-    private _interruptKernelButton: CommandToolbarButton;
+    private readonly _restartKernelCommandId: string;
+    private readonly _interruptKernelCommandId: string;
+    private readonly _restartKernelButton: CommandToolbarButton;
+    private readonly _interruptKernelButton: CommandToolbarButton;
     private _serverSettings: ServerConnection.ISettings;
     /**
      * Construct a new WaldiezEditor.
@@ -167,27 +168,78 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _onRestartKernel(): void {
         const session = this.context.sessionContext.session;
         if (session?.kernel) {
-            session.kernel.restart();
+            session.kernel
+                .restart()
+                .then(() => {
+                    showSnackbar({
+                        flowId: this.id,
+                        message: WALDIEZ_STRINGS.KERNEL_RESTARTED,
+                        level: "info",
+                    });
+                    this._logger.log({
+                        data: WALDIEZ_STRINGS.KERNEL_RESTARTED,
+                        level: "info",
+                        type: "text",
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    showSnackbar({
+                        flowId: this.id,
+                        message: `Error restarting kernel: ${err}`,
+                        level: "error",
+                    });
+                    this._logger.log({
+                        data: `Error restarting kernel: ${err}`,
+                        level: "error",
+                        type: "text",
+                    });
+                });
         }
     }
     //
     private _onInterruptKernel(): void {
         const session = this.context.sessionContext.session;
         if (session?.kernel) {
-            session.kernel.interrupt();
+            session.kernel
+                .interrupt()
+                .then(() => {
+                    showSnackbar({
+                        flowId: this.id,
+                        message: WALDIEZ_STRINGS.KERNEL_INTERRUPTED,
+                        level: "info",
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    showSnackbar({
+                        flowId: this.id,
+                        message: `Error interrupting kernel: ${err}`,
+                        level: "error",
+                    });
+                });
         }
     }
     //
-    private _onContentChanged(contents: string, markDirty: boolean = true): void {
-        const currentContents = this.context.model.toString();
-        if (contents !== currentContents) {
-            this.context.model.fromString(contents);
-            if (markDirty) {
-                this.context.model.dirty = true;
+    private _onContentChanged(contents: string, markDirty: boolean = true): Promise<void> {
+        return new Promise(resolve => {
+            const currentContents = this.context.model.toString();
+            if (contents !== currentContents) {
+                this.context.model.fromString(contents);
+                if (markDirty) {
+                    this.context.model.dirty = true;
+                    resolve();
+                } else {
+                    this.context.save().then(() => {
+                        this.context.model.dirty = false;
+                        resolve();
+                    });
+                }
             } else {
-                this.context.save();
+                // no changes, resolve immediately
+                resolve();
             }
-        }
+        });
     }
     //
     private _getServeMonacoSetting() {
@@ -253,7 +305,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     //
     private _askForInput(): void {
         const messages = this._runner.getPreviousMessages();
-        let request_id = "<unknown>";
+        let request_id: string;
         if (typeof this._stdinRequest?.metadata.request_id === "string") {
             request_id = this._stdinRequest.metadata.request_id;
         } else {
@@ -364,26 +416,42 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _onRun(contents: string) {
         const kernel = this.context.sessionContext.session?.kernel;
         if (!kernel) {
-            showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE);
+            showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE).then(() => {});
             return;
         }
         if (!this._logger.isVisible) {
             this._logger.toggle();
         }
-        this._onContentChanged(contents, false);
-        this._chat.emit(undefined);
-        getWaldiezActualPath(this.context.path)
-            .then(actualPath => {
-                this._runner.run(kernel, actualPath);
+        this._onContentChanged(contents, false)
+            .then(() => {
+                this._chat.emit(undefined);
+                getWaldiezActualPath(this.context.path)
+                    .then(actualPath => {
+                        this._runner.run(kernel, actualPath);
+                    })
+                    .catch(err => {
+                        this._logger.log({
+                            data: err,
+                            level: "error",
+                            type: "text",
+                        });
+                    });
             })
             .catch(err => {
+                console.error(err);
                 this._logger.log({
-                    data: err,
+                    data: `Error saving content: ${err}`,
                     level: "error",
                     type: "text",
                 });
+                showSnackbar({
+                    flowId: this.id,
+                    message: `Error saving content: ${err}`,
+                    level: "error",
+                });
             });
     }
+    //
     private _onEnd(): void {
         this._chat.emit({
             showUI: false,
@@ -440,7 +508,38 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
 
     //
     private _onConvert(_flow: string, to: "py" | "ipynb"): void {
-        handleExport(this._fileBrowserFactory, to);
+        const waldiezFilePath = this.context.path;
+        handleConvert(waldiezFilePath, to)
+            .then(() => {
+                showSnackbar({
+                    flowId: this.id,
+                    message: WALDIEZ_STRINGS.EXPORT_SUCCESS(to),
+                    level: "info",
+                });
+                // refresh the file browser if it exists
+                const fileBrowser = this._fileBrowserFactory.tracker.currentWidget;
+                if (fileBrowser) {
+                    fileBrowser.model.refresh().then(() => {});
+                }
+                this._logger.log({
+                    data: WALDIEZ_STRINGS.EXPORT_SUCCESS(to),
+                    level: "info",
+                    type: "text",
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                showSnackbar({
+                    flowId: this.id,
+                    message: `Error converting to .${to}: ${err}`,
+                    level: "error",
+                });
+                this._logger.log({
+                    data: `Error converting to .${to}: ${err}`,
+                    level: "error",
+                    type: "text",
+                });
+            });
     }
 }
 

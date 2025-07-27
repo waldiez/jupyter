@@ -30,7 +30,7 @@ import { ITranslator } from "@jupyterlab/translation";
  * @param mainMenu The main menu (optional)
  * @param translator The translator (optional)
  */
-const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell, "desktop" | "mobile"> = {
+const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
     id: PLUGIN_ID,
     description: WALDIEZ_STRINGS.PLUGIN_DESCRIPTION,
     autoStart: true,
@@ -83,6 +83,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory, JupyterFrontEnd.IShell
         // Handle state restoration.
         if (restorer) {
             // console.log('Restoring state...');
+            // noinspection ES6MissingAwait
             restorer.restore(tracker, {
                 command: CommandIDs.openWaldiez,
                 args: widget => ({

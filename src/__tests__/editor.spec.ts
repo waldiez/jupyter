@@ -115,7 +115,10 @@ describe("WaldiezEditor", () => {
         const restartSpy = jest.fn();
         context.sessionContext.session = {
             kernel: {
-                restart: restartSpy,
+                restart: function () {
+                    restartSpy();
+                    return Promise.resolve();
+                },
             },
         } as any;
         editor["_onRestartKernel"]();
@@ -128,7 +131,10 @@ describe("WaldiezEditor", () => {
         const interruptSpy = jest.fn();
         context.sessionContext.session = {
             kernel: {
-                interrupt: interruptSpy,
+                interrupt: function () {
+                    interruptSpy();
+                    return Promise.resolve();
+                },
             },
         } as any;
         editor["_onInterruptKernel"]();
@@ -144,25 +150,9 @@ describe("WaldiezEditor", () => {
         };
         Object.assign(editor.context.model, model);
         const fromStringSpy = jest.spyOn(model, "fromString");
-        editor["_onContentChanged"]("new content");
+        await editor["_onContentChanged"]("new content");
         expect(fromStringSpy).toHaveBeenCalledWith("new content");
     });
-
-    // it("should handle user input", async () => {
-    //     const sendInputReplySpy = jest.fn();
-    //     const editor = await getEditor();
-    //     const { context } = editor;
-    //     context.sessionContext.session = {
-    //         kernel: {
-    //             sendInputReply: sendInputReplySpy,
-    //         },
-    //     } as any;
-    // editor["_stdinRequest"] = {
-    //     parent_header: {},
-    // } as any;
-    // editor["_onUserInput"]("user input");
-    // expect(sendInputReplySpy).toHaveBeenCalledWith({ value: "user input", status: "ok" }, {});
-    // });
 
     it("should handle upload catching error", async () => {
         patchServerConnection("", true);
@@ -186,7 +176,7 @@ describe("WaldiezEditor", () => {
         patchServerConnection('{"path": "path"}', false);
         const editor = await getEditor();
         Object.assign(editor.context, {
-            save: jest.fn(),
+            save: jest.fn().mockResolvedValue(true),
         });
         const runSpy = jest.spyOn(editor["_runner"], "run");
         editor["_onRun"]("content");

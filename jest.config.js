@@ -1,5 +1,10 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 const jestJupyterLab = require("@jupyterlab/testutils/lib/jest-config");
 
+// noinspection JSValidateTypes
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
 
 const baseConfig = jestJupyterLab(__dirname);

@@ -29,6 +29,9 @@ describe("rest module", () => {
                 tracker: {
                     currentWidget: {
                         selectedItems: () => [],
+                        model: {
+                            refresh: jest.fn(),
+                        },
                     },
                 },
             } as unknown as IFileBrowserFactory;
@@ -44,6 +47,9 @@ describe("rest module", () => {
                                 name: "file.py",
                             },
                         ],
+                        model: {
+                            refresh: jest.fn(),
+                        },
                     },
                 },
             } as unknown as IFileBrowserFactory;
@@ -60,6 +66,9 @@ describe("rest module", () => {
                                 name: "file.waldiez",
                             },
                         ],
+                        model: {
+                            refresh: jest.fn(),
+                        },
                     },
                 },
             } as unknown as IFileBrowserFactory;
@@ -76,10 +85,14 @@ describe("rest module", () => {
                                 name: "file.waldiez",
                             },
                         ],
+                        model: {
+                            refresh: jest.fn(),
+                        },
                     },
                 },
             } as unknown as IFileBrowserFactory;
             await handleExport(fileBrowserFactory, "py");
+            expect(fileBrowserFactory.tracker.currentWidget?.model.refresh).toHaveBeenCalled();
         });
         it("should request file export to ipynb for all .waldiez files", async () => {
             patchServerConnection('{"path": "path/to/file.ipynb"}', false);
@@ -92,6 +105,9 @@ describe("rest module", () => {
                                 name: "file.waldiez",
                             },
                         ],
+                        model: {
+                            refresh: jest.fn(),
+                        },
                     },
                 },
             } as unknown as IFileBrowserFactory;

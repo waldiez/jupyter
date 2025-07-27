@@ -99,9 +99,14 @@ const addCommandsToMenu = (mainMenu: IMainMenu, isEnabled: () => boolean) => {
 
 /**
  * Get the current widget and activate unless the args specify otherwise.
- * @param args The arguments to the command
  * @returns The current widget
  * @throws An error if the current widget is not a WaldiezEditor
+ * @param app
+ * @param tracker
+ * @param fileBrowserFactory
+ * @param widgetFactory
+ * @param isEnabled
+ * @param translator
  **/
 export const registerCommands = (
     app: JupyterFrontEnd,

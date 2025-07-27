@@ -25,17 +25,17 @@ import { SplitPanel } from "@lumino/widgets";
  * @param options The logger options
  */
 export class WaldiezLogger {
-    private _commands: CommandRegistry;
-    private _id: string;
+    private readonly _commands: CommandRegistry;
+    private readonly _id: string;
     private _panel: SplitPanel;
-    private _rendermime: IRenderMimeRegistry;
-    private _loggerRegistry: LoggerRegistry;
-    private _logConsole: LogConsolePanel;
-    private _widget: MainAreaWidget<LogConsolePanel>;
-    private _toggleConsoleViewButton: CommandToolbarButton;
+    private readonly _rendermime: IRenderMimeRegistry;
+    private readonly _loggerRegistry: LoggerRegistry;
+    private readonly _logConsole: LogConsolePanel;
+    private readonly _widget: MainAreaWidget<LogConsolePanel>;
+    private readonly _toggleConsoleViewButton: CommandToolbarButton;
     private _widgetIsVisible: boolean;
-    private _toggleConsoleViewCommandId: string;
-    private _logConsoleClearCommandId: string;
+    private readonly _toggleConsoleViewCommandId: string;
+    private readonly _logConsoleClearCommandId: string;
 
     constructor(options: WaldiezLogger.IOptions) {
         this._id = options.editorId;
@@ -88,6 +88,7 @@ export class WaldiezLogger {
     get isVisible(): boolean {
         return this._widgetIsVisible;
     }
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Get the log console widget.
      * @returns The log console widget
@@ -345,11 +346,10 @@ export class WaldiezLogger {
         this._logData(payload);
     }
     private _logData(payload: ILogPayload): void {
-        const withoutAnsi =
+        payload.data =
             typeof payload.data === "string"
                 ? this._remove_ansi(payload.data)
                 : this._remove_ansi(JSON.stringify(payload.data));
-        payload.data = withoutAnsi;
         this._getLogger().log(payload);
     }
     private _getLogger(): ILogger {

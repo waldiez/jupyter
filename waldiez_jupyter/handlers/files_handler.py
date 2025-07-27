@@ -76,7 +76,7 @@ class FilesHandler(APIHandler):
             file_path = self._get_file_path(path_arg)
         except FileNotFoundError as error:
             raise HTTPError(404, reason=str(error)) from error
-        self.finish(json.dumps({"path": str(file_path)}))
+        await self.finish(json.dumps({"path": str(file_path)}))
 
     @authenticated
     async def post(self) -> None:
@@ -104,7 +104,7 @@ class FilesHandler(APIHandler):
             raise HTTPError(400, reason="No valid files in the request")
         results = self._handle_export(files, target_extension)
         self.log.info("Exported: %s", results)
-        self.finish(json.dumps({"files": results}))
+        await self.finish(json.dumps({"files": results}))
 
     def _send_image(self, file_path: str) -> None:
         """Send an image file.

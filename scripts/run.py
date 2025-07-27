@@ -63,6 +63,8 @@ def _start_yarn() -> None:
         _stop()
 
 
+# pylint: disable=broad-exception-caught
+# noinspection PyBroadException
 def _stop_using_pid() -> None:
     """Stop the Jupyter server using the PID."""
     pid_path = ROOT_DIR / "jupyter.pid"
@@ -72,18 +74,20 @@ def _stop_using_pid() -> None:
     with open(pid_path, "r", encoding="utf-8") as f:
         try:
             pid = int(f.read())
-        except BaseException as e:  # pylint: disable=broad-except
+        except BaseException as e:
             print(f"Error reading pid: {e}")
     if pid is None:
         return
     try:
         os.kill(pid, 15)
-    except BaseException:  # pylint: disable=broad-except
+    except BaseException:
         pass
     finally:
         pid_path.unlink()
 
 
+# pylint: disable=broad-exception-caught
+# noinspection PyBroadException
 def _stop_using_tasklist() -> None:
     """Stop the Jupyter server using tasklist."""
     cmd = 'tasklist /fi "imagename eq jupyter-lab.exe" /fo csv /nh'  # noqa
@@ -98,11 +102,11 @@ def _stop_using_tasklist() -> None:
         return
     try:
         pid = int(result.stdout.decode().split(",")[1].strip('"'))
-    except BaseException:  # pylint: disable=broad-except
+    except BaseException:
         return
     try:
         os.kill(pid, 15)
-    except BaseException:  # pylint: disable=broad-except
+    except BaseException:
         pass
 
 

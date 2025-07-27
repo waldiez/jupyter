@@ -1,3 +1,7 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
 import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import headers from "eslint-plugin-headers";
@@ -5,6 +9,7 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import eslintTs from "typescript-eslint";
 
 // export default eslintTs.config({
+// noinspection JSCheckFunctionSignatures
 const defaultConfig = eslintTs.config({
     extends: [eslint.configs.recommended, ...eslintTs.configs.recommended, eslintPluginPrettierRecommended],
     files: ["**/*.{ts,tsx}"],

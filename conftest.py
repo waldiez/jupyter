@@ -17,6 +17,7 @@ pytest_plugins = ("pytest_jupyter.jupyter_server",)
 # pylint: disable=unused-argument,redefined-outer-name
 
 
+# noinspection PyUnusedLocal
 @pytest.fixture
 def jp_server_config(jp_server_config: Dict[str, Any]) -> Dict[str, Any]:
     """Add the extension to the server configuration.

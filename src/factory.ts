@@ -23,11 +23,11 @@ import { SplitPanel } from "@lumino/widgets";
  * @param <DocumentModel> The type of model to use
  */
 export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, DocumentModel> {
-    private _commands: CommandRegistry;
-    private _rendermime: IRenderMimeRegistry;
-    private _editorServices: IEditorServices;
-    private _settingRegistry: ISettingRegistry;
-    private _fileBrowserFactory: IFileBrowserFactory;
+    private readonly _commands: CommandRegistry;
+    private readonly _rendermime: IRenderMimeRegistry;
+    private readonly _editorServices: IEditorServices;
+    private readonly _settingRegistry: ISettingRegistry;
+    private readonly _fileBrowserFactory: IFileBrowserFactory;
 
     /**
      * Constructor of WaldiezEditorFactory.
@@ -72,7 +72,7 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
         });
         panel.title.label = "Waldiez";
         panel.title.closable = true;
-        const editor = new WaldiezEditor({
+        return new WaldiezEditor({
             context,
             rendermime: this._rendermime,
             editorServices: this._editorServices,
@@ -81,7 +81,6 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
             commands: this._commands,
             fileBrowserFactory: this._fileBrowserFactory,
         });
-        return editor;
     }
 }
 

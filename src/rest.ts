@@ -23,9 +23,13 @@ export const handleExport = async (fileBrowserFactory: IFileBrowserFactory, exte
     }
     if (files.length > 0) {
         await _requestFilesExport(files, extension);
+        await fileBrowserFactory.tracker.currentWidget?.model.refresh();
     }
 };
 
+export const handleConvert = async (waldiezFilePath: string, extension: "py" | "ipynb") => {
+    await _requestFilesExport([waldiezFilePath], extension);
+};
 /**
  * Request server to get the actual path of a file.
  * @param path The relative (to the notebooks path setting) path of the file.

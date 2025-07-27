@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List
 
 # pylint: disable=duplicate-code  # also in ./lint.py
+# noinspection DuplicatedCode
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 

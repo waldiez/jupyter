@@ -142,3 +142,4 @@ dmypy.json
 uv.lock
 **/*.pid
 */tests/data/*.py
+.idea/
