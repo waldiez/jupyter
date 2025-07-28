@@ -5336,7 +5336,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.38.0"
     "@typescript-eslint/parser": "npm:^8.38.0"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+    "@waldiez/react": "npm:^0.5.7"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.0.5"
     copyfiles: "npm:^2.4.1"
@@ -5373,9 +5373,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
-  version: 0.5.6
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=38a1e9327c2774cc5a332c8c8699f977cf25000e"
+"@waldiez/react@npm:^0.5.7":
+  version: 0.5.7
+  resolution: "@waldiez/react@npm:0.5.7"
   dependencies:
     "@fontsource/fredoka": "npm:^5.2.8"
     "@monaco-editor/react": "npm:^4.7.0"
@@ -5400,7 +5400,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/c938bbd4e8a7697806305c8a6f4f109fa98cb9906c3a6ccbc9727694d4d734ee44d78c5a70ab697f20508d371ff36d80d578ac32bc40d556567f81d5e253a97e
+  checksum: 10/25a0348efd3926823695fcc250a6646a3c15abd69fbc20335e04411bee47cd4cd678be5324d079b499566ba91a4640fcc2105f40eb1da297588e77bd66f754f9
   languageName: node
   linkType: hard
 
