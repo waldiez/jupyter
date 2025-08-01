@@ -117,12 +117,13 @@ build-js:
 	${.PACKAGE_MANAGER} install && ${.PACKAGE_MANAGER} run lint && ${.PACKAGE_MANAGER} run build
 
 .PHONY: build
-build: build-py build-js
+build: build-js build-py
 
 .PHONY: all
-all: requirements forlint test build
+all: requirements forlint test
 	${.PACKAGE_MANAGER} run test
 	${.PACKAGE_MANAGER} run test:ui
+	make build
 
 .PHONY: image
 image:
