@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { getWaldiezActualPath, handleExport } from "../rest";
+import { getWaldiezActualPath, handleConvert, handleExport, uploadFile } from "../rest";
 import { mockFetch } from "./utils";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 
@@ -132,5 +132,72 @@ describe("rest module", () => {
             patchServerConnection("invalid json", false);
             await expect(getWaldiezActualPath("path")).rejects.toThrow("Not a JSON response body.");
         });
+    });
+    it("should handle handleExport with no currentWidget", async () => {
+        const fileBrowserFactory = {
+            tracker: {
+                currentWidget: null,
+            },
+        } as unknown as IFileBrowserFactory;
+        await handleExport(fileBrowserFactory, "py");
+    });
+
+    it("should handle uploadFile successfully", async () => {
+        patchServerConnection('{"path": "uploaded/file/path"}', false);
+        const file = new File(["content"], "test.txt");
+        const path = await uploadFile(file);
+        expect(path).toBe("uploaded/file/path");
+    });
+
+    it("should handle uploadFile with network error", async () => {
+        patchServerConnection("", true);
+        const file = new File(["content"], "test.txt");
+        await expect(uploadFile(file)).rejects.toThrow("error");
+    });
+
+    it("should handle uploadFile with invalid JSON response", async () => {
+        patchServerConnection("invalid json", false);
+        const file = new File(["content"], "test.txt");
+        await expect(uploadFile(file)).rejects.toThrow("Not a JSON response body.");
+    });
+
+    it("should handle uploadFile with response error", async () => {
+        patchServerConnection('{"message": "Upload failed"}', true);
+        const file = new File(["content"], "test.txt");
+        await expect(uploadFile(file)).rejects.toThrow("error");
+    });
+
+    it("should handle _requestFilesExport with invalid JSON response", async () => {
+        patchServerConnection("invalid json", false);
+        const fileBrowserFactory = {
+            tracker: {
+                currentWidget: {
+                    selectedItems: () => [
+                        {
+                            path: "path/to/file.waldiez",
+                            name: "file.waldiez",
+                        },
+                    ],
+                    model: {
+                        refresh: jest.fn(),
+                    },
+                },
+            },
+        } as unknown as IFileBrowserFactory;
+
+        const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+        await handleExport(fileBrowserFactory, "py");
+        expect(consoleLogSpy).toHaveBeenCalledWith("Not a JSON response body.", expect.any(Object));
+        consoleLogSpy.mockRestore();
+    });
+
+    it("should handle getWaldiezActualPath with network error", async () => {
+        patchServerConnection("", true);
+        await expect(getWaldiezActualPath("path")).rejects.toThrow("error");
+    });
+
+    it("should handle handleConvert function", async () => {
+        patchServerConnection('{"success": true}', false);
+        await handleConvert("path/to/file.waldiez", "py");
     });
 });

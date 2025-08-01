@@ -215,13 +215,4 @@ export const mockFetch = (data: string, error: boolean) => {
 
 export const patchServerConnection = (responseText: string, error: boolean) => {
     mockFetch(responseText, error);
-    jest.mock("@jupyterlab/services", () => {
-        return {
-            ServerConnection: {
-                makeRequest: jest.fn().mockResolvedValue({
-                    text: jest.fn().mockResolvedValue(responseText),
-                }),
-            },
-        };
-    });
 };

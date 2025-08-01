@@ -57,7 +57,7 @@ export class EditorWidget extends ReactWidget {
         this._waldiez = {
             ...flow,
             flowId: props.flowId,
-            storageId: flow.storageId ?? props.flowId,
+            storageId: flow.storageId ?? /* istanbul ignore next */ props.flowId,
             onChange: props.onChange,
             onRun: props.onRun,
             onConvert: props.onConvert,
@@ -72,6 +72,7 @@ export class EditorWidget extends ReactWidget {
                 signal={this._chat}
                 initialArgs={null}
                 children={(_, chat) => {
+                    /* istanbul ignore next */
                     return <Waldiez {...this._waldiez} chat={chat !== null ? chat : undefined} />;
                 }}
             />

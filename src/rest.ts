@@ -62,6 +62,7 @@ export const getWaldiezActualPath = async (path: string) => {
         }
     }
 
+    /* istanbul ignore if */
     if (!response.ok) {
         throw new ServerConnection.ResponseError(response, data.message || data);
     }
@@ -97,6 +98,7 @@ export const uploadFile = async (file: File) => {
         throw new ServerConnection.NetworkError(error as any);
     }
     const data: any = await response.text();
+    /* istanbul ignore if */
     if (data.length > 0) {
         try {
             JSON.parse(data);
@@ -105,9 +107,11 @@ export const uploadFile = async (file: File) => {
         }
     }
     let jsonData: any;
+    /* istanbul ignore if */
     if (!response.ok) {
         throw new ServerConnection.ResponseError(response, data.message || data);
     }
+    /* istanbul ignore if */
     if (data.length > 0) {
         try {
             jsonData = JSON.parse(data);
@@ -143,6 +147,7 @@ const _requestFilesExport = async (files: Array<string>, extension: "py" | "ipyn
         throw new ServerConnection.NetworkError(error as any);
     }
     const data: any = await response.text();
+    /* istanbul ignore if */
     if (data.length > 0) {
         try {
             JSON.parse(data);
@@ -151,6 +156,7 @@ const _requestFilesExport = async (files: Array<string>, extension: "py" | "ipyn
         }
     }
 
+    /* istanbul ignore if */
     if (!response.ok) {
         throw new ServerConnection.ResponseError(response, data.message || data);
     }

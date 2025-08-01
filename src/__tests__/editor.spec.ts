@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { FACTORY_NAME, WALDIEZ_FILE_TYPE } from "../constants";
 import { WaldiezEditor } from "../editor";
 import { WaldiezEditorFactory } from "../factory";
@@ -59,6 +60,7 @@ jest.mock("@jupyterlab/settingregistry", () => {
 });
 
 jest.mock("@jupyterlab/codeeditor");
+
 describe("WaldiezEditor", () => {
     let app: jest.Mocked<JupyterLab>;
     let settingRegistry: ISettingRegistry;
@@ -72,7 +74,15 @@ describe("WaldiezEditor", () => {
         }) as ISettingRegistry;
         rendermime = new RenderMimeRegistry();
         editorServices = {} as IEditorServices;
-        fileBrowserFactory = {} as IFileBrowserFactory;
+        fileBrowserFactory = {
+            tracker: {
+                currentWidget: {
+                    model: {
+                        refresh: jest.fn().mockResolvedValue(true),
+                    },
+                },
+            },
+        } as any;
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -199,31 +209,24 @@ describe("WaldiezEditor", () => {
     it("should handle stdin", async () => {
         const editor = await getEditor();
         editor["_inputRequestId"] = "requestId";
-        // const logSpy = jest.spyOn(editor["_logger"], "log");
+        const logSpy = jest.spyOn(editor["_logger"], "log");
         editor["_onStdin"]({
             content: { prompt: "prompt", password: false },
             metadata: {
                 requestId: "requestId",
             },
         } as any);
-        // expect(logSpy).toHaveBeenCalledWith({
-        //     data: "Requesting input: prompt",
-        //     level: "warning",
-        //     type: "text",
-        // });
-        // expect(logSpy).toHaveBeenCalledWith({
-        //     data: "prompt",
-        //     level: "warning",
-        //     type: "text",
-        // });
+        expect(logSpy).toHaveBeenCalledWith({
+            data: "prompt",
+            level: "warning",
+            type: "text",
+        });
     });
     it("should handle serve monaco setting", async () => {
         const editor = await getEditor();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         await new Promise(process.nextTick);
-        // const getSpy = jest.spyOn(editor as any, '_getServeMonacoSetting');
-        // getSpy.mockResolvedValue(true);
         const result = await editor["_getServeMonacoSetting"]();
         expect(result).not.toBeNull();
         expect(result).toBe("/static/vs");
@@ -239,5 +242,235 @@ describe("WaldiezEditor", () => {
         // @ts-ignore
         await new Promise(process.nextTick);
         expect(disposeSpy).toHaveBeenCalled();
+    });
+
+    it("should handle onEnd method", async () => {
+        const editor = await getEditor();
+        const chatEmitSpy = jest.spyOn(editor["_chat"], "emit");
+
+        // Mock runner methods
+        editor["_runner"].getPreviousMessages = jest
+            .fn()
+            .mockReturnValue([
+                { id: "1", content: "test message", type: "text", timestamp: new Date().toISOString() },
+            ]);
+        editor["_runner"].getTimelineData = jest.fn().mockReturnValue({
+            nodes: [],
+            edges: [],
+            summary: "test timeline",
+        });
+        editor["_runner"].getUserParticipants = jest.fn().mockReturnValue(["user1"]);
+
+        // Call the private method
+        editor["_onEnd"]();
+
+        expect(chatEmitSpy).toHaveBeenCalledWith({
+            showUI: false,
+            messages: [{ id: "1", content: "test message", type: "text", timestamp: expect.any(String) }],
+            timeline: { nodes: [], edges: [], summary: "test timeline" },
+            userParticipants: ["user1"],
+            activeRequest: undefined,
+        });
+    });
+
+    it("should handle messages update with input request", async () => {
+        const editor = await getEditor();
+        const chatEmitSpy = jest.spyOn(editor["_chat"], "emit");
+
+        const mockMessages = [
+            {
+                id: "1",
+                content: "test",
+                type: "input_request",
+                timestamp: new Date().toISOString(),
+                request_id: "req-123",
+            },
+        ];
+
+        editor["_runner"].getPreviousMessages = jest.fn().mockReturnValue(mockMessages);
+        editor["_runner"].getUserParticipants = jest.fn().mockReturnValue(["user1"]);
+        editor["_inputRequestId"] = "current-req-id";
+        editor["_stdinRequest"] = {
+            content: { prompt: "Enter value: ", password: true },
+        } as any;
+
+        // Call the method with input request = true
+        editor["_onMessagesUpdate"](true);
+
+        expect(chatEmitSpy).toHaveBeenCalledWith({
+            showUI: true,
+            messages: mockMessages,
+            timeline: undefined,
+            userParticipants: ["user1"],
+            activeRequest: {
+                request_id: "current-req-id",
+                prompt: "Enter value: ",
+                password: true,
+            },
+            handlers: {
+                onUserInput: expect.any(Function),
+                onInterrupt: expect.any(Function),
+                onClose: expect.any(Function),
+            },
+        });
+    });
+
+    it("should handle timeline data", async () => {
+        const editor = await getEditor();
+        const chatEmitSpy = jest.spyOn(editor["_chat"], "emit");
+
+        const timelineData = {
+            timeline: [] as any[],
+            cost_timeline: [] as any[],
+            summary: {} as any,
+            metadata: {} as any,
+            agents: [] as any[],
+        };
+
+        editor["_runner"].getPreviousMessages = jest.fn().mockReturnValue([]);
+        editor["_runner"].getUserParticipants = jest.fn().mockReturnValue([]);
+
+        // Call the method
+        editor["_onTimelineData"](timelineData);
+
+        expect(chatEmitSpy).toHaveBeenCalledWith({
+            showUI: false,
+            messages: [],
+            timeline: timelineData,
+            userParticipants: [],
+            activeRequest: undefined,
+            handlers: {
+                onUserInput: expect.any(Function),
+                onClose: expect.any(Function),
+            },
+        });
+    });
+
+    // Test for _getRequestIdFromPreviousMessages method (around line 515-520)
+    it("should get request ID from previous messages", async () => {
+        const editor = await getEditor();
+
+        const messagesWithRequest = [
+            { id: "1", content: "text", type: "text", timestamp: new Date().toISOString() },
+            {
+                id: "2",
+                content: "input",
+                type: "input_request",
+                timestamp: new Date().toISOString(),
+                request_id: "found-req-id",
+            },
+        ];
+
+        const result = editor["_getRequestIdFromPreviousMessages"](messagesWithRequest as any);
+        expect(result).toBe("found-req-id");
+
+        // Test when no input request found
+        const messagesWithoutRequest = [
+            { id: "1", content: "text", type: "text", timestamp: new Date().toISOString() },
+        ];
+
+        const resultUnknown = editor["_getRequestIdFromPreviousMessages"](messagesWithoutRequest as any);
+        expect(resultUnknown).toBe("<unknown>");
+    });
+    it("should handle convert operation", async () => {
+        const editor = await getEditor();
+        const handleConvertMock = jest.fn().mockResolvedValue(true);
+        const originalHandleConvert = require("../rest").handleConvert;
+        require("../rest").handleConvert = handleConvertMock;
+
+        const logSpy = jest.spyOn(editor["_logger"], "log");
+
+        // Call the method
+        await editor["_onConvert"]("flow content", "py");
+
+        expect(handleConvertMock).toHaveBeenCalledWith(editor.context.path, "py");
+        expect(logSpy).toHaveBeenCalledWith({
+            data: "Exported to .py successfully",
+            level: "info",
+            type: "text",
+        });
+        expect(fileBrowserFactory.tracker.currentWidget?.model.refresh).toHaveBeenCalled();
+
+        // Restore original
+        require("../rest").handleConvert = originalHandleConvert;
+    });
+
+    // Test convert error handling
+    it("should handle convert error", async () => {
+        const editor = await getEditor();
+
+        // Mock handleConvert to reject
+        const handleConvertMock = jest.fn().mockRejectedValue(new Error("Convert failed"));
+        const originalHandleConvert = require("../rest").handleConvert;
+        require("../rest").handleConvert = handleConvertMock;
+
+        const logSpy = jest.spyOn(editor["_logger"], "log");
+
+        // Call the method (don't await since it returns void)
+        editor["_onConvert"]("flow content", "ipynb");
+
+        // Wait for the promise to reject and the catch block to execute
+        await new Promise(resolve => setTimeout(resolve, 0));
+        expect(logSpy).toHaveBeenCalledWith({
+            data: "Error converting to .ipynb: Error: Convert failed",
+            level: "error",
+            type: "text",
+        });
+
+        // Restore original
+        require("../rest").handleConvert = originalHandleConvert;
+    });
+    it("should store request ID on input request", async () => {
+        const editor = await getEditor();
+
+        editor["_onInputRequest"]("req-123");
+
+        expect(editor["_inputRequestId"]).toBe("req-123");
+    });
+    /*
+        private _onUserInput(userInput: WaldiezChatUserInput): void {
+            if (this._stdinRequest) {
+                this._logger.log({
+                    data: JSON.stringify(userInput),
+                    level: "info",
+                    type: "text",
+                });
+                this.context.sessionContext.session?.kernel?.sendInputReply(
+                    { value: JSON.stringify(userInput), status: "ok" },
+                    this._stdinRequest.parent_header as any,
+                );
+                this._stdinRequest = null;
+            }
+            // this._chat.emit(undefined);
+        }
+            */
+    it("should handle user input", async () => {
+        const editor = await getEditor();
+        const sendInputReplyMock = jest.fn();
+        editor.context.sessionContext.session = {
+            kernel: {
+                sendInputReply: sendInputReplyMock,
+            },
+        } as any;
+
+        editor["_stdinRequest"] = {
+            parent_header: { msg_id: "msg-123" },
+        } as any;
+
+        const userInput = {
+            type: "input_response" as const,
+            timestamp: Date.now(),
+            data: "test input",
+        };
+        editor["_onUserInput"](userInput as any);
+
+        expect(sendInputReplyMock).toHaveBeenCalledWith(
+            {
+                status: "ok",
+                value: JSON.stringify(userInput),
+            },
+            { msg_id: "msg-123" },
+        );
+        expect(editor["_stdinRequest"]).toBeNull();
     });
 });

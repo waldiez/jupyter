@@ -47,6 +47,7 @@ describe("WaldiezLogger", () => {
             panel: new SplitPanel(),
         });
         expect(logger).toBeTruthy();
+        expect(logger.widget).toBeDefined();
     });
     it("should log a message", () => {
         const logger = new WaldiezLogger({
@@ -123,5 +124,89 @@ describe("WaldiezLogger", () => {
         expect(logger.isVisible).toBe(true);
         logger.toggle();
         expect(logger.isVisible).toBe(false);
+    });
+    it("should log a string message", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        logger.log("simple string message");
+    });
+
+    it("should log an object without header", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        logger.log({ some: "object", without: "header" } as any);
+    });
+
+    it("should handle stderr with warning", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const stderrWarning = {
+            ...iopubMessage,
+            content: {
+                name: "stderr" as const,
+                text: "Warning: this is a warning message",
+            },
+        };
+        logger.log(stderrWarning);
+    });
+
+    it("should handle stderr with error", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const stderrError = {
+            ...iopubMessage,
+            content: {
+                name: "stderr" as const,
+                text: "Error: this is an error message",
+            },
+        };
+        logger.log(stderrError);
+    });
+
+    it("should dispose properly", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        const hasCommandSpy = jest.spyOn(app.commands, "hasCommand").mockReturnValue(true);
+        const notifyCommandChangedSpy = jest.spyOn(app.commands, "notifyCommandChanged");
+
+        logger.dispose();
+
+        expect(hasCommandSpy).toHaveBeenCalled();
+        expect(notifyCommandChangedSpy).toHaveBeenCalled();
+    });
+
+    it("should handle _scrollToBottom with no logs", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        // Mock querySelectorAll to return null
+        jest.spyOn(logger["_logConsole"].node, "querySelectorAll").mockReturnValue(null as any);
+
+        logger["_scrollToBottom"]();
     });
 });

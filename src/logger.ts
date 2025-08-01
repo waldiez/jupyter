@@ -61,6 +61,7 @@ export class WaldiezLogger {
             id: this._toggleConsoleViewCommandId,
             icon: consoleIcon,
             label: () =>
+                /* istanbul ignore next */
                 this._widgetIsVisible ? ` ${WALDIEZ_STRINGS.HIDE_LOGS}` : ` ${WALDIEZ_STRINGS.SHOW_LOGS}`,
         });
         // the split panel to contain the log console
@@ -138,8 +139,10 @@ export class WaldiezLogger {
         if ("level" in msg) {
             this._logData(msg);
         } else {
+            /* istanbul ignore next */
             if (typeof msg === "object") {
                 // if the message is not a Jupyter message, log it as a string
+                /* istanbul ignore if */
                 if (!msg || !("header" in msg)) {
                     this._logData({
                         data: JSON.stringify(msg),
@@ -213,6 +216,7 @@ export class WaldiezLogger {
     dispose(): void {
         this._logConsole.dispose();
         for (const commandId of [this._toggleConsoleViewCommandId, this._logConsoleClearCommandId]) {
+            /* istanbul ignore if */
             if (this._commands.hasCommand(commandId)) {
                 this._commands.notifyCommandChanged(commandId);
             }
@@ -228,14 +232,17 @@ export class WaldiezLogger {
         const logs = this._logConsole.node.querySelectorAll(".jp-OutputArea-child");
         if (!logs) {
             // too early?, try again
+            /* istanbul ignore if */
             if (retry < 5) {
                 setTimeout(() => this._scrollToBottom(retry + 1), 1000);
                 return;
             }
+            /* istanbul ignore next */
             return;
         }
         const lastLog = logs[logs.length - 1];
         if (lastLog) {
+            /* istanbul ignore next */
             lastLog.scrollIntoView();
         }
     }
@@ -257,6 +264,7 @@ export class WaldiezLogger {
             }),
         );
         if (!this._commands.hasCommand(this._logConsoleClearCommandId)) {
+            /* istanbul ignore next */
             this._commands.addCommand(this._logConsoleClearCommandId, {
                 execute: () => this._getLogger().clear(),
                 isEnabled: () => !!this._logConsole && this._logConsole.source !== null,

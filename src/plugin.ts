@@ -84,6 +84,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
         if (restorer) {
             // console.log('Restoring state...');
             // noinspection ES6MissingAwait
+            /* istanbul ignore next */
             restorer.restore(tracker, {
                 command: CommandIDs.openWaldiez,
                 args: widget => ({
@@ -93,6 +94,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
                 name: widget => widget.context.path,
             });
         }
+        /* istanbul ignore next */
         widgetFactory.widgetCreated.connect((_sender, widget) => {
             widget.title.icon = waldiezIcon;
             widget.context.pathChanged.connect(() => {

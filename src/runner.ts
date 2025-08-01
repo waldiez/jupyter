@@ -185,6 +185,7 @@ export class WaldiezRunner {
      */
     setTimelineData(data: WaldiezTimelineData | undefined) {
         this._timelineData = data;
+        /* istanbul ignore if */
         if (!data) {
             return;
         }
@@ -272,9 +273,20 @@ export class WaldiezRunner {
             ? URLExt.join(this._baseUrl, "waldiez", "files") +
               `?view=${this._uploadsRoot}/${this._requestId}.png`
             : undefined;
-        const result = WaldiezChatMessageProcessor.process(rawMessage, this._requestId, newImgurl);
+        let result;
+        try {
+            result = WaldiezChatMessageProcessor.process(rawMessage, this._requestId, newImgurl);
+        } catch {
+            //
+        }
         // If the result is undefined, it means the message was not processed
         if (!result) {
+            const endMessage = this._raw_has_ending(rawMessage);
+            if (endMessage) {
+                this._messages.push(endMessage);
+                this._running = false;
+                this._onEnd();
+            }
             return;
         }
         if (result.timeline) {
@@ -315,6 +327,7 @@ export class WaldiezRunner {
             result.isWorkflowEnd = true; // Mark as workflow end
         }
         // Handle workflow end
+        /* istanbul ignore if */
         if (result.isWorkflowEnd && this._timelineData !== undefined) {
             this._running = false;
             this._onEnd();

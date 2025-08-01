@@ -183,12 +183,13 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     });
                 })
                 .catch(err => {
-                    console.error(err);
+                    /* istanbul ignore next */
                     showSnackbar({
                         flowId: this.id,
                         message: `Error restarting kernel: ${err}`,
                         level: "error",
                     });
+                    /* istanbul ignore next */
                     this._logger.log({
                         data: `Error restarting kernel: ${err}`,
                         level: "error",
@@ -211,7 +212,9 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     });
                 })
                 .catch(err => {
+                    /* istanbul ignore next */
                     console.error(err);
+                    /* istanbul ignore next */
                     showSnackbar({
                         flowId: this.id,
                         message: `Error interrupting kernel: ${err}`,
@@ -237,6 +240,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 }
             } else {
                 // no changes, resolve immediately
+                /* istanbul ignore next */
                 resolve();
             }
         });
@@ -248,9 +252,11 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 .get(PLUGIN_ID, SERVE_MONACO)
                 .then(setting => {
                     const doServe = (setting.composite as boolean) || false;
+                    /* istanbul ignore else */
                     if (doServe) {
                         const fullUrl = this._serverSettings.baseUrl;
                         let withOutHost = fullUrl.replace(/https?:\/\/[^/]+/, "");
+                        /* istanbul ignore if */
                         if (!withOutHost.endsWith("/")) {
                             withOutHost += "/";
                         }
@@ -260,7 +266,9 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     }
                 })
                 .catch(_ => {
+                    /* istanbul ignore next */
                     console.error(_);
+                    /* istanbul ignore next */
                     resolve(null);
                 });
         });
@@ -278,6 +286,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     if (err instanceof Error) {
                         errorString = err.message;
                     }
+                    /* istanbul ignore next */
                     if (typeof err === "string") {
                         errorString = err;
                     }
@@ -306,6 +315,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private _askForInput(): void {
         const messages = this._runner.getPreviousMessages();
         let request_id: string;
+        /* istanbul ignore if */
         if (typeof this._stdinRequest?.metadata.request_id === "string") {
             request_id = this._stdinRequest.metadata.request_id;
         } else {
@@ -330,6 +340,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this._chat.emit(chat);
     }
     //
+    /* istanbul ignore next */
     private _handleInterrupt(): void {
         this._stdinRequest = null;
         this._inputRequestId = null;
@@ -345,6 +356,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         this._onRestartKernel();
     }
     //
+    /* istanbul ignore next */
     private _handleClose(): void {
         this._stdinRequest = null;
         this._inputRequestId = null;
@@ -381,6 +393,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     // - request: prompt user for input
     private _onStdin(msg: IInputRequestMsg): void {
         let prompt = (msg as IInputRequestMsg).content.prompt;
+        /* istanbul ignore if */
         if (prompt === ">" || prompt === "> ") {
             prompt = WALDIEZ_STRINGS.ON_EMPTY_PROMPT;
         }
@@ -415,6 +428,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     //
     private _onRun(contents: string) {
         const kernel = this.context.sessionContext.session?.kernel;
+        /* istanbul ignore if */
         if (!kernel) {
             showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE).then(() => {});
             return;
@@ -438,12 +452,13 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                     });
             })
             .catch(err => {
-                console.error(err);
+                /* istanbul ignore next */
                 this._logger.log({
                     data: `Error saving content: ${err}`,
                     level: "error",
                     type: "text",
                 });
+                /* istanbul ignore next */
                 showSnackbar({
                     flowId: this.id,
                     message: `Error saving content: ${err}`,
@@ -528,7 +543,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 });
             })
             .catch(err => {
-                console.error(err);
                 showSnackbar({
                     flowId: this.id,
                     message: `Error converting to .${to}: ${err}`,

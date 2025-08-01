@@ -39,11 +39,6 @@ describe("EditorWidget", () => {
         chat: chat!,
         onChange: jest.fn(),
         onRun: jest.fn(),
-        // chat: {
-        //     showUI: false,
-        //     messages: [],
-        //     userParticipants: [],
-        // },
     };
 
     it("should render the EditorWidget", () => {
@@ -52,14 +47,27 @@ describe("EditorWidget", () => {
         widget.render();
         widget.dispose();
     });
-    it("should handle input prompt signal", () => {
+    it("should handle chat signal", () => {
         const widget = new EditorWidget(defaultProps);
-        widget.render();
-        // chat.emit({
-        //     messages: ["Hello"],
-        //     prompt: "Test Prompt",
-        // });
-        expect(widget.render()).toBeTruthy();
+
+        // Test with null chat (should use undefined)
+        chat.emit(undefined);
+        let renderResult = widget.render();
+        expect(renderResult).toBeDefined();
+
+        // Test with actual chat config (should use the chat value)
+        const chatConfig: WaldiezChatConfig = {
+            showUI: true,
+            messages: [],
+            timeline: undefined,
+            userParticipants: [],
+            activeRequest: undefined,
+        };
+
+        chat.emit(chatConfig);
+        renderResult = widget.render();
+        expect(renderResult).toBeDefined();
+
         widget.dispose();
     });
 });
