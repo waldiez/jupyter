@@ -1480,8 +1480,8 @@ __metadata:
   linkType: hard
 
 "@codemirror/lang-markdown@npm:^6.3.2":
-  version: 6.3.3
-  resolution: "@codemirror/lang-markdown@npm:6.3.3"
+  version: 6.3.4
+  resolution: "@codemirror/lang-markdown@npm:6.3.4"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
@@ -1490,7 +1490,7 @@ __metadata:
     "@codemirror/view": "npm:^6.0.0"
     "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 10/59b3de5d6fbc5f625f68513afaaa48a12d0594651d4815461af06713b41b8fe6180bc32a7b3def0eaf9e6cbe679375d6e46fb187826139d0ad01fc95a29ee48f
+  checksum: 10/8e23721a6c113cd56eca183a1089a01b19ad8cfe16b0604c0d9d825f285e2a3dc8de18a763c6a1aaf37947a890fc3ddd3cac3d25e912a506d310e4a01ceb8ab0
   languageName: node
   linkType: hard
 
@@ -5336,7 +5336,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.38.0"
     "@typescript-eslint/parser": "npm:^8.38.0"
-    "@waldiez/react": "npm:^0.5.7"
+    "@waldiez/react": "npm:^0.5.8"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.0.5"
     copyfiles: "npm:^2.4.1"
@@ -5373,16 +5373,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@npm:^0.5.7":
-  version: 0.5.7
-  resolution: "@waldiez/react@npm:0.5.7"
+"@waldiez/react@npm:^0.5.8":
+  version: 0.5.8
+  resolution: "@waldiez/react@npm:0.5.8"
   dependencies:
     "@fontsource/fredoka": "npm:^5.2.8"
     "@monaco-editor/react": "npm:^4.7.0"
     "@radix-ui/react-checkbox": "npm:^1.3.2"
     "@radix-ui/react-slider": "npm:^1.3.5"
     "@xyflow/react": "npm:^12.8.2"
-    framer-motion: "npm:^12.23.9"
+    framer-motion: "npm:^12.23.12"
     jszip: "npm:^3.10.1"
     microdiff: "npm:^1.5.0"
     nanoid: "npm:^5.1.5"
@@ -5395,12 +5395,13 @@ __metadata:
     recharts: "npm:^3.1.0"
     rehype-highlight: "npm:^7.0.2"
     remark-gfm: "npm:^4.0.1"
+    strip-ansi: "npm:^7.1.0"
     zundo: "npm:^2.3.0"
-    zustand: "npm:^5.0.6"
+    zustand: "npm:^5.0.7"
   peerDependencies:
     react: ^18.3.1 || ^19.1.0
     react-dom: ^18.3.1 || ^19.1.0
-  checksum: 10/25a0348efd3926823695fcc250a6646a3c15abd69fbc20335e04411bee47cd4cd678be5324d079b499566ba91a4640fcc2105f40eb1da297588e77bd66f754f9
+  checksum: 10/c80098fc899e7ad8eec0aa239a44ba90538e58e5c21e9f2b35394c5dda4ba8ca9507fd4a68ef1245983eb9c03bdf3be43463be7c1bb3c9326880806828841cb4
   languageName: node
   linkType: hard
 
@@ -8274,7 +8275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^12.23.9":
+"framer-motion@npm:^12.23.12":
   version: 12.23.12
   resolution: "framer-motion@npm:12.23.12"
   dependencies:
@@ -10733,11 +10734,11 @@ __metadata:
   linkType: hard
 
 "keyv@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "keyv@npm:5.4.0"
+  version: 5.5.0
+  resolution: "keyv@npm:5.5.0"
   dependencies:
     "@keyv/serialize": "npm:^1.1.0"
-  checksum: 10/2d0f54505b1650238d3efb547332dc12e5e80c6a6b8e8654c3d4630461a69e9671fef87b5c3df11dc7bfc904cebfba5a74fe56edb9bc8ad994cecfe0dc155b97
+  checksum: 10/577dc09d8972669a331009c9b1f9e9da8d9090908377208e1b1583e38ce8d2de6f4999e83cd8a31f4bdcc258bd5973f1515bcee10f678a9b8aca378611ed9a65
   languageName: node
   linkType: hard
 
@@ -15785,7 +15786,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^5.0.6":
+"zustand@npm:^5.0.7":
   version: 5.0.7
   resolution: "zustand@npm:5.0.7"
   peerDependencies:
