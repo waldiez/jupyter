@@ -166,6 +166,7 @@ jobs:
 
   test:
     runs-on: ${{ matrix.os }}
+    needs: ["build-waldiez"]
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
