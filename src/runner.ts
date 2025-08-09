@@ -289,6 +289,22 @@ export class WaldiezRunner {
             }
             return;
         }
+        if (result.isWorkflowEnd) {
+            const markers = [
+                "<Waldiez> - Workflow stopped by user",
+                "<Waldiez> - Workflow execution failed:",
+                "<Waldiez> - Done running the flow.",
+            ];
+            if (markers.some(text => rawMessage.includes(text))) {
+                const endMessage = this._raw_has_ending(rawMessage);
+                if (endMessage) {
+                    this._messages.push(endMessage);
+                    this._running = false;
+                    this._onEnd();
+                    return;
+                }
+            }
+        }
         if (result.timeline) {
             // Notify about the timeline data
             this.setTimelineData(result.timeline);
@@ -357,7 +373,6 @@ export class WaldiezRunner {
         }
         return null;
     }
-    // "<Waldiez> - Done running the flow."
     /**
      * Check if the raw message has an ending.
      * @param rawMessage The raw message to check
