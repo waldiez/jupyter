@@ -15,7 +15,7 @@ DIR_PATTERNS = [
     ".mypy_cache",
     ".ruff_cache",
     "*.egg-info",
-    "coverage",
+    os.path.join("coverage", "py"),
     "build",
     "site",
 ]

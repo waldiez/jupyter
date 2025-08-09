@@ -5,8 +5,10 @@
 
 ifeq ($(OS),Windows_NT)
   PYTHON_PATH := $(shell where python 2>NUL || where py 2>NUL)
+  .REPORTS_DIR := ${.REPORTS_DIR}\py
 else
   PYTHON_PATH := $(shell command -v python || command -v python3)
+  .REPORTS_DIR := ${.REPORTS_DIR}/py
 endif
 
 PYTHON_NAME := $(notdir $(firstword $(PYTHON_PATH)))
@@ -89,6 +91,7 @@ test:
 		--cov-report lcov:${.REPORTS_DIR}/lcov.info \
 		--junitxml=${.REPORTS_DIR}/xunit.xml \
 		${.PACKAGE_NAME}/tests
+	python scripts/merge_lcov.py
 
 .PHONY: .pre-dev
 .pre-dev:

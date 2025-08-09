@@ -1,5 +1,5 @@
 -r main.txt
-coverage==7.10.1
+coverage==7.10.2
 filelock==3.18.0
 pytest-cov==6.2.1
 pytest-datadir==1.8.0

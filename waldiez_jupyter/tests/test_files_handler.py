@@ -101,11 +101,11 @@ async def test_export_to_py(
     assert (data_dir / "flow.py").exists()
     (data_dir / "flow.py").unlink()
     (jp_root_dir / "flow.waldiez").unlink()
-    if (data_dir / "waldiez_flow_api_keys.py").exists():
+    if (data_dir / "waldiez_flow_api_keys.py").exists():  # pragma: no cover
         (data_dir / "waldiez_flow_api_keys.py").unlink()
-    if (data_dir / "test_flow_api_keys.py").exists():
+    if (data_dir / "test_flow_api_keys.py").exists():  # pragma: no cover
         (data_dir / "test_flow_api_keys.py").unlink()
-    if (data_dir / "waldiez_api_keys.py").exists():
+    if (data_dir / "waldiez_api_keys.py").exists():  # pragma: no cover
         (data_dir / "waldiez_api_keys.py").unlink()
 
 
@@ -147,9 +147,9 @@ async def test_export_to_ipynb(
     assert (data_dir / "flow.ipynb").exists()
     (data_dir / "flow.ipynb").unlink()
     (jp_root_dir / "flow.waldiez").unlink()
-    if (data_dir / "test_flow_api_keys.py").exists():
+    if (data_dir / "test_flow_api_keys.py").exists():  # pragma: no cover
         (data_dir / "test_flow_api_keys.py").unlink()
-    if (data_dir / "waldiez_api_keys.py").exists():
+    if (data_dir / "waldiez_api_keys.py").exists():  # pragma: no cover
         (data_dir / "waldiez_api_keys.py").unlink()
 
 
@@ -186,7 +186,7 @@ async def test_export_to_invalid_extension(
     assert exc_info.value.code == 400
     assert exc_info.value.response
     (jp_root_dir / "flow.waldiez").unlink()
-    if (data_dir / "test_flow_api_keys.py").exists():
+    if (data_dir / "test_flow_api_keys.py").exists():  # pragma: no cover
         (data_dir / "test_flow_api_keys.py").unlink()
 
 
