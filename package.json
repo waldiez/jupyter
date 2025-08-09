@@ -154,6 +154,7 @@
         "stylelint-config-recommended": "^17.0.0",
         "stylelint-config-standard": "^39.0.0",
         "stylelint-prettier": "^5.0.3",
+        "tmp": "0.2.5",
         "ts-jest": "^29.4.1",
         "tsx": "^4.20.3",
         "typescript": "^5.9.2",
@@ -256,7 +257,8 @@
         }
     },
     "resolutions": {
-        "form-data": "^4.0.4"
+        "form-data": "^4.0.4",
+        "tmp": "0.2.5"
     },
     "packageManager": "yarn@4.9.2"
 }
