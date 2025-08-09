@@ -177,6 +177,13 @@ jobs:
         with:
           python-version: 3.12
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
