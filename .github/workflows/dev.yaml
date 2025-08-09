@@ -202,17 +202,14 @@ jobs:
           python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
 
       - uses: actions/setup-node@v4
-        if: matrix.os == 'ubuntu-latest'
         with:
           node-version: 22
 
       - name: Enable corepack
-        if: matrix.os == 'ubuntu-latest'
         run: corepack enable
 
       - name: Cache Yarn dependencies
         uses: actions/cache@v4
-        if: matrix.os == 'ubuntu-latest'
         with:
           path: |
             .yarn/cache
@@ -220,36 +217,31 @@ jobs:
           key: yarn-test-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
           restore-keys: |
             yarn-test-js-${{ runner.os }}-
+
       - name: Download waldiez artifact
-        if: matrix.os == 'ubuntu-latest'
         uses: actions/download-artifact@v4
         with:
           name: waldiez-react
           path: .local
 
       - name: Move artifact to correct location
-        if: matrix.os == 'ubuntu-latest'
         run: |
           mv .local/waldiez-react.tgz .local/waldiez-react.tgz || echo "File already in place"
           ls -la .local/
 
       - name: Set Yarn version
-        if: matrix.os == 'ubuntu-latest'
         run: yarn set version stable
 
       - name: Install jupyterlab
-        if: matrix.os == 'ubuntu-latest'
         run: python -m pip install --upgrade pip waldiez jupyterlab
 
       - name: Install js dependencies
-        if: matrix.os == 'ubuntu-latest'
         run: |
           yarn remove @waldiez/react || true
           yarn add @waldiez/react@file:./.local/waldiez-react.tgz
           yarn install --no-immutable
 
       - name: Run js tests
-        if: matrix.os == 'ubuntu-latest'
         run: yarn test
 
       - name: Install lcov
