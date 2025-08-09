@@ -226,11 +226,13 @@ jobs:
           path: .local
 
       - name: Move artifact to correct location (posix)
+        if: runner.os == 'ubuntu-latest' || runner.os == 'macos-latest'
         run: |
           mv .local/waldiez-react.tgz .local/waldiez-react.tgz || echo "File already in place"
           ls -la .local/
 
       - name: Move artifact to correct location (non-posix)
+        if: runner.os == 'windows-latest'
         run: |
           move .local\waldiez-react.tgz .local\waldiez-react.tgz || echo "File already in place"
           dir .local
