@@ -183,9 +183,9 @@ jobs:
             ~/.cache/pip
             ~/AppData/Local/pip/Cache
             ~/Library/Caches/pip
-          key: pip-test-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
+          key: pip-test-${{ matrix.os }}-${{ hashFiles('requirements/*.txt') }}
           restore-keys: |
-            pip-test-${{ runner.os }}-
+            pip-test-${{ matrix.os }}-
 
       - name: Cache waldiez install
         uses: actions/cache@v4
@@ -194,7 +194,7 @@ jobs:
             ~/.cache/pip-waldiez
             ~/AppData/Local/pip-waldiez/Cache
             ~/Library/Caches/pip-waldiez
-          key: waldiez-pip-test-${{ runner.os }}-${{ hashFiles('.github/workflows/*.yml') }}
+          key: waldiez-pip-test-${{ matrix.os }}-${{ hashFiles('.github/workflows/*.yml') }}
 
       - name: Install py dependencies
         run: |
@@ -215,9 +215,9 @@ jobs:
           path: |
             .yarn/cache
             .yarn/install-state.gz
-          key: yarn-test-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
+          key: yarn-test-${{ matrix.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
           restore-keys: |
-            yarn-test-js-${{ runner.os }}-
+            yarn-test-js-${{ matrix.os }}-
 
       - name: Download waldiez artifact
         uses: actions/download-artifact@v4
@@ -226,13 +226,13 @@ jobs:
           path: .local
 
       - name: Move artifact to correct location (posix)
-        if: runner.os == 'ubuntu-latest' || runner.os == 'macos-latest'
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
         run: |
           mv .local/waldiez-react.tgz .local/waldiez-react.tgz || echo "File already in place"
           ls -la .local/
 
       - name: Move artifact to correct location (non-posix)
-        if: runner.os == 'windows-latest'
+        if: matrix.os == 'windows-latest'
         run: |
           move .local\waldiez-react.tgz .local\waldiez-react.tgz || echo "File already in place"
           dir .local
