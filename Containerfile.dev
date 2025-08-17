@@ -44,7 +44,7 @@ RUN apt update && \
     libjpeg-dev \
     libgif-dev \
     librsvg2-dev \
-    libgdk-pixbuf2.0-0 \
+    libgdk-pixbuf-xlib-2.0-0 \
     libnspr4 \
     libnss3 \
     libx11-xcb1 \
