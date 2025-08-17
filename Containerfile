@@ -96,7 +96,6 @@ RUN apt update && \
     libjpeg-dev \
     libgif-dev \
     librsvg2-dev \
-    libgdk-pixbuf2.0-0 \
     libnspr4 \
     libnss3 \
     libx11-xcb1 \
@@ -112,7 +111,6 @@ RUN apt update && \
     npm install -g corepack && \
     corepack enable && \
     yarn set version stable && \
-    npx playwright install-deps && \
     sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen en_US.UTF-8 && \
     apt clean && \
