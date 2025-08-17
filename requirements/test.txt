@@ -1,11 +1,11 @@
 -r main.txt
-coverage==7.10.2
-filelock==3.18.0
+coverage==7.10.4
+filelock==3.19.1
 pytest-cov==6.2.1
 pytest-datadir==1.8.0
 pytest-html==4.1.1
 pytest-jupyter[server]>=0.10.1
-pytest-sugar==1.0.0
+pytest-sugar==1.1.0
 pytest-timeout==2.4.0
 pytest-tornasync==0.6.0.post2
 pytest-xdist==3.8.0
