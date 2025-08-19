@@ -16,14 +16,26 @@ import {
 
 import { WaldiezChatMessage, WaldiezChatMessageProcessor, WaldiezTimelineData } from "@waldiez/react";
 
+/**
+ * Get the code to execute for a waldiez file.
+ * @param filePath The path of the waldiez file
+ * @returns The code to execute
+ */
 export const getCodeToExecute = (filePath: string) => {
     return (
         "from pathlib import Path\n" +
         "from waldiez import WaldiezRunner\n" +
         `file_path = Path(r"${filePath}").as_posix()\n` +
         'uploads_root = Path(file_path).parent / "uploads"\n' +
+        'dot_env_path = Path(file_path).parent / ".env"\n' +
+        'cwd_dot_env_path = Path.cwd() / ".env"\n' +
         "runner = WaldiezRunner.load(waldiez_file=file_path)\n" +
-        "runner.run(uploads_root=uploads_root, structured_io=True)\n"
+        "if dot_env_path.exists():\n" +
+        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=dot_env_path.as_posix())\n" +
+        "elif cwd_dot_env_path.exists():\n" +
+        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=cwd_dot_env_path.as_posix())\n" +
+        "else:\n" +
+        "    runner.run(uploads_root=uploads_root, structured_io=True)\n"
     );
 };
 
