@@ -160,36 +160,33 @@ setup_environment() {
 
 # Start Jupyter Lab
 start_jupyter() {
-    local jupyter_args=(
-        --no-browser
-        --ip=0.0.0.0
-        --port=8888
-        --ServerApp.terminado_settings="{'shell_command': ['/bin/bash']}"
-        --IdentityProvider.token="${JUPYTER_TOKEN}"
-        --IdentityProvider.hashed_password="${JUPYTER_HASHED_PASSWORD}"
-        --IdentityProvider.password_required="${JUPYTER_PASSWORD_REQUIRED}"
-    )
 
     # Configure CORS (defaults to permissive for container environments)
     local allowed_origins="${JUPYTER_ALLOWED_ORIGINS:-*}"
     if [[ "$allowed_origins" == "*" ]]; then
         log_warn "Using permissive CORS policy (allow_origin='*')"
-        jupyter_args+=(--ServerApp.allow_origin='*')
     else
         log_info "Using custom allowed origins pattern: $allowed_origins"
-        jupyter_args+=(--ServerApp.allow_origin_pat="$allowed_origins")
     fi
 
     # Configure XSRF protection (defaults to disabled for container environments)
-    if [[ "${JUPYTER_SKIP_XSRF:-true}" == "true" ]]; then
+    local disable_check_xsrf="True"
+    if [[ "${JUPYTER_DISABLE_XSRF:-true}" == "true" ]]; then
         log_warn "XSRF protection is disabled"
-        jupyter_args+=(--ServerApp.disable_check_xsrf=True)
+        disable_check_xsrf="True"
     else
         log_info "XSRF protection is enabled"
+        disable_check_xsrf="False"
     fi
-
-    log_info "Starting Jupyter Lab..."
-    exec jupyter lab "${jupyter_args[@]}"
+    jupyter lab \
+        --no-browser \
+        --ip="*" \
+        --ServerApp.terminado_settings="{'shell_command': ['/bin/bash']}" \
+        --IdentityProvider.token="${JUPYTER_TOKEN}" \
+        --IdentityProvider.hashed_password="${JUPYTER_HASHED_PASSWORD}" \
+        --IdentityProvider.password_required="${JUPYTER_PASSWORD_REQUIRED}" \
+        --ServerApp.allow_origin="${allowed_origins}" \
+        --ServerApp.disable_check_xsrf="${disable_check_xsrf}"
 }
 
 # Cleanup function for graceful shutdown
