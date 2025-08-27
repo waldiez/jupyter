@@ -19,7 +19,6 @@ import tarfile
 import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Optional, Tuple, Union
 
 import urllib3
 from packaging import version
@@ -32,12 +31,12 @@ LOG = logging.getLogger(__name__)
 # pylint: disable=broad-except
 
 
-def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
+def ensure_extra_static_files(static_root_path: str | Path) -> None:
     """Ensure extra static files are present.
 
     Parameters
     ----------
-    static_root_path : Union[str, Path]
+    static_root_path : str | Path
         The path to the static files directory
 
     Raises
@@ -90,7 +89,7 @@ def ensure_extra_static_files(static_root_path: Union[str, Path]) -> None:
     LOG.info("Monaco editor files are up-to-date.")
 
 
-def _get_package_details(static_root_path: Path) -> Tuple[str, str, str]:
+def _get_package_details(static_root_path: Path) -> tuple[str, str, str]:
     """Get details about the latest version of monaco editor.
 
     Parameters
@@ -100,10 +99,12 @@ def _get_package_details(static_root_path: Path) -> Tuple[str, str, str]:
 
     Returns
     -------
-    Tuple[str, str, str]
+    tuple[str, str, str]
         The latest version, download url, and SHA-1 sum.
     """
-    cached_details = _get_cached_details(static_root_path)
+    cached_details: tuple[str, str, str] | None = _get_cached_details(
+        static_root_path=static_root_path,
+    )
     if cached_details:
         return cached_details
     http = urllib3.PoolManager()
@@ -117,22 +118,23 @@ def _get_package_details(static_root_path: Path) -> Tuple[str, str, str]:
 
 
 def _download_monaco_editor(
-    details: Tuple[str, str, str],
-    static_dir: Union[str, Path],
+    details: tuple[str, str, str],
+    static_dir: str | Path,
 ) -> None:
     """Download and extract the monaco editor files.
 
     Parameters
     ----------
-    details : Tuple[str, str, str]
+    details : tuple[str, str, str]
         The version, download url, and SHA-1 sum.
 
-    static_dir : Union[str, Path]
+    static_dir : str | Path
         The path to the static files directory.
     """
     http = urllib3.PoolManager()
     version_url, version_sha_sum = details[1], details[2]
     response = http.request("GET", version_url)
+    # noinspection InsecureHash
     sha_sum = hashlib.sha1(response.data, usedforsecurity=False).hexdigest()
     if sha_sum != version_sha_sum:  # pragma: no cover
         raise ValueError("SHA-1 sum mismatch.")
@@ -178,7 +180,7 @@ def _extract_monaco_editor_files(response: urllib3.BaseHTTPResponse) -> str:
 
 def _get_cached_details(
     static_root_path: Path,
-) -> Optional[Tuple[str, str, str]]:
+) -> tuple[str, str, str] | None:
     """Get the cached details of the monaco editor.
 
     Parameters
@@ -188,7 +190,7 @@ def _get_cached_details(
 
     Returns
     -------
-    Tuple[str, str, str]
+    tuple[str, str, str], optional
         The latest version, download url, and SHA-1 sum.
     """
     details_file = static_root_path / DETAILS_JSON

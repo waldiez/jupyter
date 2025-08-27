@@ -5,7 +5,7 @@
 import { EditorWidget, IWaldiezWidgetProps } from "../widget";
 import { Signal } from "@lumino/signaling";
 
-import { WaldiezChatConfig } from "@waldiez/react";
+import { WaldiezChatConfig, WaldiezStepByStep } from "@waldiez/react";
 
 const waldiezFlow = {
     type: "flow",
@@ -23,10 +23,18 @@ jest.mock("@waldiez/react", () => ({
 }));
 
 describe("EditorWidget", () => {
-    let chat: Signal<any, WaldiezChatConfig | undefined>;
+    let signal: Signal<
+        any,
+        { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }
+    >;
+    // let chat: Signal<any, WaldiezChatConfig | undefined>;
+    // let stepByStep: Signal<any, WaldiezStepByStep | undefined>;
 
     beforeEach(() => {
-        chat = new Signal<any, WaldiezChatConfig | undefined>(undefined);
+        signal = new Signal<
+            any,
+            { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }
+        >({});
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -36,9 +44,10 @@ describe("EditorWidget", () => {
         flowId: "test-flow-id",
         vsPath: undefined,
         jsonData: waldiezFlow,
-        chat: chat!,
+        signal: signal!,
         onChange: jest.fn(),
         onRun: jest.fn(),
+        onStepRun: jest.fn(),
     };
 
     it("should render the EditorWidget", () => {
@@ -51,7 +60,7 @@ describe("EditorWidget", () => {
         const widget = new EditorWidget(defaultProps);
 
         // Test with null chat (should use undefined)
-        chat.emit(undefined);
+        signal.emit({ chat: undefined, stepByStep: undefined });
         let renderResult = widget.render();
         expect(renderResult).toBeDefined();
 
@@ -63,8 +72,7 @@ describe("EditorWidget", () => {
             userParticipants: [],
             activeRequest: undefined,
         };
-
-        chat.emit(chatConfig);
+        signal.emit({ chat: chatConfig, stepByStep: undefined });
         renderResult = widget.render();
         expect(renderResult).toBeDefined();
 

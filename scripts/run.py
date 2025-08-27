@@ -91,6 +91,7 @@ def _stop_using_pid() -> None:
 def _stop_using_tasklist() -> None:
     """Stop the Jupyter server using tasklist."""
     cmd = 'tasklist /fi "imagename eq jupyter-lab.exe" /fo csv /nh'  # noqa
+    # noinspection SubprocessShellMode
     result = subprocess.run(  # nosemgrep  # nosec
         cmd,
         shell=True,
@@ -120,6 +121,7 @@ def _stop() -> None:
     for kwd in ("ipykernel_launcher", "jupyter-lab"):
         # pylint: disable=line-too-long
         cmd = f"ps aux | grep -v grep | grep {kwd} | awk '{{print $2}}' | xargs kill -9 > /dev/null 2>&1 || true"  # noqa E501
+        # noinspection SubprocessShellMode
         subprocess.run(
             cmd,
             shell=True,

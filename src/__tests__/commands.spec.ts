@@ -229,7 +229,7 @@ describe("Waldiez Commands", () => {
     });
 
     it("should execute changeKernel command", async () => {
-        const mockWidget = {
+        (tracker as any).currentWidget = {
             context: {
                 sessionContext: {
                     session: { id: "session-id" },
@@ -243,8 +243,6 @@ describe("Waldiez Commands", () => {
                 },
             },
         } as any;
-
-        (tracker as any).currentWidget = mockWidget;
 
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, undefined);
 
@@ -306,7 +304,7 @@ describe("Waldiez Commands", () => {
     });
 
     it("should handle changeKernel without specs", async () => {
-        const mockWidget = {
+        (tracker as any).currentWidget = {
             context: {
                 sessionContext: {
                     session: { id: "session-id" },
@@ -317,8 +315,6 @@ describe("Waldiez Commands", () => {
             },
         } as any;
 
-        (tracker as any).currentWidget = mockWidget;
-
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, undefined);
 
         const result = await app.commands.execute(CommandIDs.changeKernel);
@@ -326,7 +322,7 @@ describe("Waldiez Commands", () => {
     });
 
     it("should handle changeKernel without kernelspecs", async () => {
-        const mockWidget = {
+        (tracker as any).currentWidget = {
             context: {
                 sessionContext: {
                     session: { id: "session-id" },
@@ -338,8 +334,6 @@ describe("Waldiez Commands", () => {
                 },
             },
         } as any;
-
-        (tracker as any).currentWidget = mockWidget;
 
         await handleWaldiezCommands(app, tracker, fileBrowserFactory, widgetFactory, mainMenu, undefined);
 

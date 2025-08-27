@@ -32,7 +32,7 @@ help:
 	@echo " build           Build the projects"
 	@echo " build-py        Build the Python package"
 	@echo " build-js        Build the JavaScript package"
-	@echo " all             Run 'requirements', 'forlint', 'test', 'build'"
+	@echo " some            Run 'requirements', 'forlint', 'test', 'build'"
 	@echo " image           Build a container image"
 	@echo " dev-image       Build a container image using waldiez packages from git"
 	@echo " test            Run the tests"
@@ -122,8 +122,8 @@ build-js:
 .PHONY: build
 build: build-js build-py
 
-.PHONY: all
-all: requirements forlint test
+.PHONY: some
+some: requirements forlint test
 	${.PACKAGE_MANAGER} run test
 	${.PACKAGE_MANAGER} run test:ui
 	make build

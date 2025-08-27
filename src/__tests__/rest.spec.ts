@@ -56,7 +56,7 @@ describe("rest module", () => {
             await handleExport(fileBrowserFactory, "py");
         });
         it("should throw request fails", async () => {
-            patchServerConnection('{"path": "path/to/file.py"}', true);
+            patchServerConnection("", true);
             const fileBrowserFactory = {
                 tracker: {
                     currentWidget: {
@@ -164,7 +164,7 @@ describe("rest module", () => {
     it("should handle uploadFile with response error", async () => {
         patchServerConnection('{"message": "Upload failed"}', true);
         const file = new File(["content"], "test.txt");
-        await expect(uploadFile(file)).rejects.toThrow("error");
+        await expect(uploadFile(file)).rejects.toThrow('{"message": "Upload failed"}');
     });
 
     it("should handle _requestFilesExport with invalid JSON response", async () => {

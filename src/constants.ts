@@ -23,6 +23,7 @@ export namespace WALDIEZ_STRINGS {
     export const SHOW_LOGS = "Show logs";
     export const CLEAR_LOGS = "Clear Logs";
     export const HIDE_LOGS = "Hide logs";
+    export const COPY_LOGS = "Copy logs";
     export const RESTART_KERNEL = "Restart kernel";
     export const INTERRUPT_KERNEL = "Interrupt kernel";
     export const KERNEL_INTERRUPTED = "Kernel interrupted";

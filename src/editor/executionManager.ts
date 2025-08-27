@@ -1,0 +1,393 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright 2024 - 2025 Waldiez & contributors
+ */
+import { WALDIEZ_STRINGS } from "../constants";
+import { WaldiezLogger } from "../logger";
+import { getWaldiezActualPath } from "../rest";
+import { WaldiezStandardRunner, WaldiezStepRunner } from "../runner";
+import { WaldiezKernelManager } from "./kernelManager";
+import { IEditorState, IExecutionContext } from "./types";
+import { ISessionContext } from "@jupyterlab/apputils";
+import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import { Signal } from "@lumino/signaling";
+
+import {
+    WaldiezChatConfig,
+    WaldiezChatHandlers,
+    WaldiezChatMessage,
+    WaldiezChatUserInput,
+    WaldiezDebugInputResponse,
+    WaldiezStepByStep,
+    WaldiezStepHandlers,
+} from "@waldiez/react";
+
+/**
+ * Manages execution state and runner coordination.
+ */
+export class WaldiezExecutionManager {
+    private _standardRunner: WaldiezStandardRunner;
+    private _stepRunner: WaldiezStepRunner;
+    private _state: IEditorState;
+    private readonly _logger: WaldiezLogger;
+    private _signal: Signal<
+        any,
+        { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }
+    >;
+
+    private _sessionContext: ISessionContext | null = null;
+    private _kernelManager: WaldiezKernelManager | null = null;
+
+    constructor(
+        logger: WaldiezLogger,
+        baseUrl: string,
+        signal: Signal<
+            any,
+            { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }
+        >,
+    ) {
+        this._logger = logger;
+        this._signal = signal;
+
+        // Initialize runners
+        this._standardRunner = new WaldiezStandardRunner({
+            logger: this._logger,
+            baseUrl,
+            onStdin: this._onChatStdin.bind(this),
+            onUpdate: this._onChatUpdate.bind(this),
+            onEnd: this._onEnd.bind(this),
+        });
+
+        this._stepRunner = new WaldiezStepRunner({
+            logger: this._logger,
+            baseUrl,
+            onStdin: this._onStepStdin.bind(this),
+            onUpdate: this._onStepUpdate.bind(this),
+            onEnd: this._onEnd.bind(this),
+        });
+
+        const chatHandlers: WaldiezChatHandlers = {
+            onUserInput: this._createUserInputHandler(),
+            onInterrupt: this._createInterruptHandler(),
+            onClose: this.handleClose.bind(this),
+        };
+
+        const stepByStepHandlers: WaldiezStepHandlers = {
+            sendControl: this._createSendControlHandler(),
+            close: this.closeStepByStepSession.bind(this),
+            respond: this._createStepByStepRespondHandler(),
+        };
+
+        this._state = {
+            chat: {
+                showUI: false,
+                messages: [] as WaldiezChatMessage[],
+                timeline: undefined,
+                userParticipants: [],
+                handlers: chatHandlers,
+            },
+            stepByStep: {
+                active: false,
+                stepMode: true,
+                autoContinue: false,
+                breakpoints: [],
+                eventHistory: [],
+                currentEvent: undefined,
+                help: undefined,
+                lastError: undefined,
+                pendingControlInput: null,
+                activeRequest: null,
+                handlers: stepByStepHandlers,
+            },
+            stdinRequest: null,
+        };
+    }
+
+    /**
+     * Set the dependencies that handlers need access to.
+     * This should be called after the manager is created.
+     */
+    setDependencies(sessionContext: ISessionContext, kernelManager: WaldiezKernelManager): void {
+        this._sessionContext = sessionContext;
+        this._kernelManager = kernelManager;
+    }
+
+    // Handler factory methods that capture dependencies
+    private _createUserInputHandler() {
+        return (userInput: WaldiezChatUserInput) => {
+            if (!this._sessionContext) {
+                console.error("SessionContext not available for user input");
+                return;
+            }
+            this.handleUserInput(userInput, this._sessionContext);
+        };
+    }
+
+    private _createInterruptHandler() {
+        return () => {
+            if (!this._kernelManager) {
+                console.error("KernelManager not available for interrupt");
+                return;
+            }
+            this.handleInterrupt(this._kernelManager);
+        };
+    }
+
+    private _createSendControlHandler() {
+        return (input: Pick<WaldiezDebugInputResponse, "data" | "request_id">) => {
+            if (!this._sessionContext) {
+                console.error("SessionContext not available for send control");
+                return;
+            }
+            this.sendControl(input, this._sessionContext);
+        };
+    }
+
+    private _createStepByStepRespondHandler() {
+        return (response: WaldiezChatUserInput) => {
+            if (!this._sessionContext) {
+                console.error("SessionContext not available for step response");
+                return;
+            }
+            this.stepByStepRespond(response, this._sessionContext);
+        };
+    }
+
+    // Standard execution methods
+    async executeStandard(context: IExecutionContext): Promise<void> {
+        if (!context.kernel) {
+            throw new Error(WALDIEZ_STRINGS.NO_KERNEL);
+        }
+
+        this._signal.emit({ chat: undefined, stepByStep: undefined });
+
+        try {
+            const actualPath = await getWaldiezActualPath(context.filePath);
+            this._standardRunner.run(context.kernel, actualPath);
+        } catch (err) {
+            this._logger.log({
+                data: String(err),
+                level: "error",
+                type: "text",
+            });
+            throw err;
+        }
+    }
+
+    // Step-by-step execution methods
+    async executeStepByStep(context: IExecutionContext): Promise<void> {
+        if (!context.kernel) {
+            throw new Error(WALDIEZ_STRINGS.NO_KERNEL);
+        }
+
+        this._signal.emit({ chat: undefined, stepByStep: undefined });
+
+        try {
+            const actualPath = await getWaldiezActualPath(context.filePath);
+            this._stepRunner.start(context.kernel, actualPath);
+        } catch (err) {
+            this._logger.log({
+                data: String(err),
+                level: "error",
+                type: "text",
+            });
+            throw err;
+        }
+    }
+
+    // Input handling methods
+    handleUserInput(userInput: WaldiezChatUserInput, sessionContext: ISessionContext): void {
+        if (this._state.stdinRequest) {
+            this._logger.log({
+                data: JSON.stringify(userInput),
+                level: "info",
+                type: "text",
+            });
+            sessionContext.session?.kernel?.sendInputReply(
+                { value: JSON.stringify(userInput), status: "ok" },
+                this._state.stdinRequest.parent_header as any,
+            );
+            this._state.stdinRequest = null;
+        }
+    }
+
+    handleInterrupt(kernelManager: WaldiezKernelManager): void {
+        this._state.stdinRequest = null;
+        this._standardRunner.reset();
+        this._standardRunner.setTimelineData(undefined);
+        this._signal.emit({
+            chat: {
+                showUI: false,
+                messages: this._standardRunner.getPreviousMessages(),
+                timeline: undefined,
+                userParticipants: this._standardRunner.getUserParticipants(),
+                activeRequest: undefined,
+            },
+            stepByStep: undefined,
+        });
+        // noinspection JSIgnoredPromiseFromCall
+        kernelManager.restart();
+    }
+
+    handleClose(): void {
+        this._state.stdinRequest = null;
+        this._standardRunner.reset();
+        this._signal.emit({
+            chat: {
+                showUI: false,
+                messages: this._standardRunner.getPreviousMessages(),
+                userParticipants: this._standardRunner.getUserParticipants(),
+                activeRequest: undefined,
+                timeline: this._standardRunner.getTimelineData(),
+            },
+            stepByStep: undefined,
+        });
+    }
+
+    sendControl(
+        input: Pick<WaldiezDebugInputResponse, "data" | "request_id">,
+        sessionContext: ISessionContext,
+    ): void {
+        if (this._state.stdinRequest) {
+            input.request_id = this._stepRunner.requestId || input.request_id || "<unknown>";
+            sessionContext.session?.kernel?.sendInputReply(
+                { value: JSON.stringify({ ...input, type: "debug_input_response" }), status: "ok" },
+                this._state.stdinRequest.parent_header as any,
+            );
+        } else {
+            console.error("StepByStep response received without stdin request");
+        }
+        this._state.stdinRequest = null;
+        this._stepRunner.responded();
+    }
+
+    stepByStepRespond(response: WaldiezChatUserInput, sessionContext: ISessionContext): void {
+        if (this._state.stdinRequest) {
+            sessionContext.session?.kernel?.sendInputReply(
+                { value: JSON.stringify(response), status: "ok" },
+                this._state.stdinRequest.parent_header as any,
+            );
+        } else {
+            console.error("StepByStep response received without stdin request");
+        }
+        this._state.stdinRequest = null;
+        this._stepRunner.responded();
+    }
+
+    closeStepByStepSession(): void {
+        this._state.stepByStep = { ...this._state.stepByStep, active: false };
+        this._signal.emit({ chat: undefined, stepByStep: undefined });
+        this._stepRunner.reset();
+    }
+
+    // Event handlers for runners
+    private _onChatStdin(msg: IInputRequestMsg): void {
+        let prompt = msg.content.prompt;
+        if (prompt === ">" || prompt === "> ") {
+            prompt = WALDIEZ_STRINGS.ON_EMPTY_PROMPT;
+        }
+        this._logger.log({
+            data: prompt,
+            level: "warning",
+            type: "text",
+        });
+        this._state.stdinRequest = msg;
+        this._askForInput();
+    }
+
+    private _onStepStdin(msg: IInputRequestMsg): void {
+        let prompt = msg.content.prompt;
+        if (prompt === ">" || prompt === "> ") {
+            prompt = WALDIEZ_STRINGS.ON_EMPTY_PROMPT;
+        }
+        this._logger.log({
+            data: prompt,
+            level: "warning",
+            type: "text",
+        });
+        this._state.stdinRequest = msg;
+    }
+
+    private _askForInput(): void {
+        const messages = this._standardRunner.getPreviousMessages();
+        let request_id: string;
+        if (typeof this._state.stdinRequest?.metadata.request_id === "string") {
+            request_id = this._state.stdinRequest.metadata.request_id;
+        } else {
+            request_id = this._standardRunner.requestId ?? this._getRequestIdFromPreviousMessages(messages);
+        }
+
+        const chat: WaldiezChatConfig = {
+            ...this._state.chat,
+            showUI: true,
+            messages,
+            timeline: undefined,
+            userParticipants: this._standardRunner.getUserParticipants(),
+            activeRequest: {
+                request_id,
+                prompt: this._state.stdinRequest?.content.prompt ?? "> ",
+                password: this._state.stdinRequest?.content.password ?? false,
+            },
+        };
+        this._signal.emit({ chat, stepByStep: undefined });
+    }
+
+    private _onEnd(): void {
+        this._signal.emit({
+            chat: {
+                ...this._state.chat,
+                messages: this._standardRunner.getPreviousMessages(),
+                timeline: this._standardRunner.getTimelineData(),
+                userParticipants: this._standardRunner.getUserParticipants(),
+                activeRequest: undefined,
+                handlers: undefined,
+            },
+            stepByStep: undefined,
+        });
+    }
+
+    private _onChatUpdate(updateData: Partial<WaldiezChatConfig>): void {
+        const { handlers, ...restUpdateData } = updateData;
+
+        const chatConfig = {
+            ...this._state.chat,
+            ...restUpdateData,
+            handlers: {
+                ...this._state.chat.handlers,
+                ...(handlers || {}),
+            },
+        };
+        this._state.chat = chatConfig;
+        this._signal.emit({
+            chat: chatConfig,
+            stepByStep: undefined,
+        });
+    }
+
+    private _onStepUpdate(updateData: Partial<WaldiezStepByStep>): void {
+        const { active, ...restStepUpdateData } = updateData;
+        this._state.stepByStep = {
+            ...this._state.stepByStep,
+            ...restStepUpdateData,
+            active: typeof active === "boolean" ? active : true,
+        };
+        this._signal.emit({
+            chat: undefined,
+            stepByStep: this._state.stepByStep,
+        });
+    }
+
+    private _getRequestIdFromPreviousMessages(previousMessages: WaldiezChatMessage[]): string {
+        const inputRequestMessage = previousMessages.find(msg => msg.type === "input_request");
+        if (inputRequestMessage) {
+            return inputRequestMessage.request_id ?? "<unknown>";
+        }
+        return "<unknown>";
+    }
+
+    dispose(): void {
+        this._standardRunner.reset();
+        this._standardRunner.setTimelineData(undefined);
+        this._stepRunner.reset();
+    }
+}

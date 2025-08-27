@@ -7,7 +7,7 @@ import { ISignal } from "@lumino/signaling";
 
 import { JSX } from "react";
 
-import { Waldiez, WaldiezChatConfig, WaldiezProps, importFlow } from "@waldiez/react";
+import { Waldiez, WaldiezChatConfig, WaldiezProps, WaldiezStepByStep, importFlow } from "@waldiez/react";
 import "@waldiez/react/dist/@waldiez.css";
 
 /**
@@ -28,8 +28,9 @@ export interface IWaldiezWidgetProps {
     flowId: string;
     vsPath?: string;
     jsonData: Record<string, any>;
-    chat: ISignal<any, WaldiezChatConfig | undefined>;
+    signal: ISignal<any, { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }>;
     onRun?: (flow: string) => void;
+    onStepRun?: (flow: string) => void;
     onConvert?: (flow: string, to: "py" | "ipynb") => void;
     onChange?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
@@ -44,15 +45,17 @@ export interface IWaldiezWidgetProps {
  * @param props The props for the widget
  */
 export class EditorWidget extends ReactWidget {
-    private readonly _chat: ISignal<any, WaldiezChatConfig | undefined>;
-    // private _onUserInput: (userInput: WaldiezChatUserInput) => void;
+    private readonly _signal: ISignal<
+        any,
+        { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }
+    >;
 
     private readonly _waldiez: WaldiezProps;
 
     constructor(props: IWaldiezWidgetProps) {
         super();
         this.addClass("jp-waldiez-widget");
-        this._chat = props.chat;
+        this._signal = props.signal;
         const flow = importFlow(props.jsonData);
         this._waldiez = {
             ...flow,
@@ -60,6 +63,7 @@ export class EditorWidget extends ReactWidget {
             storageId: flow.storageId ?? /* istanbul ignore next */ props.flowId,
             onChange: props.onChange,
             onRun: props.onRun,
+            onStepRun: props.onStepRun,
             onConvert: props.onConvert,
             onUpload: props.onUpload,
             monacoVsPath: props.vsPath,
@@ -69,11 +73,17 @@ export class EditorWidget extends ReactWidget {
     render(): JSX.Element {
         return (
             <UseSignal
-                signal={this._chat}
+                signal={this._signal}
                 initialArgs={null}
-                children={(_, chat) => {
+                children={(_, signal) => {
                     /* istanbul ignore next */
-                    return <Waldiez {...this._waldiez} chat={chat !== null ? chat : undefined} />;
+                    return (
+                        <Waldiez
+                            {...this._waldiez}
+                            chat={signal ? signal.chat : undefined}
+                            stepByStep={signal ? signal.stepByStep : undefined}
+                        />
+                    );
                 }}
             />
         );

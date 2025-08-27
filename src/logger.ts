@@ -4,6 +4,7 @@
  */
 import { CommandIDs } from "./commands";
 import { WALDIEZ_STRINGS } from "./constants";
+import { copyToClipboard, strip_ansi } from "./runner/common";
 import { MainAreaWidget } from "@jupyterlab/apputils";
 import { ILogPayload, ILogger, LogConsolePanel, LogLevel, LoggerRegistry } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
@@ -14,7 +15,7 @@ import {
     IInputRequestMsg,
     IStreamMsg,
 } from "@jupyterlab/services/lib/kernel/messages";
-import { CommandToolbarButton, clearIcon, consoleIcon } from "@jupyterlab/ui-components";
+import { CommandToolbarButton, clearIcon, consoleIcon, copyIcon } from "@jupyterlab/ui-components";
 import { CommandRegistry } from "@lumino/commands";
 import { SplitPanel } from "@lumino/widgets";
 
@@ -33,9 +34,13 @@ export class WaldiezLogger {
     private readonly _logConsole: LogConsolePanel;
     private readonly _widget: MainAreaWidget<LogConsolePanel>;
     private readonly _toggleConsoleViewButton: CommandToolbarButton;
+    private readonly _copyLogsButton: CommandToolbarButton;
+    private readonly _clearLogsButton: CommandToolbarButton;
     private _widgetIsVisible: boolean;
     private readonly _toggleConsoleViewCommandId: string;
     private readonly _logConsoleClearCommandId: string;
+    private readonly _copyLogsCommandId: string;
+    private readonly _clearLogsCommandId: string;
 
     constructor(options: WaldiezLogger.IOptions) {
         this._id = options.editorId;
@@ -43,9 +48,11 @@ export class WaldiezLogger {
         this._rendermime = options.rendermime;
         this._logConsoleClearCommandId = `${CommandIDs.clearLogs}-${this._id}`;
         this._toggleConsoleViewCommandId = `${CommandIDs.toggleLogsView}-${this._id}`;
+        this._copyLogsCommandId = `${CommandIDs.copyLogs}-${this._id}`;
+        this._clearLogsCommandId = `${CommandIDs.clearLogs}-${this._id}`;
         this._loggerRegistry = new LoggerRegistry({
             defaultRendermime: this._rendermime,
-            maxLength: 1000,
+            maxLength: 2000,
         });
         this._logConsole = new LogConsolePanel(this._loggerRegistry);
         this._logConsole.id = `waldiez-log-console-${this._id}`;
@@ -64,6 +71,18 @@ export class WaldiezLogger {
                 /* istanbul ignore next */
                 this._widgetIsVisible ? ` ${WALDIEZ_STRINGS.HIDE_LOGS}` : ` ${WALDIEZ_STRINGS.SHOW_LOGS}`,
         });
+        this._copyLogsButton = new CommandToolbarButton({
+            commands: this._commands,
+            id: this._copyLogsCommandId,
+            icon: copyIcon,
+            label: ` ${WALDIEZ_STRINGS.COPY_LOGS}`,
+        });
+        this._clearLogsButton = new CommandToolbarButton({
+            commands: this._commands,
+            id: this._clearLogsCommandId,
+            icon: clearIcon,
+            label: ` ${WALDIEZ_STRINGS.CLEAR_LOGS}`,
+        });
         // the split panel to contain the log console
         this._panel = options.panel;
         this._widget = this._getLogWidget();
@@ -79,6 +98,7 @@ export class WaldiezLogger {
     get toggleConsoleViewButton(): CommandToolbarButton {
         return this._toggleConsoleViewButton;
     }
+
     /**
      * Get the visibility of the log console.
      * @returns The visibility of the log console
@@ -101,20 +121,9 @@ export class WaldiezLogger {
         return this._widget;
     }
     /**
-     * Remove ANSI escape sequences from a string.
-     * @param str The string to remove ANSI escape sequences from
-     * @returns The string without ANSI escape sequences
-     * @private
-     * @memberof WaldiezRunner
-     */
-    private _remove_ansi(str: string): string {
-        // return str.replace(/\u001b\[[0-9;]*m/g, "");
-        // eslint-disable-next-line no-control-regex
-        return str.replace(/\u001b\[[\x20-\x3f]*[\x40-\x7e]/g, "");
-    }
-    /**
      * Log a message to the log console.
      * @param msg The message to log
+     * @param level The log level (if msg is a string)
      * @public
      * @memberof WaldiezLogger
      */
@@ -127,11 +136,12 @@ export class WaldiezLogger {
             | IExecuteRequestMsg
             | ILogPayload
             | string,
+        level?: LogLevel,
     ): void {
         if (typeof msg === "string") {
             this._logData({
                 data: msg,
-                level: "info",
+                level: level || "info",
                 type: "text",
             });
             return;
@@ -146,7 +156,7 @@ export class WaldiezLogger {
                 if (!msg || !("header" in msg)) {
                     this._logData({
                         data: JSON.stringify(msg),
-                        level: "info",
+                        level: level || "info",
                         type: "text",
                     });
                     return;
@@ -181,6 +191,32 @@ export class WaldiezLogger {
             }
         }
         this._scrollToBottom();
+    }
+    /**
+     * Log a warning message.
+     * @param message The warning message to log
+     * @public
+     * @memberof WaldiezLogger
+     */
+    warning(message: string): void {
+        this._logData({
+            data: message,
+            level: "warning",
+            type: "text",
+        });
+    }
+    /**
+     * Log an error message.
+     * @param message The error message to log
+     * @public
+     * @memberof WaldiezLogger
+     */
+    error(message: string): void {
+        this._logData({
+            data: message,
+            level: "error",
+            type: "text",
+        });
     }
     /**
      * Toggle the log console view.
@@ -246,6 +282,34 @@ export class WaldiezLogger {
             lastLog.scrollIntoView();
         }
     }
+
+    private async _copyLogs(): Promise<void> {
+        const logs = this._logConsole.node.querySelectorAll(".jp-OutputArea-child");
+        const logEntries: { timestamp: string; data: string }[] = [];
+
+        logs.forEach(entry => {
+            const text = entry.textContent || "";
+            // try to extract timestamp and data
+            const timestampMatch = text.match(/^\s*(\d{1,2}:\d{2}:\d{2}(?:\s*[AP]M)?)\s*(.*)/);
+
+            if (timestampMatch && timestampMatch[2].trim()) {
+                const timestamp = timestampMatch[1].trim();
+                const data = timestampMatch[2].trim();
+                logEntries.push({
+                    timestamp,
+                    data: strip_ansi(data),
+                });
+            } else {
+                logEntries.push({
+                    timestamp: new Date().toISOString(),
+                    data: strip_ansi(text.trim()),
+                });
+            }
+        });
+
+        const logText = logEntries.map(e => JSON.stringify(e)).join("\n");
+        await copyToClipboard(logText);
+    }
     /**
      * Get the log console widget.
      * @returns The log console widget
@@ -256,13 +320,18 @@ export class WaldiezLogger {
         const logConsoleWidget = new MainAreaWidget<LogConsolePanel>({
             content: this._logConsole,
         });
-        logConsoleWidget.toolbar.addItem(
-            "clear",
-            new CommandToolbarButton({
-                commands: this._commands,
-                id: this._logConsoleClearCommandId,
-            }),
-        );
+        logConsoleWidget.toolbar.addItem("clear", this._clearLogsButton);
+        logConsoleWidget.toolbar.addItem("copy", this._copyLogsButton);
+        this._setupCommands();
+        return logConsoleWidget;
+    }
+
+    private _setupCommands(): void {
+        this._setupClearCommand();
+        this._setupCopyCommand();
+        this._setupToggleCommand();
+    }
+    private _setupClearCommand(): void {
         if (!this._commands.hasCommand(this._logConsoleClearCommandId)) {
             /* istanbul ignore next */
             this._commands.addCommand(this._logConsoleClearCommandId, {
@@ -272,13 +341,26 @@ export class WaldiezLogger {
                 icon: clearIcon,
             });
         }
+    }
+    private _setupCopyCommand(): void {
+        if (!this._commands.hasCommand(this._copyLogsCommandId)) {
+            this._commands.addCommand(this._copyLogsCommandId, {
+                execute: this._copyLogs.bind(this),
+                isEnabled: () => !!this._logConsole && this._logConsole.source !== null,
+                label: ` ${WALDIEZ_STRINGS.COPY_LOGS}`,
+                icon: copyIcon,
+            });
+        }
+    }
+
+    private _setupToggleCommand(): void {
         if (!this._commands.hasCommand(this._toggleConsoleViewCommandId)) {
             this._commands.addCommand(this._toggleConsoleViewCommandId, {
                 execute: this.toggle.bind(this),
             });
         }
-        return logConsoleWidget;
     }
+
     /**
      * Log an IOPub message to the log console.
      * @param msg The IOPub message
@@ -356,8 +438,8 @@ export class WaldiezLogger {
     private _logData(payload: ILogPayload): void {
         payload.data =
             typeof payload.data === "string"
-                ? this._remove_ansi(payload.data)
-                : this._remove_ansi(JSON.stringify(payload.data));
+                ? strip_ansi(payload.data)
+                : strip_ansi(JSON.stringify(payload.data));
         this._getLogger().log(payload);
     }
     private _getLogger(): ILogger {

@@ -191,6 +191,7 @@ export const mockEditor = {
     context: editorContext,
 };
 export const mockFetch = (data: string, error: boolean) => {
+    // noinspection JSUnusedGlobalSymbols
     window.Request = jest.fn().mockImplementation(() => ({
         headers: new Headers(),
         signal: {
@@ -200,7 +201,7 @@ export const mockFetch = (data: string, error: boolean) => {
     }));
     if (error) {
         window.fetch = jest.fn().mockImplementation(() => {
-            return Promise.reject(new Error("error"));
+            return Promise.reject(new Error(data.length > 0 ? data : "error"));
         });
     } else {
         window.fetch = jest.fn().mockImplementation(() => {

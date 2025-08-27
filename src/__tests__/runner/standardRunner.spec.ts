@@ -2,9 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { WaldiezLogger } from "../logger";
-import { WaldiezRunner } from "../runner";
-import { errorMsg, executeReplyMessage, inputRequestMessage, iopubMessage } from "./utils";
+import { WaldiezLogger } from "../../logger";
+import { WaldiezStandardRunner } from "../../runner";
+import { errorMsg, executeReplyMessage, inputRequestMessage, iopubMessage } from "../utils";
 import { JupyterLab } from "@jupyterlab/application";
 import { IRenderMimeRegistry, RenderMimeRegistry } from "@jupyterlab/rendermime";
 import { Kernel } from "@jupyterlab/services";
@@ -22,8 +22,8 @@ jest.mock("@jupyterlab/application", () => {
         }),
     };
 });
-jest.mock("../logger", () => {
-    const WaldiezLogger = jest.requireActual("../logger").WaldiezLogger;
+jest.mock("../../logger", () => {
+    const WaldiezLogger = jest.requireActual("../../logger").WaldiezLogger;
     return {
         WaldiezLogger,
         getCodeToExecute: jest.fn(),
@@ -31,9 +31,7 @@ jest.mock("../logger", () => {
 });
 
 const onStdin = jest.fn();
-const onInputRequest = jest.fn();
-const onMessagesUpdate = jest.fn();
-const onTimelineData = jest.fn();
+const onUpdate = jest.fn();
 const onEnd = jest.fn();
 
 const mockKernelConnectionSuccess = {
@@ -52,17 +50,6 @@ const mockKernelConnectionNoRequestExecute = {
     status: "idle",
 } as unknown as Kernel.IKernelConnection;
 
-const mockKernelConnectionFail = {
-    requestExecute: jest.fn().mockReturnValue({
-        onIOPub: jest.fn(),
-        onReply: jest.fn(),
-        onStdin: jest.fn(),
-        done: Promise.reject(),
-        dispose: jest.fn(),
-    }),
-    status: "idle",
-} as unknown as Kernel.IKernelConnection;
-
 const mockKernelConnectionError = {
     requestExecute: jest.fn().mockReturnValue({
         onIOPub: jest.fn(),
@@ -74,14 +61,12 @@ const mockKernelConnectionError = {
     status: "idle",
 } as unknown as Kernel.IKernelConnection;
 
-const getRunner = (logger: WaldiezLogger, includeTimelineCallback = false) => {
-    return new WaldiezRunner({
+const getRunner = (logger: WaldiezLogger) => {
+    return new WaldiezStandardRunner({
         baseUrl: "http://localhost:8888",
         logger,
         onStdin,
-        onInputRequest,
-        onMessagesUpdate,
-        onTimelineData: includeTimelineCallback ? onTimelineData : undefined,
+        onUpdate,
         onEnd,
     });
 };
@@ -137,7 +122,7 @@ const getTimelineData = () => {
     };
 };
 
-describe("WaldiezRunner", () => {
+describe("WaldiezStandardRunner", () => {
     let app: jest.Mocked<JupyterLab>;
     let rendermime: IRenderMimeRegistry;
     let logger: WaldiezLogger;
@@ -168,45 +153,6 @@ describe("WaldiezRunner", () => {
         expect(runner.running).toBe(true);
     });
 
-    it("should not run a waldiez file if one is already running", () => {
-        const runner = getRunner(logger);
-        runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
-        expect(runner.running).toBe(true);
-        const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-        runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
-        expect(consoleWarnSpy).toHaveBeenCalledWith("A waldiez file is already running");
-        consoleWarnSpy.mockRestore();
-    });
-
-    it("should log an error if the kernel request fails", async () => {
-        const runner = getRunner(logger);
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-        const loggerLogSpy = jest.spyOn(logger, "log");
-
-        runner.run(mockKernelConnectionFail, "path/to/file.waldiez");
-        expect(runner.running).toBe(true);
-
-        // Trigger the error
-        try {
-            await mockKernelConnectionFail.requestExecute({
-                code: "any",
-                silent: true,
-                stop_on_error: true,
-            }).done;
-        } catch (_) {
-            // Error should be handled
-        }
-
-        expect(consoleErrorSpy).toHaveBeenCalledWith("Error while running the waldiez file", undefined);
-        expect(loggerLogSpy).toHaveBeenCalledWith(
-            'Error: {"channel":"iopub","content":{"name":"stderr","text":"Failed to run the waldiez file"},"header":{"msg_type":"stream"},"metadata":{}}',
-        );
-        expect(runner.running).toBe(false);
-
-        consoleErrorSpy.mockRestore();
-        loggerLogSpy.mockRestore();
-    });
-
     it("should handle kernel execution error with actual error object", async () => {
         const runner = getRunner(logger);
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
@@ -224,11 +170,6 @@ describe("WaldiezRunner", () => {
         } catch (_) {
             // Error should be handled
         }
-
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-            "Error while running the waldiez file",
-            expect.any(Error),
-        );
         expect(loggerLogSpy).toHaveBeenCalledWith("Error: {}");
 
         consoleErrorSpy.mockRestore();
@@ -237,13 +178,9 @@ describe("WaldiezRunner", () => {
 
     it("should not run a waldiez file if the kernel does not support requestExecute", () => {
         const runner = getRunner(logger);
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
         runner.run(mockKernelConnectionNoRequestExecute, "path/to/file.waldiez");
         expect(runner.running).toBe(false);
-        expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to create a future for the waldiez file");
-
-        consoleErrorSpy.mockRestore();
     });
 
     it("should reset the runner", () => {
@@ -324,7 +261,7 @@ describe("WaldiezRunner", () => {
     });
 
     it("should handle timeline messages", () => {
-        const runner = getRunner(logger, true);
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         const timeline = getTimelineData();
         const timelineMsg = {
@@ -445,9 +382,8 @@ describe("WaldiezRunner", () => {
         };
 
         runner["_future"]!.onIOPub(streamMsg);
-        expect(onInputRequest).toHaveBeenCalledWith("req-123");
         expect(runner["_expectingUserInput"]).toBe(true);
-        expect(runner["_requestId"]).toBe("req-123");
+        expect(runner.requestId).toBe("req-123");
     });
 
     it("should handle text message after input request", () => {
@@ -479,7 +415,7 @@ describe("WaldiezRunner", () => {
     });
 
     it("should handle timeline messages", () => {
-        const runner = getRunner(logger, true);
+        const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
 
         const timelineMsg = {
@@ -527,23 +463,6 @@ describe("WaldiezRunner", () => {
         };
         runner["_future"]!.onIOPub(streamMsg);
         expect(runner.running).toBe(false);
-        expect(onEnd).toHaveBeenCalled();
-    });
-
-    it("should handle workflow stopped by user message", () => {
-        const runner = getRunner(logger);
-        runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
-
-        const stoppedMessage = "<Waldiez> - Workflow stopped by user";
-        const streamMsg = {
-            ...iopubMessage,
-            content: {
-                name: "stdout" as const,
-                text: stoppedMessage,
-            },
-        };
-
-        runner["_future"]!.onIOPub(streamMsg);
         expect(onEnd).toHaveBeenCalled();
     });
 
@@ -696,65 +615,3 @@ describe("WaldiezRunner", () => {
         expect(runner["_messages"].length).toBe(initialMessageCount);
     });
 });
-
-/*
- timeline: WaldiezTimelineItem[];
-    cost_timeline: WaldiezTimelineCostPoint[];
-    summary: {
-        total_sessions: number;
-        total_time: number;
-        total_cost: number;
-        total_agents: number;
-        total_events: number;
-        total_tokens: number;
-        avg_cost_per_session: number;
-        compression_info: {
-            gaps_compressed: number;
-            time_saved: number;
-        };
-    };
-    metadata: {
-        time_range: [number, number];
-        cost_range: [number, number];
-        colors?: Record<string, string>;
-    };
-    agents: WaldiezTimelineAgentInfo[];
-
-
-    export declare type WaldiezTimelineAgentInfo = {
-    name: string;
-    class: string;
-    color: string;
-};
-
-export declare type WaldiezTimelineCostPoint = {
-    time: number;
-    cumulative_cost: number;
-    session_cost: number;
-    session_id: number | string;
-};
-
-export declare type WaldiezTimelineItem = {
-    id: string;
-    type: "session" | "gap";
-    start: number;
-    end: number;
-    duration: number;
-    agent?: string;
-    cost?: number;
-    color: string;
-    label: string;
-    gap_type?: string;
-    real_duration?: number;
-    compressed?: boolean;
-    prompt_tokens?: number;
-    completion_tokens?: number;
-    tokens?: number;
-    agent_class?: string;
-    is_cached?: boolean;
-    llm_model?: string;
-    y_position?: number;
-    session_id?: string;
-    real_start_time?: string;
-};
-*/

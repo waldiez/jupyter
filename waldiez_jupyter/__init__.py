@@ -4,8 +4,6 @@
 
 """Jupyter server extension for Waldiez."""
 
-from typing import Dict, List
-
 from jupyter_server.serverapp import ServerApp
 
 # pylint: disable=import-error
@@ -26,11 +24,11 @@ except ImportError:  # pragma: no cover
 from .handlers import setup_handlers
 
 
-def _jupyter_labextension_paths() -> List[Dict[str, str]]:
+def _jupyter_labextension_paths() -> list[dict[str, str]]:
     return [{"src": "labextension", "dest": "@waldiez/jupyter"}]
 
 
-def _jupyter_server_extension_points() -> List[Dict[str, str]]:
+def _jupyter_server_extension_points() -> list[dict[str, str]]:
     return [{"module": "waldiez_jupyter"}]
 
 

@@ -85,6 +85,7 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
             // console.log('Restoring state...');
             // noinspection ES6MissingAwait
             /* istanbul ignore next */
+            // noinspection ES6MissingAwait
             restorer.restore(tracker, {
                 command: CommandIDs.openWaldiez,
                 args: widget => ({

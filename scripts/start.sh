@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
 # Configuration
+# shellcheck disable=SC2155
 readonly SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+# shellcheck disable=SC2155
 readonly ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 readonly LOG_PREFIX="[start.sh]"
 readonly RED='\033[0;31m'
 readonly YELLOW='\033[1;33m'
-readonly GREEN='\033[0;32m'
+#readonly GREEN='\033[0;32m'
 readonly BLUE='\033[0;34m'
 readonly NC='\033[0m' # No Color
 
