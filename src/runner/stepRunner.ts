@@ -82,6 +82,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         this._expectingUserInput = true;
         if (msg.content.prompt === CONTROL_PROMPT) {
             this._onUpdate({
+                active: this._running,
                 pendingControlInput: {
                     request_id: this.requestId || "<unknown>",
                     prompt: msg.content.prompt,
@@ -89,6 +90,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             });
         } else {
             this._onUpdate({
+                active: this._running,
                 pendingControlInput: undefined,
                 activeRequest: {
                     request_id: this.requestId || "<unknown>",
@@ -151,8 +153,10 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             this._eventHistory.add(result.debugMessage);
         }
         this._onUpdate({
+            active: !result.error && this.running,
             eventHistory: Array.from(this._eventHistory).reverse(),
             currentEvent: typeof this._currentEvent?.type === "string" ? this._currentEvent : undefined,
+            lastError: result.error ? result.error.message : undefined,
         });
     }
 
@@ -166,6 +170,14 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         let chatResult: WaldiezChatMessageProcessingResult | undefined = undefined;
         try {
             const parsed = JSON.parse(rawMessage);
+            if (parsed.type === "error") {
+                return {
+                    error: {
+                        message: parsed.message,
+                        originalData: rawMessage,
+                    },
+                };
+            }
             if (
                 parsed.type === "print" &&
                 typeof parsed.data === "object" &&
@@ -199,6 +211,9 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
     private _chatResultToStepResult(
         chatResult: WaldiezChatMessageProcessingResult,
     ): WaldiezStepByStepProcessingResult | undefined {
+        if (chatResult.participants) {
+            // Handle participants
+        }
         if (!chatResult.message || !chatResult.message.content) {
             return undefined;
         }

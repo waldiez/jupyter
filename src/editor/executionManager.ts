@@ -69,7 +69,7 @@ export class WaldiezExecutionManager {
         const chatHandlers: WaldiezChatHandlers = {
             onUserInput: this._createUserInputHandler(),
             onInterrupt: this._createInterruptHandler(),
-            onClose: this.handleClose.bind(this),
+            onClose: this._createCloseHandler(),
         };
 
         const stepByStepHandlers: WaldiezStepHandlers = {
@@ -133,6 +133,16 @@ export class WaldiezExecutionManager {
         };
     }
 
+    private _createCloseHandler() {
+        return () => {
+            if (!this._kernelManager) {
+                console.error("KernelManager not available for close");
+                return;
+            }
+            this.handleClose();
+        };
+    }
+
     private _createSendControlHandler() {
         return (input: Pick<WaldiezDebugInputResponse, "data" | "request_id">) => {
             if (!this._sessionContext) {
@@ -187,7 +197,7 @@ export class WaldiezExecutionManager {
             this._stepRunner.start(context.kernel, actualPath);
         } catch (err) {
             this._logger.log({
-                data: String(err),
+                data: (err as Error).message || String(err),
                 level: "error",
                 type: "text",
             });
@@ -233,15 +243,13 @@ export class WaldiezExecutionManager {
         this._state.stdinRequest = null;
         this._standardRunner.reset();
         this._signal.emit({
-            chat: {
-                showUI: false,
-                messages: this._standardRunner.getPreviousMessages(),
-                userParticipants: this._standardRunner.getUserParticipants(),
-                activeRequest: undefined,
-                timeline: this._standardRunner.getTimelineData(),
-            },
+            chat: undefined,
             stepByStep: undefined,
         });
+        if (this._kernelManager) {
+            // noinspection JSIgnoredPromiseFromCall
+            this._kernelManager.restart();
+        }
     }
 
     sendControl(
@@ -258,7 +266,12 @@ export class WaldiezExecutionManager {
             console.error("StepByStep response received without stdin request");
         }
         this._state.stdinRequest = null;
-        this._stepRunner.responded();
+        const isQuit = input.data === "q";
+        if (isQuit) {
+            this.closeStepByStepSession();
+        } else {
+            this._stepRunner.responded();
+        }
     }
 
     stepByStepRespond(response: WaldiezChatUserInput, sessionContext: ISessionContext): void {
@@ -267,8 +280,6 @@ export class WaldiezExecutionManager {
                 { value: JSON.stringify(response), status: "ok" },
                 this._state.stdinRequest.parent_header as any,
             );
-        } else {
-            console.error("StepByStep response received without stdin request");
         }
         this._state.stdinRequest = null;
         this._stepRunner.responded();
@@ -278,6 +289,11 @@ export class WaldiezExecutionManager {
         this._state.stepByStep = { ...this._state.stepByStep, active: false };
         this._signal.emit({ chat: undefined, stepByStep: undefined });
         this._stepRunner.reset();
+
+        if (this._kernelManager) {
+            // noinspection JSIgnoredPromiseFromCall
+            this._kernelManager.restart();
+        }
     }
 
     // Event handlers for runners
@@ -328,6 +344,10 @@ export class WaldiezExecutionManager {
                 prompt: this._state.stdinRequest?.content.prompt ?? "> ",
                 password: this._state.stdinRequest?.content.password ?? false,
             },
+            handlers: {
+                ...this._state.chat.handlers,
+                onClose: undefined,
+            },
         };
         this._signal.emit({ chat, stepByStep: undefined });
     }
@@ -369,7 +389,7 @@ export class WaldiezExecutionManager {
         this._state.stepByStep = {
             ...this._state.stepByStep,
             ...restStepUpdateData,
-            active: typeof active === "boolean" ? active : true,
+            active: typeof active === "boolean" ? active : this._state.stepByStep.active,
         };
         this._signal.emit({
             chat: undefined,

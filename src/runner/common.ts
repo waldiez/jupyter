@@ -19,17 +19,16 @@ export const getCodeToExecute = (filePath: string, mode: "standard" | "debug") =
         'cwd_dot_env_path = Path.cwd() / ".env"\n' +
         `runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}")\n` +
         "if dot_env_path.exists():\n" +
-        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=dot_env_path.as_posix())\n" +
+        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=dot_env_path.resolve())\n" +
         "elif cwd_dot_env_path.exists():\n" +
-        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=cwd_dot_env_path.as_posix())\n" +
+        "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=cwd_dot_env_path.resolve())\n" +
         "else:\n" +
         "    runner.run(uploads_root=uploads_root, structured_io=True)\n"
     );
 };
 
 /**
- * Get the uploads root directory (browser-only, no Node 'path').
- * Handles POSIX/Windows separators, mixed separators, trailing slashes, and roots.
+ * Get the uploads root directory.
  *
  * Examples:
  *  - "/a/b/c.txt"            -> "/a/b/uploads"

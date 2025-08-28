@@ -19,6 +19,7 @@ import {
  */
 export abstract class WaldiezBaseRunner<TUpdate = any> {
     protected _running: boolean = false;
+    // private _kernel: Kernel.IKernelConnection | null = null;
     protected _future?: Kernel.IShellFuture<IExecuteRequestMsg, IExecuteReplyMsg>;
     protected readonly _onStdin: (msg: IInputRequestMsg) => void;
     protected _logger: WaldiezLogger;
@@ -103,6 +104,7 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
             this._logger.error("A waldiez flow is already running");
             return;
         }
+        // this._kernel = kernel;
         this._inputRequest = null;
         this._running = true;
         this._requestId = null;
@@ -116,7 +118,7 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
                 code,
                 stop_on_error: true,
             },
-            false,
+            true,
         );
         this._onFuture();
     }
@@ -152,26 +154,15 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
 
         this._future.onReply = msg => {
             if (msg.content.status !== "ok") {
-                this._logger.log(`error: ${msg}`);
+                this._logger.error(`error: ${msg.content}`);
             }
         };
 
         this._future.done.catch(err => {
-            this._logger.error(`Error while running the waldiez file: ${err.message}`);
-            if (!err) {
-                err = {
-                    channel: "iopub",
-                    content: {
-                        name: "stderr",
-                        text: "Failed to run the waldiez file",
-                    },
-                    header: { msg_type: "stream" },
-                    metadata: {},
-                };
+            if (err.message) {
+                this._logger.error(err.message);
             }
-            const errorMsg = typeof err === "string" ? err : JSON.stringify(err);
-            this._logger.log(`Error: ${errorMsg}`);
-            this._running = false;
+            this.reset();
             this._onEnd();
         });
     }

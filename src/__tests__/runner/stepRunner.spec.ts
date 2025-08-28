@@ -116,7 +116,7 @@ describe("WaldiezStepRunner", () => {
                     code: "mocked python code",
                     stop_on_error: true,
                 },
-                false,
+                true,
             );
         });
 
@@ -173,11 +173,12 @@ describe("WaldiezStepRunner", () => {
                 ...inputRequestMessage,
                 content: { prompt: CONTROL_PROMPT, password: false },
             };
-
+            stepRunner["_running"] = true;
             stepRunner.onStdin(msg);
 
             expect(stepRunner["_expectingUserInput"]).toBe(true);
             expect(mockOnUpdate).toHaveBeenCalledWith({
+                active: true,
                 pendingControlInput: {
                     request_id: "<unknown>",
                     prompt: CONTROL_PROMPT,
@@ -192,11 +193,13 @@ describe("WaldiezStepRunner", () => {
                 ...inputRequestMessage,
                 content: { prompt: "Enter value:", password: true },
             };
+            stepRunner["_running"] = true;
             stepRunner["_requestId"] = "test-123";
 
             stepRunner.onStdin(msg);
 
             expect(mockOnUpdate).toHaveBeenCalledWith({
+                active: true,
                 pendingControlInput: undefined,
                 activeRequest: {
                     request_id: "test-123",
@@ -267,8 +270,10 @@ describe("WaldiezStepRunner", () => {
             expect(WaldiezStepByStepProcessor.process).toHaveBeenCalledWith("step message");
             expect(stepRunner["_eventHistory"].size).toBe(1);
             expect(mockOnUpdate).toHaveBeenCalledWith({
+                active: false,
                 eventHistory: [{ type: "step", data: "test" }],
                 currentEvent: { type: "step", data: "test" },
+                lastError: undefined,
             });
         });
 
@@ -441,8 +446,10 @@ describe("WaldiezStepRunner", () => {
             stepRunner.processMessage("test message");
 
             expect(mockOnUpdate).toHaveBeenCalledWith({
+                active: false,
                 eventHistory: events.reverse(),
                 currentEvent: { type: "event3" },
+                lastError: undefined,
             });
         });
     });

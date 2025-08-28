@@ -250,7 +250,7 @@ describe("WaldiezEditor", () => {
 
         await editor["_onRun"]("content");
         expect(logSpy).toHaveBeenCalledWith({
-            data: "Error saving content: Error: Execution failed",
+            data: "Error executing flow: Execution failed",
             level: "error",
             type: "text",
         });
@@ -293,7 +293,7 @@ describe("WaldiezEditor", () => {
 
         await editor["_onStepRun"]("content");
         expect(logSpy).toHaveBeenCalledWith({
-            data: "Error saving content: Error: Step execution failed",
+            data: "Error executing flow: Step execution failed",
             level: "error",
             type: "text",
         });

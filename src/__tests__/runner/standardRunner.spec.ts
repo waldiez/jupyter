@@ -156,7 +156,7 @@ describe("WaldiezStandardRunner", () => {
     it("should handle kernel execution error with actual error object", async () => {
         const runner = getRunner(logger);
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-        const loggerLogSpy = jest.spyOn(logger, "log");
+        const loggerErrorSpy = jest.spyOn(logger, "error");
 
         runner.run(mockKernelConnectionError, "path/to/file.waldiez");
 
@@ -170,10 +170,10 @@ describe("WaldiezStandardRunner", () => {
         } catch (_) {
             // Error should be handled
         }
-        expect(loggerLogSpy).toHaveBeenCalledWith("Error: {}");
+        expect(loggerErrorSpy).toHaveBeenCalledWith("Kernel execution failed");
 
         consoleErrorSpy.mockRestore();
-        loggerLogSpy.mockRestore();
+        loggerErrorSpy.mockRestore();
     });
 
     it("should not run a waldiez file if the kernel does not support requestExecute", () => {
@@ -282,11 +282,11 @@ describe("WaldiezStandardRunner", () => {
 
     it("should handle reply messages correctly", () => {
         const runner = getRunner(logger);
-        const loggerLogSpy = jest.spyOn(logger, "log");
+        const loggerErrorSpy = jest.spyOn(logger, "error");
 
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
         runner["_future"]!.onReply(executeReplyMessage);
-        expect(loggerLogSpy).not.toHaveBeenCalledWith(executeReplyMessage);
+        expect(loggerErrorSpy).not.toHaveBeenCalledWith(executeReplyMessage);
 
         const notOk = {
             ...executeReplyMessage,
@@ -303,7 +303,7 @@ describe("WaldiezStandardRunner", () => {
             },
         };
         runner["_future"]!.onReply(notOk);
-        expect(loggerLogSpy).toHaveBeenCalledWith("error: [object Object]");
+        expect(loggerErrorSpy).toHaveBeenCalledWith("error: [object Object]");
     });
 
     it("should filter and return previous messages correctly", () => {

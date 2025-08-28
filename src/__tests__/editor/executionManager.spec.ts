@@ -276,13 +276,7 @@ describe("WaldiezExecutionManager", () => {
 
             expect(mockStandardRunner.reset).toHaveBeenCalled();
             expect(signalEmitSpy).toHaveBeenCalledWith({
-                chat: {
-                    showUI: false,
-                    messages: [],
-                    userParticipants: [],
-                    activeRequest: undefined,
-                    timeline: undefined,
-                },
+                chat: undefined,
                 stepByStep: undefined,
             });
         });
@@ -581,29 +575,6 @@ describe("WaldiezExecutionManager", () => {
         });
     });
     describe("_onStepUpdate method", () => {
-        it("should update step by step state with active=true by default", () => {
-            const updateData = {
-                eventHistory: [{ type: "event1" }],
-                currentEvent: { type: "current" },
-            };
-
-            const signalEmitSpy = jest.spyOn(signal, "emit");
-
-            executionManager["_onStepUpdate"](updateData);
-
-            expect(executionManager["_state"].stepByStep).toEqual({
-                ...executionManager["_state"].stepByStep,
-                eventHistory: [{ type: "event1" }],
-                currentEvent: { type: "current" },
-                active: true, // Should default to true
-            });
-
-            expect(signalEmitSpy).toHaveBeenCalledWith({
-                chat: undefined,
-                stepByStep: executionManager["_state"].stepByStep,
-            });
-        });
-
         it("should update step by step state with active=false when explicitly set", () => {
             const updateData = {
                 active: false,
@@ -639,28 +610,6 @@ describe("WaldiezExecutionManager", () => {
             });
         });
 
-        it("should handle active=null by defaulting to true", () => {
-            const updateData = {
-                active: null as any, // Invalid value
-                eventHistory: [],
-            };
-
-            executionManager["_onStepUpdate"](updateData);
-
-            expect(executionManager["_state"].stepByStep.active).toBe(true);
-        });
-
-        it("should handle active=undefined by defaulting to true", () => {
-            const updateData = {
-                active: undefined as any,
-                currentEvent: { type: "test" },
-            };
-
-            executionManager["_onStepUpdate"](updateData);
-
-            expect(executionManager["_state"].stepByStep.active).toBe(true);
-        });
-
         it("should preserve existing state when updating with partial data", () => {
             // Set initial state
             executionManager["_state"].stepByStep = {
@@ -685,7 +634,7 @@ describe("WaldiezExecutionManager", () => {
             executionManager["_onStepUpdate"](updateData);
 
             expect(executionManager["_state"].stepByStep).toEqual({
-                active: true, // Should default to true since not provided
+                active: false, // Preserved
                 stepMode: true, // Preserved
                 autoContinue: true, // Preserved
                 breakpoints: ["bp1"], // Preserved
