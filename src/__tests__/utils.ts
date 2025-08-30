@@ -2,8 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { ILogPayload } from "@jupyterlab/logconsole";
-import {
+import type { ILogPayload } from "@jupyterlab/logconsole";
+import type {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,

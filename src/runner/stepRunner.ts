@@ -6,13 +6,13 @@ import { WaldiezLogger } from "../logger";
 import { WaldiezBaseRunner } from "./baseRunner";
 import { normalizeLogEntry, parseRequestId, strip_ansi } from "./common";
 import { Kernel } from "@jupyterlab/services";
-import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
 import {
-    WaldiezChatMessageProcessingResult,
+    type WaldiezChatMessageProcessingResult,
     WaldiezChatMessageProcessor,
-    WaldiezStepByStep,
-    WaldiezStepByStepProcessingResult,
+    type WaldiezStepByStep,
+    type WaldiezStepByStepProcessingResult,
     WaldiezStepByStepProcessor,
 } from "@waldiez/react";
 
@@ -132,7 +132,11 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             result = this._handleStepProcessError(rawMessage, result);
         }
         if (!result) {
-            return;
+            const chatResult = WaldiezChatMessageProcessor.process(rawMessage);
+            if (!chatResult) {
+                return;
+            }
+            return this._chatResultToStepResult(chatResult);
         }
         if (result.error) {
             const normalized = normalizeLogEntry(rawMessage);
@@ -192,12 +196,10 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
                 chatResult = WaldiezChatMessageProcessor.process(rawMessage);
                 if (!chatResult) {
                     return newResult;
-                } else {
-                    return this._chatResultToStepResult(chatResult);
                 }
-            } else {
-                return newResult;
+                return this._chatResultToStepResult(chatResult);
             }
+            return newResult;
         } catch (e) {
             return {
                 error: {
@@ -212,7 +214,11 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         chatResult: WaldiezChatMessageProcessingResult,
     ): WaldiezStepByStepProcessingResult | undefined {
         if (chatResult.participants) {
-            // Handle participants
+            return {
+                stateUpdate: {
+                    participants: chatResult.participants,
+                },
+            };
         }
         if (!chatResult.message || !chatResult.message.content) {
             return undefined;

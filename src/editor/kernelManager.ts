@@ -5,7 +5,7 @@
 import { CommandIDs } from "../commands";
 import { WALDIEZ_STRINGS } from "../constants";
 import { WaldiezLogger } from "../logger";
-import { ISessionContext } from "@jupyterlab/apputils";
+import type { ISessionContext } from "@jupyterlab/apputils";
 import { Kernel } from "@jupyterlab/services";
 import { CommandToolbarButton, kernelIcon } from "@jupyterlab/ui-components";
 import { CommandRegistry } from "@lumino/commands";

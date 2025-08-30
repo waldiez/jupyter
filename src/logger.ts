@@ -6,9 +6,15 @@ import { CommandIDs } from "./commands";
 import { WALDIEZ_STRINGS } from "./constants";
 import { copyToClipboard, strip_ansi } from "./runner/common";
 import { MainAreaWidget } from "@jupyterlab/apputils";
-import { ILogPayload, ILogger, LogConsolePanel, LogLevel, LoggerRegistry } from "@jupyterlab/logconsole";
-import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import {
+    type ILogPayload,
+    type ILogger,
+    LogConsolePanel,
+    type LogLevel,
+    LoggerRegistry,
+} from "@jupyterlab/logconsole";
+import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
+import type {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,

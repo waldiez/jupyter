@@ -6,13 +6,13 @@ import { WaldiezLogger } from "../logger";
 import { WaldiezBaseRunner } from "./baseRunner";
 import { URLExt } from "@jupyterlab/coreutils";
 import { Kernel } from "@jupyterlab/services";
-import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
 import {
-    WaldiezChatConfig,
-    WaldiezChatMessage,
+    type WaldiezChatConfig,
+    type WaldiezChatMessage,
     WaldiezChatMessageProcessor,
-    WaldiezTimelineData,
+    type WaldiezTimelineData,
 } from "@waldiez/react";
 
 /**

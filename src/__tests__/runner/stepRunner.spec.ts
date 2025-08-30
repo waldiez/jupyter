@@ -7,7 +7,7 @@ import { WaldiezLogger } from "../../logger";
 import { WaldiezStepRunner } from "../../runner";
 import { inputRequestMessage } from "../utils";
 import { Kernel } from "@jupyterlab/services";
-import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
 // Mock dependencies
 jest.mock("../../logger");

@@ -8,12 +8,12 @@ import { handleConvert, uploadFile } from "../rest";
 import { EditorWidget } from "../widget";
 import { WaldiezExecutionManager } from "./executionManager";
 import { WaldiezKernelManager } from "./kernelManager";
-import { IExecutionContext } from "./types";
+import type { IExecutionContext } from "./types";
 import { showErrorMessage } from "@jupyterlab/apputils";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { DocumentModel, DocumentWidget } from "@jupyterlab/docregistry";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
-import { ILogPayload } from "@jupyterlab/logconsole";
+import type { ILogPayload } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import { ServerConnection } from "@jupyterlab/services";
 import { ISettingRegistry } from "@jupyterlab/settingregistry";
@@ -21,7 +21,7 @@ import { CommandRegistry } from "@lumino/commands";
 import { Signal } from "@lumino/signaling";
 import { SplitPanel } from "@lumino/widgets";
 
-import { WaldiezChatConfig, WaldiezStepByStep, showSnackbar } from "@waldiez/react";
+import { type WaldiezChatConfig, type WaldiezStepByStep, showSnackbar } from "@waldiez/react";
 
 /**
  * A Waldiez editor.

@@ -7,12 +7,12 @@ import { WaldiezLogger } from "../logger";
 import { getWaldiezActualPath } from "../rest";
 import { WaldiezStandardRunner, WaldiezStepRunner } from "../runner";
 import { WaldiezKernelManager } from "./kernelManager";
-import { IEditorState, IExecutionContext } from "./types";
-import { ISessionContext } from "@jupyterlab/apputils";
-import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import type { IEditorState, IExecutionContext } from "./types";
+import type { ISessionContext } from "@jupyterlab/apputils";
+import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 import { Signal } from "@lumino/signaling";
 
-import {
+import type {
     WaldiezChatConfig,
     WaldiezChatHandlers,
     WaldiezChatMessage,

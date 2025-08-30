@@ -5,7 +5,7 @@
 import { WaldiezLogger } from "../logger";
 import { getCodeToExecute, getUploadsRoot } from "./common";
 import { Kernel } from "@jupyterlab/services";
-import {
+import type {
     IErrorMsg,
     IExecuteReplyMsg,
     IExecuteRequestMsg,

@@ -7,7 +7,7 @@ import { FACTORY_NAME, NAMESPACE, PLUGIN_ID, WALDIEZ_FILE_TYPE, WALDIEZ_STRINGS 
 import { WaldiezEditor } from "./editor";
 import { WaldiezEditorFactory } from "./factory";
 import { waldiezIcon } from "./icon";
-import { ILayoutRestorer, JupyterFrontEnd, JupyterFrontEndPlugin } from "@jupyterlab/application";
+import { ILayoutRestorer, JupyterFrontEnd, type JupyterFrontEndPlugin } from "@jupyterlab/application";
 import { ICommandPalette, WidgetTracker } from "@jupyterlab/apputils";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";

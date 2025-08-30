@@ -2,10 +2,10 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { EditorWidget, IWaldiezWidgetProps } from "../widget";
+import { EditorWidget, type IWaldiezWidgetProps } from "../widget";
 import { Signal } from "@lumino/signaling";
 
-import { WaldiezChatConfig, WaldiezStepByStep } from "@waldiez/react";
+import type { WaldiezChatConfig, WaldiezStepByStep } from "@waldiez/react";
 
 const waldiezFlow = {
     type: "flow",

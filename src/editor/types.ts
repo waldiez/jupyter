@@ -3,9 +3,9 @@
  * Copyright 2024 - 2025 Waldiez & contributors
  */
 import { Kernel } from "@jupyterlab/services";
-import { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
+import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
-import { WaldiezChatConfig, WaldiezStepByStep } from "@waldiez/react";
+import type { WaldiezChatConfig, WaldiezStepByStep } from "@waldiez/react";
 
 /**
  * The state interface for the Waldiez editor.

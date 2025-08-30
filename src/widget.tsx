@@ -3,11 +3,17 @@
  * Copyright 2024 - 2025 Waldiez & contributors
  */
 import { ReactWidget, UseSignal } from "@jupyterlab/ui-components";
-import { ISignal } from "@lumino/signaling";
+import type { ISignal } from "@lumino/signaling";
 
-import { JSX } from "react";
+import type { JSX } from "react";
 
-import { Waldiez, WaldiezChatConfig, WaldiezProps, WaldiezStepByStep, importFlow } from "@waldiez/react";
+import {
+    Waldiez,
+    type WaldiezChatConfig,
+    type WaldiezProps,
+    type WaldiezStepByStep,
+    importFlow,
+} from "@waldiez/react";
 import "@waldiez/react/dist/@waldiez.css";
 
 /**
