@@ -93,6 +93,8 @@ export class WaldiezExecutionManager {
                 breakpoints: [],
                 eventHistory: [],
                 currentEvent: undefined,
+                timeline: undefined,
+                participants: [],
                 help: undefined,
                 lastError: undefined,
                 pendingControlInput: null,
@@ -395,6 +397,7 @@ export class WaldiezExecutionManager {
             chat: undefined,
             stepByStep: this._state.stepByStep,
         });
+        // console.debug(this._state.stepByStep);
     }
 
     private _getRequestIdFromPreviousMessages(previousMessages: WaldiezChatMessage[]): string {

@@ -148,6 +148,17 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
                 this._eventHistory.add(message);
             }
         }
+        if (result.stateUpdate?.participants) {
+            this._onUpdate({
+                participants: result.stateUpdate.participants,
+            });
+            return;
+        }
+        if (result.stateUpdate?.timeline) {
+            this._onUpdate({
+                timeline: result.stateUpdate.timeline,
+            });
+        }
         if (result.stateUpdate?.eventHistory) {
             const lastEvent = result.stateUpdate.eventHistory[result.stateUpdate.eventHistory.length - 1];
             this._eventHistory = new Set([...this._eventHistory, ...result.stateUpdate.eventHistory]);
