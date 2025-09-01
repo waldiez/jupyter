@@ -4,7 +4,7 @@
  */
 import { WaldiezLogger } from "../logger";
 import { WaldiezBaseRunner } from "./baseRunner";
-import { normalizeLogEntry, parseRequestId, strip_ansi } from "./common";
+import { normalizeLogEntry, parseRequestId } from "./common";
 import { Kernel } from "@jupyterlab/services";
 import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
@@ -117,7 +117,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         if (rawMessage.endsWith("\n")) {
             rawMessage = rawMessage.slice(0, -1);
         }
-        rawMessage = strip_ansi(rawMessage);
+        // rawMessage = strip_ansi(rawMessage);
         if (rawMessage.includes(END_MARKER)) {
             this._onUpdate({ active: false });
             return;
@@ -160,7 +160,9 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             });
         }
         if (result.stateUpdate?.eventHistory) {
-            const lastEvent = result.stateUpdate.eventHistory[result.stateUpdate.eventHistory.length - 1];
+            const lastEvent =
+                result.stateUpdate?.currentEvent ||
+                result.stateUpdate.eventHistory[result.stateUpdate.eventHistory.length - 1];
             this._eventHistory = new Set([...this._eventHistory, ...result.stateUpdate.eventHistory]);
             this._currentEvent = typeof lastEvent === "object" ? lastEvent : undefined;
         }

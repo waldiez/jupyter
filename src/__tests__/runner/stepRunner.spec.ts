@@ -237,15 +237,6 @@ describe("WaldiezStepRunner", () => {
             expect(mockOnUpdate).toHaveBeenCalledWith({ active: false });
         });
 
-        it("should strip trailing newline and ANSI codes", () => {
-            const { strip_ansi } = require("../../runner/common");
-            const message = "test message\n";
-            // @ts-expect-error protected method
-            stepRunner.processMessage(message);
-
-            expect(strip_ansi).toHaveBeenCalledWith("test message");
-        });
-
         it("should parse and set request ID", () => {
             const { parseRequestId } = require("../../runner/common");
             parseRequestId.mockReturnValue("new-request-123");
@@ -399,24 +390,6 @@ describe("WaldiezStepRunner", () => {
     });
 
     describe("event history management", () => {
-        // it("should add events to history and update current event", () => {
-        //     const { WaldiezStepByStepProcessor } = require("@waldiez/react");
-        //     const event1 = { type: "event1", data: "first" };
-        //     const event2 = { type: "event2", data: "second" };
-
-        //     WaldiezStepByStepProcessor.process.mockReturnValue({
-        //         stateUpdate: {
-        //             eventHistory: [event1, event2],
-        //         },
-        //     });
-        //     // @ts-expect-error protected method
-        //     stepRunner.processMessage("test message");
-
-        //     expect(stepRunner["_eventHistory"].has(event1)).toBe(true);
-        //     expect(stepRunner["_eventHistory"].has(event2)).toBe(true);
-        //     expect(stepRunner["_currentEvent"]).toBe(event2);
-        // });
-
         it("should handle non-object events in history", () => {
             const { WaldiezStepByStepProcessor } = require("@waldiez/react");
             const stringEvent = "string event";
