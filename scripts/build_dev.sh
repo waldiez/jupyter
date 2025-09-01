@@ -128,6 +128,46 @@ if [ "${dry_run}" = "true" ]; then
     exit 0
 fi
 
+find_main_requirements() {
+    if [ -f "${ROOT_DIR}/requirements/main.txt" ]; then
+        echo "${ROOT_DIR}/requirements/main.txt"
+    elif [ -f "${ROOT_DIR}/requirements.txt" ]; then
+        echo "${ROOT_DIR}/requirements.txt"
+    elif [ -f "/tmp/requirements.txt" ]; then
+        echo "/tmp/requirements.txt"
+    else
+        echo ""
+    fi
+}
+
+requirements_file="$(find_main_requirements)"
+if [ -z "$requirements_file" ]; then
+    echo "no requirements file found"
+    exit 1
+fi
+extra_pip_args=""
+
+# Check if in a virtualenv
+in_venv=$(python3 -c 'import os,sys; print(hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and os.path.realpath(sys.base_prefix) != os.path.realpath(sys.prefix)))')
+# If not in venv, consider --user and --break-system-packages
+if [ "$in_venv" != "True" ]; then
+    # Check if pip warns about system-managed installation (PEP 668)
+    pip_output=$(python3 -m pip install --dry-run -r "$requirements_file" 2>&1)
+
+    if echo "$pip_output" | grep -q "externally managed"; then
+        extra_pip_arg="${extra_pip_arg} --break-system-packages"
+    fi
+
+    # Only add --user if not root
+    if [ "$(id -u)" -ne 0 ]; then
+        extra_pip_args="${extra_pip_arg} --user"
+    fi
+fi
+python_deps() {
+    before_requirements_packages="pip setuptools wheel build jupyter jupyterhub jupyterlab ipywidgets ipykernel"
+    python3 -m pip install --upgrade ${extra_pip_args} $before_requirements_packages
+}
+
 use_react_from_git() {
     if [ -d "${DOT_LOCAL}/waldiez-react" ]; then
         rm -rf "${DOT_LOCAL}/waldiez-react"
@@ -150,6 +190,7 @@ use_react_from_git() {
 }
 
 handle_react() {
+    python_deps
     react_build="$(check_local_react_build)"
     if [ -z "$react_build" ]; then
         use_react_from_git
@@ -189,50 +230,12 @@ build_js_lib
 # python part
 ######################################################################
 
-find_main_requirements() {
-    if [ -f "${ROOT_DIR}/requirements/main.txt" ]; then
-        echo "${ROOT_DIR}/requirements/main.txt"
-        elif [ -f "${ROOT_DIR}/requirements.txt" ]; then
-        echo "${ROOT_DIR}/requirements.txt"
-        elif [ -f "/tmp/requirements.txt" ]; then
-        echo "/tmp/requirements.txt"
-    else
-        echo ""
-    fi
-}
-
-requirements_file="$(find_main_requirements)"
-if [ -z "$requirements_file" ]; then
-    echo "no requirements file found"
-    exit 1
-fi
-extra_pip_args=""
-
-# Check if in a virtualenv
-in_venv=$(python3 -c 'import sys; print(hasattr(sys, "real_prefix") or (getattr(sys, "base_prefix", sys.prefix) != sys.prefix))')
-
-# If not in venv, consider --user and --break-system-packages
-if [ "$in_venv" != "True" ]; then
-    # Check if pip warns about system-managed installation (PEP 668)
-    pip_output=$(python3 -m pip install --dry-run -r "$requirements_file" 2>&1)
-
-    if echo "$pip_output" | grep -q "externally managed"; then
-        extra_pip_arg="${extra_pip_arg} --break-system-packages"
-    fi
-
-    # Only add --user if not root
-    if [ "$(id -u)" -ne 0 ]; then
-        extra_pip_args="${extra_pip_arg} --user"
-    fi
-fi
-
 before_python_whl() {
-    before_requirements_packages="pip setuptools wheel build jupyter jupyterhub jupyterlab ipywidgets ipykernel"
-    python3 -m pip install --upgrade $extra_pip_args $before_requirements_packages
+    python_deps
     python3 -m pip install ${extra_pip_args} -r ${requirements_file}
     python3 -m build --wheel . && \
     python3 -m pip install --force ${extra_pip_args} dist/*.whl && \
-    python3 -m pip uninstall -y waldiez autogen-agentchat
+    python3 -m pip uninstall -y waldiez
 }
 
 use_python_from_git() {
