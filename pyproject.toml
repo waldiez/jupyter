@@ -43,7 +43,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
 test = [
-    "coverage==7.10.5",
+    "coverage==7.10.6",
     "filelock==3.19.1",
     "pytest==8.4.1",
     "pytest-datadir==1.8.0",
