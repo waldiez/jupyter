@@ -105,6 +105,24 @@ export class WaldiezExecutionManager {
         };
     }
 
+    _resetStepByStepState() {
+        this._state.stepByStep = {
+            ...this._state.stepByStep,
+            active: false,
+            stepMode: true,
+            autoContinue: false,
+            breakpoints: [],
+            eventHistory: [],
+            currentEvent: undefined,
+            timeline: undefined,
+            participants: [],
+            help: undefined,
+            lastError: undefined,
+            pendingControlInput: null,
+            activeRequest: null,
+        };
+    }
+
     /**
      * Set the dependencies that handlers need access to.
      * This should be called after the manager is created.
@@ -288,7 +306,7 @@ export class WaldiezExecutionManager {
     }
 
     closeStepByStepSession(): void {
-        this._state.stepByStep = { ...this._state.stepByStep, active: false };
+        this._resetStepByStepState();
         this._signal.emit({ chat: undefined, stepByStep: undefined });
         this._stepRunner.reset();
 

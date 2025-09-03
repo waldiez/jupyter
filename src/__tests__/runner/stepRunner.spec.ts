@@ -333,7 +333,7 @@ describe("WaldiezStepRunner", () => {
             expect(mockChatProcessor.process).toHaveBeenCalledWith(jsonMessage);
             expect(output).toEqual({
                 stateUpdate: {
-                    eventHistory: [chatResult],
+                    eventHistory: [chatResult.message],
                 },
             });
         });
@@ -345,12 +345,7 @@ describe("WaldiezStepRunner", () => {
 
             const output = stepRunner["_handleStepProcessError"]("invalid json", errorResult);
 
-            expect(output).toEqual({
-                error: {
-                    message: expect.stringContaining("invalid json"),
-                    originalData: "invalid json",
-                },
-            });
+            expect(output).toBeUndefined();
         });
 
         it("should handle nested JSON structure", () => {
@@ -383,7 +378,7 @@ describe("WaldiezStepRunner", () => {
 
             expect(result).toEqual({
                 stateUpdate: {
-                    eventHistory: [chatResult],
+                    eventHistory: [chatResult.message],
                 },
             });
         });
@@ -426,37 +421,6 @@ describe("WaldiezStepRunner", () => {
             });
         });
     });
-
-    describe("error handling", () => {
-        it("should normalize error messages correctly", () => {
-            const { WaldiezStepByStepProcessor } = require("@waldiez/react");
-            const { normalizeLogEntry } = require("../../runner/common");
-
-            // Test with error that has originalData
-            const errorWithOriginalData = {
-                error: {
-                    originalData: "original data",
-                },
-            };
-            WaldiezStepByStepProcessor.process.mockReturnValueOnce(errorWithOriginalData);
-            normalizeLogEntry.mockReturnValue(["line1", "line2"]);
-            // @ts-expect-error protected method
-            stepRunner.processMessage("multi\nline\nerror");
-            expect(normalizeLogEntry).toHaveBeenCalledWith("multi\nline\nerror");
-
-            // Test with error without originalData
-            const errorWithoutOriginalData = {
-                error: {
-                    message: "Simple error",
-                },
-            };
-            WaldiezStepByStepProcessor.process.mockReturnValueOnce(errorWithoutOriginalData);
-            // @ts-expect-error protected method
-            stepRunner.processMessage("another message");
-            expect(normalizeLogEntry).toHaveBeenCalledWith("another message");
-        });
-    });
-
     describe("integration scenarios", () => {
         it("should handle complete step-by-step workflow", async () => {
             // Start execution

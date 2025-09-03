@@ -51,7 +51,14 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
      * @memberof WaldiezStepRunner
      */
     start(kernel: Kernel.IKernelConnection, filePath: string) {
+        this._eventHistory = new Set();
+        this._currentEvent = undefined;
         this.executeFile(kernel, filePath, "debug");
+        this._onUpdate({
+            active: true,
+            eventHistory: [],
+            currentEvent: undefined,
+        });
     }
 
     responded() {
@@ -169,11 +176,16 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         if (!result.stateUpdate && result.debugMessage) {
             this._eventHistory.add(result.debugMessage);
         }
+        const lastError = result.error
+            ? result.error.message
+            : this._currentEvent?.type === "error"
+              ? this._currentEvent.content.error
+              : undefined;
         this._onUpdate({
-            active: !result.error && this.running,
+            active: this.running,
             eventHistory: Array.from(this._eventHistory).reverse(),
             currentEvent: typeof this._currentEvent?.type === "string" ? this._currentEvent : undefined,
-            lastError: result.error ? result.error.message : undefined,
+            lastError,
         });
     }
 
@@ -213,13 +225,8 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
                 return this._chatResultToStepResult(chatResult);
             }
             return newResult;
-        } catch (e) {
-            return {
-                error: {
-                    message: (e as Error).message,
-                    originalData: rawMessage,
-                },
-            };
+        } catch (_) {
+            return undefined;
         }
     }
 
@@ -238,8 +245,9 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         }
         return {
             stateUpdate: {
-                eventHistory: [chatResult],
+                eventHistory: [chatResult.message],
             },
+            isWorkflowEnd: chatResult.isWorkflowEnd,
         };
     }
 }
