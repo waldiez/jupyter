@@ -276,9 +276,9 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             await showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE);
             return;
         }
-        // if (!this._logger.isVisible) {
-        //     this._logger.toggle();
-        // }
+        if (!this._logger.isVisible) {
+            this._logger.toggle();
+        }
         await this._preRun(contents);
         try {
             const context: IExecutionContext = {
