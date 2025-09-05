@@ -5597,7 +5597,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.5.10
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=c6319665b87e148f53f8574ad23b1c041943a236"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=0f277b85e39c4c58c8e2afe734e278a9d0d5cc0d"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.3.1"
     "@fontsource/fredoka": "npm:^5.2.8"
@@ -5625,7 +5625,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/727f627005937cebc352cef84693978b080340a622eb805db3f34f5d1c075d07c705d9d101ecff2d5ac25603954ae60057580d8ed147a51cdaba0f98d50e8811
+  checksum: 10/21bb9e6249f57e2b7726cc19980ad0a411d3d84b3f4143c5169a872458ffacd6d188c83fc1139d4b051b12ada4916a7db7ec871b13b652b143badd8c79344eb9
   languageName: node
   linkType: hard
 
