@@ -66,7 +66,8 @@ describe("EditorWidget", () => {
 
         // Test with actual chat config (should use the chat value)
         const chatConfig: WaldiezChatConfig = {
-            showUI: true,
+            show: true,
+            active: true,
             messages: [],
             timeline: undefined,
             userParticipants: [],

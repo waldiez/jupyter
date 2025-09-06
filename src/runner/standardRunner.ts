@@ -147,13 +147,13 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
         if (!this._running) {
             return;
         }
-        const newImgurl = this._requestId
+        const newImgUrl = this._requestId
             ? URLExt.join(this._baseUrl, "waldiez", "files") +
               `?view=${this._uploadsRoot}/${this._requestId}.png`
             : undefined;
         let result;
         try {
-            result = WaldiezChatMessageProcessor.process(rawMessage, this._requestId, newImgurl);
+            result = WaldiezChatMessageProcessor.process(rawMessage, this._requestId, newImgUrl);
         } catch {
             //
         }

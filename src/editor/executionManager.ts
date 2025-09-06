@@ -80,13 +80,15 @@ export class WaldiezExecutionManager {
 
         this._state = {
             chat: {
-                showUI: false,
+                show: false,
+                active: false,
                 messages: [] as WaldiezChatMessage[],
                 timeline: undefined,
                 userParticipants: [],
                 handlers: chatHandlers,
             },
             stepByStep: {
+                show: false,
                 active: false,
                 stepMode: true,
                 autoContinue: false,
@@ -247,7 +249,8 @@ export class WaldiezExecutionManager {
         this._standardRunner.setTimelineData(undefined);
         this._signal.emit({
             chat: {
-                showUI: false,
+                show: false,
+                active: false,
                 messages: this._standardRunner.getPreviousMessages(),
                 timeline: undefined,
                 userParticipants: this._standardRunner.getUserParticipants(),
@@ -355,7 +358,8 @@ export class WaldiezExecutionManager {
 
         const chat: WaldiezChatConfig = {
             ...this._state.chat,
-            showUI: true,
+            show: true,
+            active: true,
             messages,
             timeline: undefined,
             userParticipants: this._standardRunner.getUserParticipants(),
@@ -405,10 +409,11 @@ export class WaldiezExecutionManager {
     }
 
     private _onStepUpdate(updateData: Partial<WaldiezStepByStep>): void {
-        const { active, ...restStepUpdateData } = updateData;
+        const { show, active, ...restStepUpdateData } = updateData;
         this._state.stepByStep = {
             ...this._state.stepByStep,
             ...restStepUpdateData,
+            show: typeof show === "boolean" ? show : this._state.stepByStep.show,
             active: typeof active === "boolean" ? active : this._state.stepByStep.active,
         };
         this._signal.emit({

@@ -16,6 +16,7 @@ import {
     WaldiezStepByStepProcessor,
 } from "@waldiez/react";
 
+// cspell: disable-next-line
 const CONTROL_PROMPT = "[Step] (c)ontinue, (r)un, (q)uit, (i)nfo, (h)elp, (st)ats: ";
 const END_MARKER = "<Waldiez> - Done running the flow.";
 
@@ -55,6 +56,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         this._currentEvent = undefined;
         this.executeFile(kernel, filePath, "debug");
         this._onUpdate({
+            show: true,
             active: true,
             eventHistory: [],
             currentEvent: undefined,

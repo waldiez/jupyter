@@ -9,4 +9,4 @@ pytest-sugar==1.1.1
 pytest-timeout==2.4.0
 pytest-tornasync==0.6.0.post2
 pytest-xdist==3.8.0
-pytest==8.4.1
+pytest==8.4.2

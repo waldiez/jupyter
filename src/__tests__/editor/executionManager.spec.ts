@@ -257,7 +257,8 @@ describe("WaldiezExecutionManager", () => {
             expect(kernelManager.restart).toHaveBeenCalled();
             expect(signalEmitSpy).toHaveBeenCalledWith({
                 chat: {
-                    showUI: false,
+                    show: false,
+                    active: false,
                     messages: [],
                     timeline: undefined,
                     userParticipants: [],
@@ -613,6 +614,7 @@ describe("WaldiezExecutionManager", () => {
         it("should preserve existing state when updating with partial data", () => {
             // Set initial state
             executionManager["_state"].stepByStep = {
+                show: false,
                 active: false,
                 stepMode: true,
                 autoContinue: true,
@@ -634,6 +636,7 @@ describe("WaldiezExecutionManager", () => {
             executionManager["_onStepUpdate"](updateData);
 
             expect(executionManager["_state"].stepByStep).toEqual({
+                show: false, // Preserved
                 active: false, // Preserved
                 stepMode: true, // Preserved
                 autoContinue: true, // Preserved
