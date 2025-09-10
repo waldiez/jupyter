@@ -26,6 +26,10 @@ from packaging import version
 REGISTRY_BASE_URL = "https://registry.npmjs.org"
 PACKAGE_NAME = "monaco-editor"
 DETAILS_JSON = "monaco_details.json"
+# 0.53.0 does not seem to play well with @monaco-editor/react
+# let's check periodically and change it to None when we are good.
+PINNED_VERSION: str | None = "0.52.2"
+
 LOG = logging.getLogger(__name__)
 
 # pylint: disable=broad-except
@@ -90,7 +94,7 @@ def ensure_extra_static_files(static_root_path: str | Path) -> None:
 
 
 def _get_package_details(static_root_path: Path) -> tuple[str, str, str]:
-    """Get details about the latest version of monaco editor.
+    """Get details about the target version of monaco editor.
 
     Parameters
     ----------
@@ -100,21 +104,24 @@ def _get_package_details(static_root_path: Path) -> tuple[str, str, str]:
     Returns
     -------
     tuple[str, str, str]
-        The latest version, download url, and SHA-1 sum.
+        The target version, download url, and SHA-1 sum.
     """
     cached_details: tuple[str, str, str] | None = _get_cached_details(
         static_root_path=static_root_path,
     )
     if cached_details:
-        return cached_details
+        if not PINNED_VERSION or PINNED_VERSION == cached_details[0]:
+            return cached_details
     http = urllib3.PoolManager()
     response = http.request("GET", f"{REGISTRY_BASE_URL}/{PACKAGE_NAME}")
     data = json.loads(response.data)
-    latest_version = data["dist-tags"]["latest"]
-    latest_version_data = data["versions"][latest_version]
-    url = latest_version_data["dist"]["tarball"]
-    sha_sum = latest_version_data["dist"]["shasum"]
-    return latest_version, url, sha_sum
+    target_version = data["dist-tags"]["latest"]
+    if PINNED_VERSION and PINNED_VERSION in data["versions"]:
+        target_version = PINNED_VERSION
+    target_version_data = data["versions"][target_version]
+    url = target_version_data["dist"]["tarball"]
+    sha_sum = target_version_data["dist"]["shasum"]
+    return target_version, url, sha_sum
 
 
 def _download_monaco_editor(
@@ -141,18 +148,25 @@ def _download_monaco_editor(
     os.makedirs(static_dir, exist_ok=True)
     tmp_dir = _extract_monaco_editor_files(response)
     monaco_editor_path = os.path.join(tmp_dir, "package")
-    for src_dir_name in (os.path.join("min", "vs"), "min-maps"):
-        src_dir = os.path.join(monaco_editor_path, src_dir_name)
-        if not os.path.exists(src_dir):
-            if os.path.exists(monaco_editor_path):
-                shutil.rmtree(monaco_editor_path)
-            raise FileNotFoundError("Failed to extract monaco editor files.")
-        dst_din_name = src_dir_name if src_dir_name == "min-maps" else "vs"
-        dst_dir = os.path.join(static_dir, dst_din_name)
+    min_vs = os.path.join("min", "vs")
+    src_dir = os.path.join(monaco_editor_path, min_vs)
+    if not os.path.exists(src_dir):
+        if os.path.exists(monaco_editor_path):
+            shutil.rmtree(monaco_editor_path)
+        raise FileNotFoundError("Failed to extract monaco editor files.")
+    dst_dir = os.path.join(static_dir, "vs")
+    if os.path.exists(dst_dir):
+        shutil.rmtree(dst_dir)
+    print(f"Copying {src_dir} to {dst_dir}")
+    shutil.copytree(src_dir, dst_dir)
+    # min-maps might not exist (e.g. in v0.53.0)
+    min_maps = os.path.join(monaco_editor_path, "min-maps")
+    if os.path.exists(min_maps):
+        dst_dir = os.path.join(static_dir, "min-maps")
         if os.path.exists(dst_dir):
             shutil.rmtree(dst_dir)
-        print(f"Copying {src_dir} to {dst_dir}")
-        shutil.copytree(src_dir, dst_dir)
+        print(f"Copying {min_maps} to {dst_dir}")
+        shutil.copytree(min_maps, dst_dir)
     shutil.rmtree(tmp_dir)
 
 
@@ -191,7 +205,7 @@ def _get_cached_details(
     Returns
     -------
     tuple[str, str, str], optional
-        The latest version, download url, and SHA-1 sum.
+        The target version, download url, and SHA-1 sum.
     """
     details_file = static_root_path / DETAILS_JSON
     # pylint: disable=broad-except, too-many-try-statements

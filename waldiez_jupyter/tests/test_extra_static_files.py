@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 import pytest
 
+import waldiez_jupyter.handlers.extra_static_files as mod
 from waldiez_jupyter.handlers.extra_static_files import (
     DETAILS_JSON,
     ensure_extra_static_files,
@@ -32,7 +33,8 @@ def test_ensure_extra_static_files(tmp_path: Path) -> None:
     }
     details_json = static_root_path / DETAILS_JSON
     details_json.write_text(json.dumps(details))
-    ensure_extra_static_files(static_root_path)
+    with patch.object(mod, "PINNED_VERSION", None):
+        ensure_extra_static_files(static_root_path)
     assert (static_root_path / "vs" / "loader.js").exists()
     assert details_json.exists()
 
