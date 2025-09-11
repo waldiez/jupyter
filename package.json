@@ -22,6 +22,10 @@
         {
             "name": "Lazaros Toumanidis",
             "email": "laztoum@waldiez.io"
+        },
+        {
+            "name": "Christos Chatzigeorgiou",
+            "email": "chrihatz@waldiez.io"
         }
     ],
     "files": [
@@ -97,8 +101,7 @@
         "@jupyterlab/settingregistry": "^4.4.7",
         "@jupyterlab/translation": "^4.4.7",
         "@jupyterlab/ui-components": "^4.4.7",
-        "@jupyterlab/ui-components-extension": "^4.4.7",
-        "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+        "@jupyterlab/ui-components-extension": "^4.4.7"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -122,6 +125,7 @@
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.43.0",
         "@typescript-eslint/parser": "^8.43.0",
+        "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev",
         "all-contributors-cli": "^6.26.1",
         "babel-jest": "^30.1.2",
         "copyfiles": "^2.4.1",
