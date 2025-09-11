@@ -112,8 +112,10 @@ dev-stop:
 
 .PHONY: build-py
 build-py:
-	$(PYTHON) -m pip install build
-	$(PYTHON) -m build
+	$(PYTHON) -c 'import shutil; shutil.rmtree("dist", ignore_errors=True)'
+	$(PYTHON) -m pip install build wheel twine hatchling hatch-nodejs-version hatch-jupyter-builder jupyterlab
+	$(PYTHON) -m hatchling build -t sdist -t wheel -d dist
+	$(PYTHON) -m twine check dist/*
 
 .PHONY: build-js
 build-js:
