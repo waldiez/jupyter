@@ -5544,7 +5544,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.5.10
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=9b704f90b4cd601ed9e90a2a8a2a0807b8f96248"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=1f1163fc4be61575784445e82597b8186f9acd76"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.8"
@@ -5554,6 +5554,7 @@ __metadata:
     "@radix-ui/react-tooltip": "npm:^1.2.8"
     "@xyflow/react": "npm:^12.8.4"
     framer-motion: "npm:^12.23.12"
+    highlight.js: "npm:^11.11.1"
     jszip: "npm:^3.10.1"
     marked: "npm:^16.2.1"
     marked-highlight: "npm:^2.2.2"
@@ -5572,7 +5573,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/b21c55900d8343802b93d52fdcf507746e346f05bb3e071f6ee51d7d2ae502acab764b64bb5847cfcf1f459e4bad16c8f52eb8a29353700f1586416deb6c4148
+  checksum: 10/770b27db34afffe29be175c927dac6954f69152e6273943e3588e4e81ffa77fe6284ec3af4fdbdfa78aef57989a7a7ae29c2dde15fe5b5e2dbb035cab07980b7
   languageName: node
   linkType: hard
 
