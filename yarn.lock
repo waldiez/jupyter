@@ -5597,7 +5597,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.5.10
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=028ca4a21f58275eef7f1abddadc82efdf0dc25c"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=54caaacd2636f01c945ad70445979890f12502ed"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.8"
@@ -5623,9 +5623,37 @@ __metadata:
     zundo: "npm:^2.3.0"
     zustand: "npm:^5.0.8"
   peerDependencies:
+    "@monaco-editor/react": ^4.7.0
+    "@xyflow/react": ^12.8.4
+    framer-motion: ^12.23.12
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/bcf91fa9778be7d0cf1c455758c8b40d3292b253e1b603171da20dc0ae6193dea73e02f1ef33e18ac389eace15cdcb3d15a0316ed00b5512207712d7f13c9622
+    react-icons: ^5.5.0
+    react-markdown: ^10.1.0
+    react-select: ^5.10.2
+    recharts: ^3.2.0
+    rehype-highlight: ^7.0.2
+    remark-gfm: ^4.0.1
+  peerDependenciesMeta:
+    "@monaco-editor/react":
+      optional: false
+    "@xyflow/react":
+      optional: false
+    framer-motion:
+      optional: false
+    react-icons:
+      optional: false
+    react-markdown:
+      optional: false
+    react-select:
+      optional: false
+    recharts:
+      optional: false
+    rehype-highlight:
+      optional: false
+    remark-gfm:
+      optional: false
+  checksum: 10/76c2bc5d114a9719cdc5171be5fadaff56fdbe65e20fc6299399ff5e6757a229f6125c2e1198cc3bf191521158288963a5c42f186750022bcc3ae0affcacc550
   languageName: node
   linkType: hard
 
