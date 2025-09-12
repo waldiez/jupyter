@@ -91,7 +91,7 @@ test:
 		--cov-report lcov:${.REPORTS_DIR}/lcov.info \
 		--junitxml=${.REPORTS_DIR}/xunit.xml \
 		${.PACKAGE_NAME}/tests
-	python scripts/merge_lcov.py
+	$(PYTHON) scripts/merge_lcov.py
 
 .PHONY: .pre-dev
 .pre-dev:
