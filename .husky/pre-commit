@@ -1,1 +1,49 @@
-npx lint-staged --relative
+#!/usr/bin/env sh
+set -e
+
+FORCE_MODE=0
+
+# Check for --force
+for arg in "$@"; do
+    if [ "$arg" = "--force" ]; then
+        FORCE_MODE=1
+        break
+    fi
+done
+HERE="$(cd "$(dirname "$0")" && pwd)"
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+# Detect staged TS/JS/CSS/JSON/YAML/Markdown files
+FROM_NPM=$(echo "${STAGED_FILES}" | grep -E '\.(js|jsx|ts|tsx|css|json|yml|yaml)$' || true)
+
+# Detect staged Python files
+PY_FILES=$(echo "$STAGED_FILES" | grep -E '\.(py|yml|yaml|md|toml)$' || true)
+
+# --- React / TS side ---
+if command -v npx >/dev/null 2>&1 && [ -f "package.json" ]; then
+    if [ "${FORCE_MODE}" -eq 1 ]; then
+        echo "Running lint-staged (React/TS/JS files), forced..."
+        bun run lint
+    else
+        if [ -n "${FROM_NPM}" ]; then
+            echo "Running lint-staged (React/TS/JS files)..."
+            npx lint-staged --relative
+        else
+            echo "No JS/TS/CSS/JSON files to lint."
+        fi
+    fi
+fi
+
+# --- Python side ---
+if command -v pre-commit >/dev/null 2>&1 && [ -f ".pre-commit-config.yaml" ]; then
+    if [ "$FORCE_MODE" -eq 1 ]; then
+        echo "Running pre-commit on all files (forced)..."
+        pre-commit run --all-files
+    else
+        if [ -n "${PY_FILES}" ]; then
+            echo "Running pre-commit on staged Python files..."
+            pre-commit hook-impl --config=.pre-commit-config.yaml --hook-dir "${HERE}" --hook-type=pre-commit
+        else
+            echo "No PY/YAML/MD/TOML files to lint."
+        fi
+    fi
+fi
