@@ -120,7 +120,7 @@
         "@types/babel__preset-env": "^7.10.0",
         "@types/jest": "^30.0.0",
         "@types/json-schema": "^7.0.15",
-        "@types/node": "^24.3.1",
+        "@types/node": "^24.3.3",
         "@types/react": "^18.3.24",
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.43.0",
@@ -167,8 +167,7 @@
         "yjs": "^13.6.27"
     },
     "lint-staged": {
-        "*": [
-            "yarn run format",
+        "*.{js,jsx,ts,tsx,json,css,md,yml,yaml}": [
             "yarn run lint"
         ]
     },

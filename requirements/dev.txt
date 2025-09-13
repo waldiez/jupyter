@@ -5,7 +5,7 @@ black[jupyter]==25.1.0
 flake8==7.3.0
 isort==6.0.1
 jupyterlab==4.4.7
-mypy==1.17.1
+mypy==1.18.1
 pre-commit==4.3.0
 pydocstyle==6.3.0
 pylint==3.3.8
