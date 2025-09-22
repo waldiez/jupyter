@@ -361,16 +361,11 @@ export class WaldiezExecutionManager {
             show: true,
             active: true,
             messages,
-            timeline: undefined,
             userParticipants: this._standardRunner.getUserParticipants(),
             activeRequest: {
                 request_id,
                 prompt: this._state.stdinRequest?.content.prompt ?? "> ",
                 password: this._state.stdinRequest?.content.password ?? false,
-            },
-            handlers: {
-                ...this._state.chat.handlers,
-                onClose: undefined,
             },
         };
         this._signal.emit({ chat, stepByStep: undefined });
@@ -420,7 +415,6 @@ export class WaldiezExecutionManager {
             chat: undefined,
             stepByStep: this._state.stepByStep,
         });
-        // console.debug(this._state.stepByStep);
     }
 
     private _getRequestIdFromPreviousMessages(previousMessages: WaldiezChatMessage[]): string {
@@ -432,8 +426,7 @@ export class WaldiezExecutionManager {
     }
 
     dispose(): void {
-        this._standardRunner.reset();
-        this._standardRunner.setTimelineData(undefined);
+        this._standardRunner.reset(true);
         this._stepRunner.reset();
     }
 }

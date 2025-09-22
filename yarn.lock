@@ -8352,10 +8352,10 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^12.23.16":
-  version: 12.23.16
-  resolution: "framer-motion@npm:12.23.16"
+  version: 12.23.18
+  resolution: "framer-motion@npm:12.23.18"
   dependencies:
-    motion-dom: "npm:^12.23.12"
+    motion-dom: "npm:^12.23.18"
     motion-utils: "npm:^12.23.6"
     tslib: "npm:^2.4.0"
   peerDependencies:
@@ -8369,7 +8369,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/0b4080d43d5640083aecba6401a02269e17a866ab5ecbcf7e6d1207f7094f32c8258f0c486eb13c3282589892e16ba3f57fc825f5571361637867815800b2827
+  checksum: 10/6225645a9bceea64e4720d25609cd7bfebf1c17512e557e7db83b725ea3f2496fd77df071b7ca9e26adf614bd012b46e084c4acdf0bdc6dcb1640111df221294
   languageName: node
   linkType: hard
 
@@ -11331,12 +11331,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^12.23.12":
-  version: 12.23.12
-  resolution: "motion-dom@npm:12.23.12"
+"motion-dom@npm:^12.23.18":
+  version: 12.23.18
+  resolution: "motion-dom@npm:12.23.18"
   dependencies:
     motion-utils: "npm:^12.23.6"
-  checksum: 10/e13cbd1f32ad30dc642ebc83f7f35d0fb76c4d93902daebdbbea2cdb85bb07481fb4fe315b3e2c899076dab5490fb611ff803c334b336bc4fcd59b9a1aa6d7ff
+  checksum: 10/22f46065ca382d47974a50c75cf906f6bea3cc20c106d46dff8e3e811bc934cf0ff9dacafdc948de82b9b0b579c83ed62646c16e4c058311209099b781348465
   languageName: node
   linkType: hard
 
@@ -11378,11 +11378,11 @@ __metadata:
   linkType: hard
 
 "nanoid@npm:^5.1.5":
-  version: 5.1.5
-  resolution: "nanoid@npm:5.1.5"
+  version: 5.1.6
+  resolution: "nanoid@npm:5.1.6"
   bin:
     nanoid: bin/nanoid.js
-  checksum: 10/6de2d006b51c983be385ef7ee285f7f2a57bd96f8c0ca881c4111461644bd81fafc2544f8e07cb834ca0f3e0f3f676c1fe78052183f008b0809efe6e273119f5
+  checksum: 10/4109dbcf596d7f297a9b42f459b8f01694a03ebbdd2f41408d963ad54e5ec7234cbe7b4acad137751f31add11bb4fb3415a3e688082516745812811f05570014
   languageName: node
   linkType: hard
 

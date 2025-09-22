@@ -145,7 +145,10 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             if (!chatResult) {
                 return;
             }
-            return this._chatResultToStepResult(chatResult);
+            result = this._chatResultToStepResult(chatResult);
+            if (!result) {
+                return;
+            }
         }
         if (result.error) {
             const normalized = normalizeLogEntry(rawMessage);
@@ -235,6 +238,13 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
     private _chatResultToStepResult(
         chatResult: WaldiezChatMessageProcessingResult,
     ): WaldiezStepByStepProcessingResult | undefined {
+        if (chatResult.timeline) {
+            return {
+                stateUpdate: {
+                    timeline: chatResult.timeline,
+                },
+            };
+        }
         if (chatResult.participants) {
             return {
                 stateUpdate: {

@@ -57,10 +57,13 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
      * @public
      * @memberof WaldiezStandardRunner
      */
-    reset() {
+    reset(clearTimeline: boolean = false) {
         super.reset();
         this._messages = [];
         this._userParticipants = [];
+        if (clearTimeline) {
+            this.setTimelineData(undefined);
+        }
     }
 
     /**
