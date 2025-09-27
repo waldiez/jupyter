@@ -9,11 +9,11 @@
         "test:update": "yarn playwright test --update-snapshots"
     },
     "devDependencies": {
-        "@jupyterlab/galata": "^5.4.7",
-        "@playwright/test": "^1.55.0"
+        "@jupyterlab/galata": "^5.4.9",
+        "@playwright/test": "^1.55.1"
     },
     "resolutions": {
         "brace-expansion": "^2.0.2"
     },
-    "packageManager": "yarn@4.9.4"
+    "packageManager": "yarn@4.10.3"
 }
