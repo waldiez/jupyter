@@ -126,7 +126,19 @@ describe("WaldiezStepRunner", () => {
 
             stepRunner.start(mockKernel, filePath);
 
-            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug");
+            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug", undefined);
+        });
+
+        it("should call executeFile with debug mode and initial breakpoints", () => {
+            const executeFileSpy = jest.spyOn(stepRunner as any, "executeFile");
+            const filePath = "/path/to/test.waldiez";
+            const breakpoints = [
+                { type: "event" as const, event_type: "tool_call", description: "Break on tool calls" },
+            ];
+
+            stepRunner.start(mockKernel, filePath, breakpoints);
+
+            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug", ["event:tool_call"]);
         });
     });
 

@@ -9,6 +9,7 @@ import type { JSX } from "react";
 
 import {
     Waldiez,
+    type WaldiezBreakpoint,
     type WaldiezChatConfig,
     type WaldiezProps,
     type WaldiezStepByStep,
@@ -36,7 +37,7 @@ export interface IWaldiezWidgetProps {
     jsonData: Record<string, any>;
     signal: ISignal<any, { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }>;
     onRun?: (flow: string) => void;
-    onStepRun?: (flow: string) => void;
+    onStepRun?: (flow: string, breakpoints?: (string | WaldiezBreakpoint)[]) => void;
     onConvert?: (flow: string, to: "py" | "ipynb") => void;
     onChange?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;

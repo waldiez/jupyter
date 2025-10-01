@@ -13,6 +13,7 @@ import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages"
 import { Signal } from "@lumino/signaling";
 
 import type {
+    WaldiezBreakpoint,
     WaldiezChatConfig,
     WaldiezChatHandlers,
     WaldiezChatMessage,
@@ -207,7 +208,10 @@ export class WaldiezExecutionManager {
     }
 
     // Step-by-step execution methods
-    async executeStepByStep(context: IExecutionContext): Promise<void> {
+    async executeStepByStep(
+        context: IExecutionContext,
+        breakpoints?: (string | WaldiezBreakpoint)[],
+    ): Promise<void> {
         if (!context.kernel) {
             throw new Error(WALDIEZ_STRINGS.NO_KERNEL);
         }
@@ -216,7 +220,7 @@ export class WaldiezExecutionManager {
 
         try {
             const actualPath = await getWaldiezActualPath(context.filePath);
-            this._stepRunner.start(context.kernel, actualPath);
+            this._stepRunner.start(context.kernel, actualPath, breakpoints);
         } catch (err) {
             this._logger.log({
                 data: (err as Error).message || String(err),

@@ -9,6 +9,7 @@ import { Kernel } from "@jupyterlab/services";
 import type { IInputRequestMsg } from "@jupyterlab/services/lib/kernel/messages";
 
 import {
+    type WaldiezBreakpoint,
     type WaldiezChatMessageProcessingResult,
     WaldiezChatMessageProcessor,
     type WaldiezStepByStep,
@@ -19,6 +20,21 @@ import {
 // cspell: disable-next-line
 const CONTROL_PROMPT = "[Step] (c)ontinue, (r)un, (q)uit, (i)nfo, (h)elp, (st)ats: ";
 const END_MARKER = "<Waldiez> - Done running the flow.";
+
+const waldiezBreakpointToString: (breakpoint: WaldiezBreakpoint | string) => string = bp => {
+    if (typeof bp === "string") {
+        return bp;
+    }
+    let bp_string = "";
+    if (bp.type === "event" && bp.event_type) {
+        bp_string += `${bp.type}:${bp.event_type}`;
+    } else if (bp.type === "agent" && bp.agent) {
+        bp_string += `${bp.type}:${bp.agent}`;
+    } else if (bp.type === "agent_event") {
+        //
+    }
+    return bp_string;
+};
 
 export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepByStep>> {
     private _eventHistory: Set<Record<string, any>>;
@@ -51,15 +67,20 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
      * @param filePath The path of the waldiez file
      * @memberof WaldiezStepRunner
      */
-    start(kernel: Kernel.IKernelConnection, filePath: string) {
+    start(kernel: Kernel.IKernelConnection, filePath: string, breakpoints?: (string | WaldiezBreakpoint)[]) {
         this._eventHistory = new Set();
         this._currentEvent = undefined;
-        this.executeFile(kernel, filePath, "debug");
+        let initialBreakpoints: string[] | undefined = undefined;
+        if (breakpoints) {
+            initialBreakpoints = breakpoints.map(waldiezBreakpointToString);
+        }
+        this.executeFile(kernel, filePath, "debug", initialBreakpoints);
         this._onUpdate({
             show: true,
             active: true,
             eventHistory: [],
             currentEvent: undefined,
+            breakpoints,
         });
     }
 

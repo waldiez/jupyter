@@ -19,7 +19,6 @@ import type {
  */
 export abstract class WaldiezBaseRunner<TUpdate = any> {
     protected _running: boolean = false;
-    // private _kernel: Kernel.IKernelConnection | null = null;
     protected _future?: Kernel.IShellFuture<IExecuteRequestMsg, IExecuteReplyMsg>;
     protected readonly _onStdin: (msg: IInputRequestMsg) => void;
     protected _logger: WaldiezLogger;
@@ -93,18 +92,19 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
      * @param kernel The kernel to run the code
      * @param filePath The path of the waldiez file
      * @param executionMode The execution mode ('standard' or 'debug')
+     * @param breakpoints Initial breakpoints for 'debug' mode.
      * @protected
      */
     protected executeFile(
         kernel: Kernel.IKernelConnection,
         filePath: string,
         executionMode: "standard" | "debug",
+        breakpoints?: string[],
     ) {
         if (this._running) {
             this._logger.error("A waldiez flow is already running");
             return;
         }
-        // this._kernel = kernel;
         this._inputRequest = null;
         this._running = true;
         this._requestId = null;
@@ -112,7 +112,8 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
         this._future = undefined;
         this._uploadsRoot = getUploadsRoot(filePath);
 
-        const code = getCodeToExecute(filePath, executionMode);
+        const code = getCodeToExecute(filePath, executionMode, breakpoints);
+        console.debug(code);
         this._future = kernel.requestExecute(
             {
                 code,

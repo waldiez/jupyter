@@ -21,7 +21,12 @@ import { CommandRegistry } from "@lumino/commands";
 import { Signal } from "@lumino/signaling";
 import { SplitPanel } from "@lumino/widgets";
 
-import { type WaldiezChatConfig, type WaldiezStepByStep, showSnackbar } from "@waldiez/react";
+import {
+    type WaldiezBreakpoint,
+    type WaldiezChatConfig,
+    type WaldiezStepByStep,
+    showSnackbar,
+} from "@waldiez/react";
 
 /**
  * A Waldiez editor.
@@ -271,7 +276,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
     }
 
-    private async _onStepRun(contents: string): Promise<void> {
+    private async _onStepRun(contents: string, breakpoints?: (string | WaldiezBreakpoint)[]): Promise<void> {
         if (!this._kernelManager.kernel) {
             await showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE);
             return;
@@ -286,7 +291,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 filePath: this.context.path,
                 contents,
             };
-            await this._executionManager.executeStepByStep(context);
+            await this._executionManager.executeStepByStep(context, breakpoints);
         } catch (err) {
             const errorMsg = `Error executing flow: ${(err as Error).message || err}`;
             showSnackbar({

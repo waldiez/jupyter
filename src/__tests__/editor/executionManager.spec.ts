@@ -163,7 +163,11 @@ describe("WaldiezExecutionManager", () => {
                 chat: undefined,
                 stepByStep: undefined,
             });
-            expect(mockStepRunner.start).toHaveBeenCalledWith(context.kernel, "/actual/path/test.waldiez");
+            expect(mockStepRunner.start).toHaveBeenCalledWith(
+                context.kernel,
+                "/actual/path/test.waldiez",
+                undefined,
+            );
         });
 
         it("should throw error when no kernel", async () => {

@@ -9,7 +9,16 @@
  * @param mode The mode to run the waldiez file in ("standard" or "debug")
  * @returns The code to execute
  */
-export const getCodeToExecute = (filePath: string, mode: "standard" | "debug") => {
+export const getCodeToExecute = (filePath: string, mode: "standard" | "debug", breakpoints?: string[]) => {
+    let breakpointsArg = " ";
+    if (mode === "debug" && breakpoints) {
+        breakpointsArg = " breakpoints=[";
+        breakpoints.forEach(bp => {
+            breakpointsArg += `"${bp}",`;
+        });
+        breakpointsArg = breakpointsArg.slice(0, -1);
+        breakpointsArg += "], ";
+    }
     return (
         "from pathlib import Path\n" +
         "from waldiez import WaldiezRunner\n" +
@@ -17,7 +26,7 @@ export const getCodeToExecute = (filePath: string, mode: "standard" | "debug") =
         'uploads_root = Path(file_path).parent / "uploads"\n' +
         'dot_env_path = Path(file_path).parent / ".env"\n' +
         'cwd_dot_env_path = Path.cwd() / ".env"\n' +
-        `runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}")\n` +
+        `runner = WaldiezRunner.load(waldiez_file=file_path,${breakpointsArg}mode="${mode}")\n` +
         "if dot_env_path.exists():\n" +
         "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=dot_env_path.resolve())\n" +
         "elif cwd_dot_env_path.exists():\n" +
