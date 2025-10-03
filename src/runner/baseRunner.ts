@@ -113,7 +113,6 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
         this._uploadsRoot = getUploadsRoot(filePath);
 
         const code = getCodeToExecute(filePath, executionMode, breakpoints);
-        console.debug(code);
         this._future = kernel.requestExecute(
             {
                 code,
@@ -160,7 +159,7 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
         };
 
         this._future.done.catch(err => {
-            if (err.message) {
+            if (this._running && err.message) {
                 this._logger.error(err.message);
             }
             this.reset();

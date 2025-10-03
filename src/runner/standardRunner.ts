@@ -45,10 +45,7 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
      * @memberof WaldiezStandardRunner
      */
     run(kernel: Kernel.IKernelConnection, filePath: string) {
-        this._messages = [];
-        this._userParticipants = [];
-        this._timelineData = undefined;
-
+        this.reset(true);
         this.executeFile(kernel, filePath, "standard");
     }
 
@@ -188,6 +185,7 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
         }
         if (result.participants && result.participants.length > 0) {
             // Update user participants
+            this._timelineData = undefined;
             this._userParticipants = Array.from(
                 new Set([
                     ...this._userParticipants,
@@ -197,7 +195,11 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
                         .filter(Boolean),
                 ]),
             );
-            this._onUpdate({ userParticipants: this._userParticipants, activeRequest: undefined });
+            this._onUpdate({
+                userParticipants: this._userParticipants,
+                timeline: undefined,
+                activeRequest: undefined,
+            });
         }
         // Update request ID if needed
         if (result.message && result.message.type === "input_request" && result.requestId) {

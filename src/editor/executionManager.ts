@@ -268,7 +268,7 @@ export class WaldiezExecutionManager {
 
     handleClose(): void {
         this._state.stdinRequest = null;
-        this._standardRunner.reset();
+        this._standardRunner.reset(true);
         this._signal.emit({
             chat: undefined,
             stepByStep: undefined,
