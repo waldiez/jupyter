@@ -16,7 +16,9 @@ export const getCodeToExecute = (filePath: string, mode: "standard" | "debug", b
         breakpoints.forEach(bp => {
             breakpointsArg += `"${bp}",`;
         });
-        breakpointsArg = breakpointsArg.slice(0, -1);
+        if (breakpoints.length > 0) {
+            breakpointsArg = breakpointsArg.slice(0, -1);
+        }
         breakpointsArg += "], ";
     }
     return (
