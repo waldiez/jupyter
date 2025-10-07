@@ -10,7 +10,7 @@
     },
     "devDependencies": {
         "@jupyterlab/galata": "^5.4.9",
-        "@playwright/test": "^1.55.1"
+        "@playwright/test": "^1.56.0"
     },
     "resolutions": {
         "brace-expansion": "^2.0.2"
