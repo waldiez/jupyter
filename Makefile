@@ -51,7 +51,7 @@ format:
 
 .PHONY: init
 init:
-	python scripts/init.py
+	$(PYTHON) scripts/init.py
 
 .PHONY: lint
 lint:
