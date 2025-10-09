@@ -61,12 +61,17 @@ jobs:
       - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
+          package-manager-cache: false
+
+      - name: Install corepack and yarn
+        run: |
+          corepack enable
+          yarn set version stable
+
       - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
-      - run: |
-          corepack enable
-          yarn set version stable
+
       - name: Install jupyterlab/jlpm and waldiez
         run: |
           python -m pip install --upgrade pip waldiez jupyterlab
@@ -96,9 +101,12 @@ jobs:
       - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
+          package-manager-cache: false
 
       - name: Enable corepack
-        run: corepack enable
+        run: |
+          corepack enable
+          yarn set version stable
 
       - name: Install dependencies
         run: |
@@ -112,6 +120,7 @@ jobs:
         if: matrix.python-version == '3.12'
         with:
           node-version: 22
+          package-manager-cache: false
 
       - name: Enable corepack and set Yarn version
         if: matrix.python-version == '3.12'

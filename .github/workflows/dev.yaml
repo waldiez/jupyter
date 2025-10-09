@@ -112,13 +112,16 @@ jobs:
       - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
+          package-manager-cache: false
 
       - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
 
       - name: Enable corepack
-        run: corepack enable
+        run: |
+          corepack enable
+          yarn set version stable
 
       - name: Cache Yarn dependencies
         uses: actions/cache@v4.3.0
@@ -205,9 +208,12 @@ jobs:
       - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
+          package-manager-cache: false
 
       - name: Enable corepack
-        run: corepack enable
+        run: |
+          corepack enable
+          yarn set version stable
 
       - name: Cache Yarn dependencies
         uses: actions/cache@v4.3.0
