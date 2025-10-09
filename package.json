@@ -42,7 +42,7 @@
         "url": "https://github.com/waldiez/jupyter.git"
     },
     "scripts": {
-        "prepare": "node -e \"try{require('./.husky/install.mjs')}catch(e){}\"",
+        "prepare": "node -e \"(async () => { await import('./.husky/install.mjs').catch(() => {}) })()\"",
         "python": "node --import=tsx scripts/python.ts",
         "requirements": "yarn python -m pip install -r requirements/all.txt",
         "jupyter": "yarn python -m jupyter",
