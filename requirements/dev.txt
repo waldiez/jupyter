@@ -9,8 +9,9 @@ mypy==1.18.2
 pre-commit==4.3.0
 pydocstyle==6.3.0
 pylint==3.3.9
+pyright==1.1.406
 python-dotenv>=1.1.1
-ruff==0.13.3
+ruff==0.14.0
 toml==0.10.2; python_version <= '3.10'
 types-PyYAML==6.0.12.20250915
 types-toml==0.10.8.20240310

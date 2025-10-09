@@ -380,6 +380,7 @@
         "pypa",
         "pypi",
         "pyproject",
+        "pyright",
         "Pytest",
         "pythonpath",
         "PYTHONUNBUFFERED",

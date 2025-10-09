@@ -44,7 +44,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
 test = [
     "coverage==7.10.7",
-    "filelock==3.19.1",
+    "filelock==3.20.0",
     "pytest==8.4.2",
     "pytest-datadir==1.8.0",
     "pytest-cov==7.0.0",
@@ -66,8 +66,9 @@ dev = [
     "pre-commit==4.3.0",
     "pydocstyle==6.3.0",
     "pylint==3.3.9",
+    "pyright==1.1.406",
     "python-dotenv>=1.1.1",
-    "ruff==0.13.3",
+    "ruff==0.14.0",
     "types-PyYAML==6.0.12.20250915",
     "toml==0.10.2; python_version <= '3.10'",
     "types-toml==0.10.8.20240310",
@@ -187,6 +188,13 @@ exclude = [
   'waldiez_out',
 ]
 plugins = []
+
+# pyright
+[tool.pyright]
+include = ["waldiez_jupyter", "scripts"]
+ignore = ["**/examples"]
+reportCallIssue = false
+
 # isort
 [tool.isort]
 profile = 'black'

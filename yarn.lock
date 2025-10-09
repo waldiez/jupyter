@@ -5586,7 +5586,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=59b88551b469c26b9793c8604c88a2585451c479"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=84a2982d80d98da1b5cb9ac1978757fa255ad808"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5616,7 +5616,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/8a0d8421e63e10ae1b2f514ca211a19d096a788545da5d0d74c6f51df1f3fbd8ca8d00edb602b59b5b942d343e6209ab21ce5298245f60b5b9ed427e33c911c8
+  checksum: 10/9212c02e4398a6f700f6cb1b065e8fbbdbdab1f338555ee3b07dcc0bb805984a58515d5826b527d1884422936f119b2bf278b3b0a0fed25607bf23b3d1b93ef1
   languageName: node
   linkType: hard
 
@@ -7743,14 +7743,14 @@ __metadata:
   linkType: hard
 
 "es-toolkit@npm:^1.39.3":
-  version: 1.39.10
-  resolution: "es-toolkit@npm:1.39.10"
+  version: 1.40.0
+  resolution: "es-toolkit@npm:1.40.0"
   dependenciesMeta:
     "@trivago/prettier-plugin-sort-imports@4.3.0":
       unplugged: true
     prettier-plugin-sort-re-exports@0.0.1:
       unplugged: true
-  checksum: 10/e29686bda6131825a4974ae15892d68c33a8e686b634614ebc3bc15c5d0f85f7533fca8613708f01a54b8b9b379794258b6edf3db47d626546477029d1faabbc
+  checksum: 10/97aba253de03c0e1632d3bd5e0460b223eba7808192e0fb0123696b4eb3892eb546b7e782233072d571b04a6c6ca02828dc7b52a6bf12c75af45c2fc721d0cd6
   languageName: node
   linkType: hard
 

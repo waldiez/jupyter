@@ -1,6 +1,6 @@
 -r main.txt
 coverage==7.10.7
-filelock==3.19.1
+filelock==3.20.0
 pytest-cov==7.0.0
 pytest-datadir==1.8.0
 pytest-html==4.1.1
