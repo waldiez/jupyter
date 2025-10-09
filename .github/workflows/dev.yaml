@@ -27,14 +27,14 @@ jobs:
 
       - name: Cache waldiez build
         id: waldiez-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: ./.local/waldiez-react.tgz
           key: waldiez-react-${{ steps.waldiez-commit.outputs.commit }}
 
       - name: Setup bun
         if: steps.waldiez-cache.outputs.cache-hit != 'true'
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2.0.2
 
       - name: Build waldiez
         if: steps.waldiez-cache.outputs.cache-hit != 'true'
@@ -48,7 +48,7 @@ jobs:
           cp out/archive/waldiez-react-*.tgz ../.local/waldiez-react.tgz
 
       - name: Upload waldiez artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: waldiez-react
           path: ./.local/waldiez-react.tgz
@@ -57,14 +57,14 @@ jobs:
   lint-py:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: 3.12
 
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: ~/.cache/pip
           key: pip-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
@@ -72,7 +72,7 @@ jobs:
             pip-${{ runner.os }}-
 
       - name: Cache waldiez install
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: ~/.cache/pip-waldiez
           key: waldiez-pip-${{ hashFiles('.github/workflows/*.yml') }}
@@ -107,13 +107,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-waldiez
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
 
@@ -121,7 +121,7 @@ jobs:
         run: corepack enable
 
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             .yarn/cache
@@ -131,7 +131,7 @@ jobs:
             yarn-${{ runner.os }}-
 
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: ~/.cache/pip
           key: pip-lint-js-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
@@ -139,7 +139,7 @@ jobs:
             pip-lint-js-${{ runner.os }}-
 
       - name: Download waldiez artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5.0.0
         with:
           name: waldiez-react
           path: .local
@@ -171,13 +171,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.cache/pip
@@ -188,7 +188,7 @@ jobs:
             pip-test-${{ matrix.os }}-
 
       - name: Cache waldiez install
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ~/.cache/pip-waldiez
@@ -202,7 +202,7 @@ jobs:
           python -m pip install --cache-dir ~/.cache/pip -r requirements/test.txt
           python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
 
@@ -210,7 +210,7 @@ jobs:
         run: corepack enable
 
       - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v4.3.0
         with:
           path: |
             .yarn/cache
@@ -220,7 +220,7 @@ jobs:
             yarn-test-js-${{ matrix.os }}-
 
       - name: Download waldiez artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5.0.0
         with:
           name: waldiez-react
           path: .local

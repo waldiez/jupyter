@@ -22,8 +22,8 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5.0.0
+      - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
       - name: Install dependencies
@@ -57,11 +57,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5.0.0
+      - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
       - run: |
@@ -83,17 +83,17 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5.0.0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
 
@@ -108,7 +108,7 @@ jobs:
           python -m pip install -r requirements/test.txt
 
       # js tests: only on python 3.12
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5.0.0
         if: matrix.python-version == '3.12'
         with:
           node-version: 22
@@ -147,7 +147,7 @@ jobs:
       - name: Report to Coveralls
         # don't spam coveralls
         if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/lcov.info
@@ -162,6 +162,6 @@ jobs:
     needs: [lint-py, lint-js, test]
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
+        uses: re-actors/alls-green@v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}
