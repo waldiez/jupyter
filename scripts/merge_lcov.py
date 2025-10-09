@@ -216,7 +216,7 @@ def main() -> None:
     if not lcov_cmd:
         return
     merge_lcov(lcov_cmd)
-    if shutil.which("yarn"):
+    if shutil.which("yarn") and shutil.which("lcov-viewer"):
         run_command(["yarn", "lcov:html"])
 
 

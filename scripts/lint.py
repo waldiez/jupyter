@@ -185,6 +185,7 @@ def main() -> None:
     run_isort()
     run_black()
     run_mypy()
+    run_pyright()
     run_flake8()
     run_pydocstyle()
     run_bandit()
