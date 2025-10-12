@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0.
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+# pyright: reportUnknownMemberType=false,reportUnknownVariableType=false
+
 """Handle requests to handle .waldiez files.
 GET:
     Get the actual path of a .waldiez file:
@@ -16,8 +18,9 @@ POST:
 
 import json
 import os
+from collections.abc import Awaitable
 from pathlib import Path
-from typing import Any, Awaitable
+from typing import Any
 
 from jupyter_server.base.handlers import APIHandler
 from tornado.web import HTTPError, authenticated
@@ -120,7 +123,7 @@ class FilesHandler(APIHandler):
             raise HTTPError(404, reason=str(error)) from error
         with open(actual_file_path, "rb") as image_file:
             self.set_header("Content-Type", "image/png")
-            self.write(image_file.read())  # pyright: ignore
+            self.write(image_file.read())
             self.flush()
         self.log.info("Sent image: %s", file_path)
 
@@ -147,7 +150,7 @@ class FilesHandler(APIHandler):
         if not isinstance(files, list) or not files:
             raise HTTPError(400, reason="No files in request")
         files_list: list[str] = []
-        for file in files:  # pyright: ignore
+        for file in files:
             if isinstance(file, str):
                 files_list.append(file)
         try:

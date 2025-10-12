@@ -35,12 +35,16 @@ async def test_valid_file_upload(
     }
     filename = file_path.name
     body = (
-        f"--{boundary}" + "\r\n"
+        f"--{boundary}"
+        "\r\n"
         'Content-Disposition: form-data; name="file"; '
-        f'filename="{filename}"' + "\r\n"
+        f'filename="{filename}"'
+        "\r\n"
         "Content-Type: text/plain\r\n\r\n"
-        f"{file_path.read_text()}" + "\r\n"
-        f"--{boundary}--" + "\r\n"
+        f"{file_path.read_text()}"
+        "\r\n"
+        f"--{boundary}--"
+        "\r\n"
     )
     response = await jp_fetch(
         "waldiez",
@@ -91,7 +95,8 @@ async def test_invalid_file_upload(
     }
     image_data = image.read_bytes()
     body = (
-        f"--{boundary}" + "\r\n"
+        f"--{boundary}"
+        "\r\n"
         'Content-Disposition: form-data; name="file"; '
         'filename="blank.png"\r\n'
         "Content-Type: image/png\r\n\r\n"

@@ -7,7 +7,7 @@
 from jupyter_server.serverapp import ServerApp
 
 # pylint: disable=import-error
-# pyright: reportMissingImports=false
+# pyright: reportMissingImports=false,reportUnusedFunction=false
 try:
     from ._version import __version__  # noqa
 except ImportError:  # pragma: no cover

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0.
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
 
+# pyright: reportConstantRedefinition=false
 """Build container image."""
 
 import argparse
@@ -10,7 +11,6 @@ import shutil
 import subprocess  # nosemgrep # nosec
 import sys
 from pathlib import Path
-from typing import List
 
 try:
     # noinspection PyUnresolvedReferences
@@ -24,9 +24,9 @@ os.environ["PYTHONUNBUFFERED"] = "1"
 
 _MY_ARCH = platform.machine()
 if _MY_ARCH == "x86_64":
-    _MY_ARCH = "amd64"  # pyright: ignore
+    _MY_ARCH = "amd64"
 elif _MY_ARCH in ("aarch64", "arm64"):
-    _MY_ARCH = "arm64"  # pyright: ignore
+    _MY_ARCH = "arm64"
 _ROOT_DIR = Path(__file__).parent.parent.resolve()
 _DEFAULT_IMAGE = os.environ.get("IMAGE_NAME", "waldiez/jupyter")
 _FALLBACK_TAG = "dev" if "--dev" in sys.argv else "latest"
@@ -153,7 +153,7 @@ def get_container_cmd() -> str:
     return "docker"
 
 
-def run_command(command: List[str], dry_run: bool = False) -> None:
+def run_command(command: list[str], dry_run: bool = False) -> None:
     """Run a command.
 
     Parameters
@@ -192,7 +192,7 @@ def build_image(
     image_platform: str,
     container_command: str,
     no_cache: bool,
-    build_args: List[str],
+    build_args: list[str],
 ) -> None:
     """Build the container image.
 

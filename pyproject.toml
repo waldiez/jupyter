@@ -58,15 +58,16 @@ test = [
 dev = [
     "autoflake==2.3.1",
     "bandit==1.8.6",
+    "basedpyright==1.31.7",
     "black[jupyter]==25.9.0",
     "flake8==7.3.0",
-    "isort==6.1.0",
+    "isort==7.0.0",
     "jupyterlab==4.4.9",
     "mypy==1.18.2",
-    "pre-commit==4.3.0",
+    "prek==0.2.5",
     "pydocstyle==6.3.0",
-    "pylint==3.3.9",
-    "pyright==1.1.406",
+    "pylint==4.0.0",
+    "basedpyright==1.31.7",
     "python-dotenv>=1.1.1",
     "ruff==0.14.0",
     "types-PyYAML==6.0.12.20250915",
@@ -89,7 +90,7 @@ contributors-as-maintainers = false
 artifacts = ["waldiez_jupyter/labextension"]
 exclude = [
   ".github",
-  "examples"
+  "examples",
 ]
 
 [tool.hatch.build.targets.wheel.shared-data]
@@ -150,6 +151,7 @@ exclude = '''
   | \.hg
   | \.mypy_cache
   | \.tox
+  | \.hatch
   | \.venv
   | .local
   | _build
@@ -165,7 +167,7 @@ exclude = '''
 
 # mypy
 [tool.mypy]
-files = '.'
+files = 'waldiez_jupyter,scripts'
 platform = 'linux'
 ignore_missing_imports = false
 disallow_untyped_defs = false
@@ -180,6 +182,8 @@ explicit_package_bases = true
 exclude = [
   '.venv',
   '.local',
+  '.tox',
+  '.hatch',
   'build',
   'dist',
   'examples',
@@ -190,10 +194,27 @@ exclude = [
 plugins = []
 
 # pyright
-[tool.pyright]
+[tool.basedpyright]
 include = ["waldiez_jupyter", "scripts"]
-ignore = ["**/examples"]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/src",
+    "**/.tox",
+    "**/.hatch",
+    "**/.venv",
+    "**/.local",
+    "**/examples",
+    "**/waldiez_out",
+]
+extraPaths = ["."]
 reportCallIssue = false
+reportUnusedCallResult = false
+reportExplicitAny = false
+reportUnannotatedClassAttribute = false
+reportAny = false
+reportImplicitOverride = false
+
 
 # isort
 [tool.isort]
@@ -202,6 +223,8 @@ skip = [
   '.venv',
   'node_modules',
   './.local',
+  './.hatch',
+  './.tox',
   'build',
   'dist',
   'examples',
@@ -218,6 +241,8 @@ line_length = 80
 match-dir = '''
   [^!(.venv)]
   [^!(.local)]
+  [^!(.tox)]
+  [^!(.hatch)]
   [^!(build)]
   [^!(dist)]
   [^!(node_modules)]
@@ -227,24 +252,24 @@ match-dir = '''
 '''
 
 # pylint
-[tool.pylint.main]
-load-plugins = [
-  'pylint.extensions.mccabe',
-  'pylint.extensions.redefined_variable_type',
-  'pylint.extensions.broad_try_clause',
-  'pylint.extensions.no_self_use',
-  'pylint.extensions.docparams',
-]
-
-# ignored-modules = []
-# generated-members = []
-# source-roots = []
+[tool.pylint.master]
 extension-pkg-whitelist = []
+load-plugins = [
+  "pylint.extensions.mccabe",
+  "pylint.extensions.redefined_variable_type",
+  "pylint.extensions.broad_try_clause",
+  "pylint.extensions.no_self_use",
+  "pylint.extensions.docparams",
+]
+# reports=true
 fail-under = 8.0
+# jobs = 0
 ignore = ["CVS"]
 ignore-paths = [
   "^(.*)/.venv/*",
   "^(.*)/.local/.*",
+  "^(.*)/.tox/.*",
+  "^(.*)/.hatch/.*",
   "^(.*)/build/*",
   "^(.*)/dist/*",
   "^(.*)/examples/*",
@@ -253,11 +278,14 @@ ignore-paths = [
   "^(.*)/waldiez_out/*",
   ".venv/*",
   ".local/.*",
+  ".tox/.*",
+  ".hatch/.*",
   "build/*",
   "dist/*",
   "examples/*",
   "notebooks/*",
   "node_modules/*",
+  "waldiez_out/*",
   "^(.*)/(.*).pyi",
   "^(.*)/_version.py"
 ]
@@ -293,7 +321,17 @@ disable = [
 ]
 # bandit
 [tool.bandit]
-exclude_dirs = [".venv", ".local", "build", "dist", "node_modules", "examples", "waldiez_out"]
+exclude_dirs = [
+    ".venv",
+    ".local",
+    ".tox",
+    ".hatch",
+    "build",
+    "dist",
+    "node_modules",
+    "examples",
+    "waldiez_out",
+]
 # B104: bind to all interfaces (0.0.0.0)
 # B110: allow pass on try/except
 # B404: allow import subprocess
@@ -306,14 +344,16 @@ skips = ['*_test.py', '*/test_*.py']
 [tool.ruff]
 line-length = 80
 extend-exclude = [
-  "**/.venv",
-  "**/examples",
-  "**/notebooks",
-  "**/.local",
-  "**/node_modules",
-  "**/build",
-  "**/dist",
-  "**/waldiez_out",
+  ".venv",
+  "examples",
+  "notebooks",
+  ".local",
+  ".tox",
+  ".hatch",
+  "node_modules",
+  "build",
+  "dist",
+  "waldiez_out",
 ]
 
 [tool.ruff.lint]

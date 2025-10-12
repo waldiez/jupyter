@@ -35,6 +35,8 @@ def setup_handlers(web_app: ServerWebApplication) -> None:
     upload_pattern = url_path_join(base_url, "waldiez", "upload")
     min_maps_pattern = url_path_join(base_url, "min-maps")
     min_maps_path = os.path.join(static_path, "min-maps")
+    vs_pattern = url_path_join(base_url, "vs")
+    vs_path = os.path.join(static_path, "vs")
     web_app.add_handlers(
         host_pattern,
         [
@@ -44,6 +46,11 @@ def setup_handlers(web_app: ServerWebApplication) -> None:
                 rf"{min_maps_pattern}/(.*)",
                 web.StaticFileHandler,
                 {"path": min_maps_path},
+            ),
+            (
+                rf"{vs_pattern}/(.*)",
+                web.StaticFileHandler,
+                {"path": vs_path},
             ),
         ],
     )

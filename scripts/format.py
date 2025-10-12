@@ -3,18 +3,91 @@
 
 """Run python formatters."""
 
+import os
 import shutil
 import subprocess  # nosemgrep # nosec
 import sys
 from pathlib import Path
-from typing import List
 
 # pylint: disable=duplicate-code  # also in ./lint.py
 # noinspection DuplicatedCode
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 
-def run_command(args: List[str]) -> None:
+def in_hatch_environment() -> bool:
+    """Check if the script is running in a Hatch environment.
+
+    Returns
+    -------
+    bool
+        True if the script is running in a Hatch environment, False otherwise.
+    """
+    return (
+        "HATCH_ENV_ACTIVE" in os.environ
+        and len(os.environ["HATCH_ENV_ACTIVE"]) > 0
+    )
+
+
+def prefer_uv() -> bool:
+    """Check if we should prefer to use uv.
+
+    Returns
+    -------
+    bool
+        True if we should prefer to use uv, False otherwise.
+    """
+    if not shutil.which("uv"):
+        return False
+    return (ROOT_DIR / ".uv").is_file()
+
+
+def ensure_venv() -> None:
+    """Ensure the virtual environment executable exists."""
+    if os.path.exists(ROOT_DIR / ".venv") or in_hatch_environment():
+        return
+    if prefer_uv():
+        print("Creating virtual environment with uv...")
+        run_command(["uv", "venv", str(ROOT_DIR / ".venv")])
+        run_command(["uv", "sync"])
+        run_command(["uv", "pip", "install", "-U", "pip"])
+    else:
+        print("Creating virtual environment...")
+        run_command([sys.executable, "-m", "venv", str(ROOT_DIR / ".venv")])
+        run_command(
+            [
+                str(ROOT_DIR / ".venv" / "bin" / "python"),
+                "-m",
+                "pip",
+                "install",
+                "-U",
+                "pip",
+            ]
+        )
+
+
+def get_executable() -> str:
+    """Get the path to the Python executable.
+
+    Returns
+    -------
+    str
+        The path to the Python executable.
+    """
+    if os.getenv("CI") == "true":
+        return sys.executable
+    if in_hatch_environment():
+        return sys.executable
+    if not os.path.exists(ROOT_DIR / ".venv"):
+        ensure_venv()
+    if sys.platform != "win32":
+        if os.path.exists(ROOT_DIR / ".venv" / "bin" / "python"):
+            return str(ROOT_DIR / ".venv" / "bin" / "python")
+    if os.path.exists(ROOT_DIR / ".venv" / "Scripts" / "python.exe"):
+        return str(ROOT_DIR / ".venv" / "Scripts" / "python.exe")
+    return sys.executable
+
+
+def run_command(args: list[str]) -> None:
     """Run a command.
 
     Parameters
@@ -38,7 +111,7 @@ def ensure_dev_requirements() -> None:
     requirements_file = ROOT_DIR / "requirements" / "dev.txt"
     run_command(
         [
-            sys.executable,
+            get_executable(),
             "-m",
             "pip",
             "install",
@@ -57,13 +130,13 @@ def ensure_command_exists(command: str) -> None:
         Command to check.
     """
     if not shutil.which(command):
-        run_command([sys.executable, "-m", "pip", "install", command])
+        run_command([get_executable(), "-m", "pip", "install", command])
 
 
 def run_isort() -> None:
     """Run isort."""
     ensure_command_exists("isort")
-    run_command([sys.executable, "-m", "isort", "."])
+    run_command([get_executable(), "-m", "isort", "."])
 
 
 def run_autoflake() -> None:
@@ -71,7 +144,7 @@ def run_autoflake() -> None:
     ensure_command_exists("autoflake")
     run_command(
         [
-            sys.executable,
+            get_executable(),
             "-m",
             "autoflake",
             "--remove-all-unused-imports",
@@ -87,7 +160,7 @@ def run_black() -> None:
     ensure_command_exists("black")
     run_command(
         [
-            sys.executable,
+            get_executable(),
             "-m",
             "black",
             "--config",
@@ -102,7 +175,7 @@ def run_ruff() -> None:
     ensure_command_exists("ruff")
     run_command(
         [
-            sys.executable,
+            get_executable(),
             "-m",
             "ruff",
             "format",

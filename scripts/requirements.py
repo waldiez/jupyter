@@ -4,6 +4,8 @@
 # flake8: noqa: E501
 # pylint: disable=import-error,import-outside-toplevel,too-few-public-methods,broad-except
 # isort: skip_file
+# pyright: reportUnreachable=false,reportReturnType=false
+# pyright: reportUnknownVariableType=false
 
 """Generate requirements/*txt files from pyproject.toml."""
 
@@ -30,7 +32,7 @@ class TomlLoader(Protocol):
         self,
         *args: Any,
         **kwargs: Any,
-    ) -> dict[str, Any]:  # pyright: ignore
+    ) -> dict[str, Any]:
         """Load TOML data from a file."""
 
 
@@ -77,11 +79,12 @@ def get_loader() -> TomlLoader:
 
                 return toml.load
             except Exception as err:
-                raise ImportError(
+                msg = (
                     "Failed to install the `toml` library. "
                     "Please install it manually.\n"
                     "Error: {err}"
-                ) from err
+                )
+                raise ImportError(msg) from err
 
 
 def _write_all_dot_txt(project_dir: Path, extras: list[str]) -> None:
@@ -172,6 +175,7 @@ def _write_requirements_txt(
     """
     has_main = True
     main_requirements: list[str] = []
+    extra_requirements: dict[str, list[str]] = {}
     try:
         main_requirements = toml_data["project"]["dependencies"]
     except KeyError:
@@ -184,7 +188,7 @@ def _write_requirements_txt(
         os.makedirs(project_dir / "requirements")
     if has_main:
         _write_main_txt(project_dir, main_requirements)
-    extra_keys = []
+    extra_keys: list[str] = []
     for extra in extra_requirements:
         if extra in EXCLUDED_EXTRAS:
             continue

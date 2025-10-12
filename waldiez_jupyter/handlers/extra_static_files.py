@@ -28,7 +28,7 @@ PACKAGE_NAME = "monaco-editor"
 DETAILS_JSON = "monaco_details.json"
 # 0.53.0 does not seem to play well with @monaco-editor/react
 # let's check periodically and change it to None when we are good.
-PINNED_VERSION: str | None = "0.52.2"
+PINNED_VERSION: str | None = "0.54.0"
 
 LOG = logging.getLogger(__name__)
 
@@ -157,7 +157,8 @@ def _download_monaco_editor(
     dst_dir = os.path.join(static_dir, "vs")
     if os.path.exists(dst_dir):
         shutil.rmtree(dst_dir)
-    print(f"Copying {src_dir} to {dst_dir}")
+    msg = f"Copying {src_dir} to {dst_dir}"
+    LOG.info(msg)
     shutil.copytree(src_dir, dst_dir)
     # min-maps might not exist (e.g. in v0.53.0)
     min_maps = os.path.join(monaco_editor_path, "min-maps")
@@ -165,7 +166,8 @@ def _download_monaco_editor(
         dst_dir = os.path.join(static_dir, "min-maps")
         if os.path.exists(dst_dir):
             shutil.rmtree(dst_dir)
-        print(f"Copying {min_maps} to {dst_dir}")
+        msg = f"Copying {min_maps} to {dst_dir}"
+        LOG.info(msg)
         shutil.copytree(min_maps, dst_dir)
     shutil.rmtree(tmp_dir)
 
@@ -190,6 +192,16 @@ def _extract_monaco_editor_files(response: urllib3.BaseHTTPResponse) -> str:
         else:
             tar.extractall(path=tmp_dir)  # nosemgrep # nosec
     return tmp_dir
+
+
+def _remove_loader_js(static_root_path: Path) -> None:
+    """Remove loader.js if it exists."""
+    loader_js = static_root_path / "vs" / "loader.js"
+    if loader_js.exists():
+        try:
+            loader_js.unlink(missing_ok=True)
+        except BaseException:
+            pass
 
 
 def _get_cached_details(
@@ -217,16 +229,19 @@ def _get_cached_details(
             try:
                 last_check = datetime.fromisoformat(data.get("last_check", ""))
             except ValueError:  # pragma: no cover
+                _remove_loader_js(static_root_path)
                 return None
             local_version = data.get("version")
             url = data.get("url")
             sha_sum = data.get("sha_sum")
             if not all((local_version, url, sha_sum)):
+                _remove_loader_js(static_root_path)
                 return None
             if datetime.now(timezone.utc) - last_check < timedelta(days=1):
                 return local_version, url, sha_sum
     except BaseException:  # pragma: no cover
         pass
+    _remove_loader_js(static_root_path)
     return None
 
 
