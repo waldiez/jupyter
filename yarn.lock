@@ -1646,14 +1646,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0, @codemirror/view@npm:^6.38.1":
-  version: 6.38.5
-  resolution: "@codemirror/view@npm:6.38.5"
+  version: 6.38.6
+  resolution: "@codemirror/view@npm:6.38.6"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10/2335b593770042eb3adfe369073432b07cd2d15f1e230ae4dc7be7a7b8edd74e57c13e59b92a11e7e5d59ae030aabf7f55478dfec1cf2a2fe3a1ef3f091676a4
+  checksum: 10/5a047337a98de111817ce8c8d39e6429c90ca0b0a4d2678d6e161e9e5961b1d476a891f447ab7a05cac395d4a93530e7c68bedd93191285265f0742a308ad00b
   languageName: node
   linkType: hard
 
@@ -5087,7 +5087,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.7.1":
+"@types/node@npm:*, @types/node@npm:^24.7.2":
   version: 24.7.2
   resolution: "@types/node@npm:24.7.2"
   dependencies:
@@ -5536,7 +5536,7 @@ __metadata:
     "@types/babel__preset-env": "npm:^7.10.0"
     "@types/jest": "npm:^30.0.0"
     "@types/json-schema": "npm:^7.0.15"
-    "@types/node": "npm:^24.7.1"
+    "@types/node": "npm:^24.7.2"
     "@types/react": "npm:^18.3.26"
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.46.0"
@@ -5582,7 +5582,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=174a322b35fcec15a1b601633e6948524eb2c833"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=d56dae12076ec7790f1320d34b115d3637219edc"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5598,12 +5598,12 @@ __metadata:
     lucide-react: "npm:^0.545.0"
     marked: "npm:16.4.0"
     marked-highlight: "npm:^2.2.2"
-    marked-react: "npm:^3.0.1"
+    marked-react: "npm:^3.0.2"
     microdiff: "npm:^1.5.0"
     nanoid: "npm:^5.1.6"
     react-error-boundary: "npm:^6.0.0"
     react-fast-compare: "npm:^3.2.2"
-    react-hotkeys-hook: "npm:^5.1.0"
+    react-hotkeys-hook: "npm:^5.2.0"
     react-icons: "npm:^5.5.0"
     react-select: "npm:^5.10.2"
     recharts: "npm:^3.2.1"
@@ -5613,7 +5613,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/8a1a97cef70db9d29ab687074f73cdfff0be9758694baef62e2ed15de55c427473fddeb570821978d95ee8f48281d58e083c94bd35d794c4e3e7b7803451ab3c
+  checksum: 10/aa03692d898ad8e9c7ed6bced23b8c423eb8f7486fb48abc601934f97eb5d33e9825630a71b7a6bc9ebd4dbe67bf323ac8ff91e0f869242876f47dcb26987827
   languageName: node
   linkType: hard
 
@@ -6488,7 +6488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cacheable@npm:^2.0.3":
+"cacheable@npm:^2.1.0":
   version: 2.1.0
   resolution: "cacheable@npm:2.1.0"
   dependencies:
@@ -7525,9 +7525,9 @@ __metadata:
   linkType: hard
 
 "emoji-regex@npm:^10.3.0":
-  version: 10.5.0
-  resolution: "emoji-regex@npm:10.5.0"
-  checksum: 10/97537a2cec7c12653bdedf9d87b3c4e2641f12f8f8829765d33959d8e62c6fc23ffe7722ccbdaf3531681725bed0cc201059652f3289fd06925255437a589a49
+  version: 10.6.0
+  resolution: "emoji-regex@npm:10.6.0"
+  checksum: 10/98cc0b0e1daed1ed25afbf69dcb921fee00f712f51aab93aa1547e4e4e8171725cc4f0098aaa645b4f611a19da11ec9f4623eb6ff2b72314b39a8f2ae7c12bf2
   languageName: node
   linkType: hard
 
@@ -7593,11 +7593,11 @@ __metadata:
   linkType: hard
 
 "envinfo@npm:^7.7.3":
-  version: 7.17.0
-  resolution: "envinfo@npm:7.17.0"
+  version: 7.18.0
+  resolution: "envinfo@npm:7.18.0"
   bin:
     envinfo: dist/cli.js
-  checksum: 10/2a4c264df40a62ac6ce57867a00d6b4cafba02149403eb751b6e46264bba85938fa55bb176693db355fbc502fff77873c2062c4403172f9581883d1ace555e74
+  checksum: 10/d08b27f39f8e562cc5b9ef202b1a20a05e9598f3f05ea2509d561c45989e1dc6bdea272bf55f552a178e2898c16fe49fb3808d41414c317bfac7c2389a466339
   languageName: node
   linkType: hard
 
@@ -8326,13 +8326,13 @@ __metadata:
   linkType: hard
 
 "flat-cache@npm:^6.1.13":
-  version: 6.1.17
-  resolution: "flat-cache@npm:6.1.17"
+  version: 6.1.18
+  resolution: "flat-cache@npm:6.1.18"
   dependencies:
-    cacheable: "npm:^2.0.3"
+    cacheable: "npm:^2.1.0"
     flatted: "npm:^3.3.3"
     hookified: "npm:^1.12.0"
-  checksum: 10/42c7a25e11d38058e3ecd934173efd0dbb4d3bec6e11191b7c2a5b467c4086774779f5cfbee1895ba2a59c1e9c66e563ef12fd4bd03d3fd0b208d2036e7c2e1a
+  checksum: 10/1c1f5659dda8ef7c140a8ff3ea63daa620c96542057ea81e51b929c9706241b8d1015c0c2db9d4eb8fc80e73ee031407d8eacc3c2dfd67ddeb7ce89a8c6b1bb1
   languageName: node
   linkType: hard
 
@@ -11080,7 +11080,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked-react@npm:^3.0.1":
+"marked-react@npm:^3.0.2":
   version: 3.0.2
   resolution: "marked-react@npm:3.0.2"
   dependencies:
@@ -12232,7 +12232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.1.0":
+"react-hotkeys-hook@npm:^5.2.0":
   version: 5.2.0
   resolution: "react-hotkeys-hook@npm:5.2.0"
   peerDependencies:
