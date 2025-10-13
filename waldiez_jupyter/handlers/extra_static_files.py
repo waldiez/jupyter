@@ -257,9 +257,15 @@ def _has_filter_parameter() -> bool:  # pragma: no cover
     # Changed in version 3.11.4: Added the filter parameter.
     # Changed in version 3.12: Added the filter parameter.
     py_minor = sys.version_info.minor
+    if py_minor >= 12:
+        return True
     py_micro = sys.version_info.micro
     if version.parse("3.10.12") <= version.parse(f"3.{py_minor}.{py_micro}"):
         return True
     if version.parse("3.11.4") <= version.parse(f"3.{py_minor}.{py_micro}"):
         return True
     return False
+
+
+if __name__ == "__main__":
+    print(_has_filter_parameter())

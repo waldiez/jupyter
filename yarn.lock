@@ -11081,13 +11081,13 @@ __metadata:
   linkType: hard
 
 "marked-react@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "marked-react@npm:3.0.1"
+  version: 3.0.2
+  resolution: "marked-react@npm:3.0.2"
   dependencies:
     marked: "npm:^16.0.0"
   peerDependencies:
     react: ^16.8.0 || >=17.0.0
-  checksum: 10/67cd1cb0775d73a68d70588a8b58089ad2a58b6874bc45cc9fe6d042da9ba2cf4199366a08cd31b1ab7b9b81a685d0588be7dae32c12c3eb0cb51755901b6e47
+  checksum: 10/28f49535feae7bdf00a912de226ffd3070529e7d56c428cb011d264b48532c6696f1851d9030a6364ffb5b844d43fe9b2e3469a1224ad37efbc9e37330af2884
   languageName: node
   linkType: hard
 
@@ -12233,12 +12233,12 @@ __metadata:
   linkType: hard
 
 "react-hotkeys-hook@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "react-hotkeys-hook@npm:5.1.0"
+  version: 5.2.0
+  resolution: "react-hotkeys-hook@npm:5.2.0"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10/e912c0178fbfb04b841007aa3fc50cb326082346f860d3b92a22ff71516dfd487c6f60c0474d9609b982ad15e6b4741c35ca2b38adfeb133789d43ff6b0029c6
+  checksum: 10/a41447d64851c38306170dffe6ee757b962f8d857a89196c5f0003461d5bb37c79b8e950659e7f1d5b7a1fa74b750791f56d403f35c0ce321a4a20300dd28e66
   languageName: node
   linkType: hard
 

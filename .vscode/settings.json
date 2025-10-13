@@ -478,5 +478,6 @@
         "yarnrc",
         "ydoc",
         "yfinance"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }

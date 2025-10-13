@@ -1,13 +1,15 @@
 # SPDX-License-Identifier: Apache-2.0.
 # Copyright (c) 2024 - 2025 Waldiez and contributors.
+
 # type: ignore
+# pylint: disable=import-error
+# pyright: reportMissingImports=false,reportUnusedFunction=false
+# pyright: reportUnknownVariableType=false
 
 """Jupyter server extension for Waldiez."""
 
 from jupyter_server.serverapp import ServerApp
 
-# pylint: disable=import-error
-# pyright: reportMissingImports=false,reportUnusedFunction=false
 try:
     from ._version import __version__  # noqa
 except ImportError:  # pragma: no cover
