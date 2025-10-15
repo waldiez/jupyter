@@ -4070,12 +4070,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@monaco-editor/loader@npm:^1.5.0, @monaco-editor/loader@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@monaco-editor/loader@npm:1.6.0"
+"@monaco-editor/loader@npm:^1.5.0, @monaco-editor/loader@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@monaco-editor/loader@npm:1.6.1"
   dependencies:
     state-local: "npm:^1.0.6"
-  checksum: 10/28c1c5ec79744a6e9cca52420da5a88cce55e48ae3bdbc8988d07d5c33a1470c56b349de5d9ad9c23e1cae9ced9cf56c35c378766296b2a8305fccca6c125956
+  checksum: 10/16e2bc752cf5826805be268b86fd313a7a6f6d19fc6e1254cc66c87c643c753142cea940e8d2e086a9d67c323700d3d1c1cbf51fd51b37a30f787fc41afab405
   languageName: node
   linkType: hard
 
@@ -5582,11 +5582,11 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=8c213f0ab585975f2bb07ca69ddbea3f9ba1834c"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=06110b93c28a68ad4765b98db3cc86a53a2303a7"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
-    "@monaco-editor/loader": "npm:^1.6.0"
+    "@monaco-editor/loader": "npm:^1.6.1"
     "@monaco-editor/react": "npm:4.7.0"
     "@radix-ui/react-checkbox": "npm:^1.3.3"
     "@radix-ui/react-slider": "npm:^1.3.6"
@@ -5613,7 +5613,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/028c99fd108a8c15d4e80c95f9f7d536dbe71711091a1f9c84679e7adfe33427e0f029b894bc6a0f8618ffe52dfaaed23bc4e261f2321da61ec9bc257a3ec5e2
+  checksum: 10/d5b3658f9ec200072ef576ae846a199d86afe255ff0f647163b7612ba9a327bf0ef4ac9eee7b56d6cf2b04f1a8804c49bfd36f4aeb980c287cb711c2638c3c89
   languageName: node
   linkType: hard
 
