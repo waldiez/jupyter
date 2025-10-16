@@ -4079,7 +4079,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@monaco-editor/react@npm:4.7.0":
+"@monaco-editor/react@npm:^4.7.0":
   version: 4.7.0
   resolution: "@monaco-editor/react@npm:4.7.0"
   dependencies:
@@ -5582,12 +5582,12 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=a2a155c132bd7eec8bf772535f11539be145f9e4"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=324015e13033768ea3623ad173e50dab0904d201"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
     "@monaco-editor/loader": "npm:^1.6.1"
-    "@monaco-editor/react": "npm:4.7.0"
+    "@monaco-editor/react": "npm:^4.7.0"
     "@radix-ui/react-checkbox": "npm:^1.3.3"
     "@radix-ui/react-slider": "npm:^1.3.6"
     "@radix-ui/react-tooltip": "npm:^1.2.8"
@@ -5613,7 +5613,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19.1.1
     react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/7c7c94e87bd67e6713d3d80af55f7dbaee2f2c4448d5024a02a066ffae89d296c8a5b32c209709be96d5d74d7308b6ff1eb0b2938ab174d5ddf4bb8c6acf21ba
+  checksum: 10/2b2021220c69c76e69ac02e79afce875debec1c0f692f48d5d1121b17f55ecac0a602e753de443d56ab75b1506211baf0d42f866e75fcd290226c745ae7ce393
   languageName: node
   linkType: hard
 
