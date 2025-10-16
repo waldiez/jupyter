@@ -2,8 +2,9 @@
 
 import json
 import os
+from collections.abc import Generator
 from pathlib import Path
-from typing import Any, Dict, Generator, List
+from typing import Any
 
 import pytest
 from filelock import FileLock
@@ -15,11 +16,12 @@ os.environ["JUPYTER_IS_TESTING"] = "1"
 pytest_plugins = ("pytest_jupyter.jupyter_server",)
 
 # pylint: disable=unused-argument,redefined-outer-name
+# pyright: reportUnusedParameter=false
 
 
 # noinspection PyUnusedLocal
 @pytest.fixture
-def jp_server_config(jp_server_config: Dict[str, Any]) -> Dict[str, Any]:
+def jp_server_config(jp_server_config: dict[str, Any]) -> dict[str, Any]:
     """Add the extension to the server configuration.
 
     Parameters
@@ -34,12 +36,12 @@ def jp_server_config(jp_server_config: Dict[str, Any]) -> Dict[str, Any]:
     return {"ServerApp": {"jpserver_extensions": {"waldiez_jupyter": True}}}
 
 
-def _load_worker_list(fn: Path) -> List[str]:
+def _load_worker_list(fn: Path) -> list[str]:
     """Read the worker id list from a file."""
     return json.loads(fn.read_text())["workers"]
 
 
-def _write_worker_list(fn: Path, workers: List[str]) -> None:
+def _write_worker_list(fn: Path, workers: list[str]) -> None:
     """Write the worker id list to a file."""
     fn.write_text(json.dumps({"workers": workers}))
 

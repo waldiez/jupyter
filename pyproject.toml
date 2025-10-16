@@ -53,7 +53,7 @@ test = [
     "pytest-timeout==2.4.0",
     "pytest-tornasync==0.6.0.post2",
     "pytest-xdist==3.8.0",
-    "pytest-jupyter[server]>=0.10.1",
+    "pytest-jupyter[server]==0.11.0",
 ]
 dev = [
     "autoflake==2.3.1",
@@ -64,7 +64,7 @@ dev = [
     "isort==7.0.0",
     "jupyterlab==4.4.9",
     "mypy==1.18.2",
-    "prek==0.2.8",
+    "prek==0.2.9",
     "pydocstyle==6.3.0",
     "pylint==4.0.1",
     "basedpyright==1.31.7",

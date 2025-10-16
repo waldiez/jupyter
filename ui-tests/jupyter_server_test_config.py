@@ -5,6 +5,9 @@ opens the server to the world and provide access to JupyterLab
 JavaScript objects through the global window variable.
 """
 
+# pyright: reportUnknownVariableType=false,reportUndefinedVariable=false
+# pyright: reportMissingTypeStubs=false,reportUnknownArgumentType=false
+
 from jupyterlab.galata import configure_jupyter_server  # type: ignore
 
 # pylint: disable=undefined-variable
