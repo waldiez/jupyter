@@ -179,6 +179,10 @@ start_jupyter() {
         log_info "XSRF protection is enabled"
         disable_check_xsrf="False"
     fi
+    # let's try to handle: 'IOPub data rate exceeded'.
+    # defaults:
+    # ServerApp.iopub_data_rate_limit=1000000.0 (bytes/sec)
+    # ServerApp.rate_limit_window=3.0 (secs)
     jupyter lab \
         --no-browser \
         --ip="*" \
@@ -187,7 +191,9 @@ start_jupyter() {
         --IdentityProvider.hashed_password="${JUPYTER_HASHED_PASSWORD}" \
         --IdentityProvider.password_required="${JUPYTER_PASSWORD_REQUIRED}" \
         --ServerApp.allow_origin="${allowed_origins}" \
-        --ServerApp.disable_check_xsrf="${disable_check_xsrf}"
+        --ServerApp.disable_check_xsrf="${disable_check_xsrf}" \
+        --ServerApp.iopub_data_rate_limit=2000000 \
+        --ServerApp.rate_limit_window=2
 }
 
 # Cleanup function for graceful shutdown
