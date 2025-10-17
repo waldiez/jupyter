@@ -4627,8 +4627,8 @@ __metadata:
   linkType: hard
 
 "@reduxjs/toolkit@npm:1.x.x || 2.x.x":
-  version: 2.9.0
-  resolution: "@reduxjs/toolkit@npm:2.9.0"
+  version: 2.9.1
+  resolution: "@reduxjs/toolkit@npm:2.9.1"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@standard-schema/utils": "npm:^0.3.0"
@@ -4644,7 +4644,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: 10/d2f1b59c96638d9a36c3709f31f24ec1ce25604f2010eebb89506e6782142dfa3a97bd64f6b4650d9230d1a8a7f09a2dfed5ee2eb7a4454cbeb08fcb8cc6cf36
+  checksum: 10/d545e62b9a8a34ebc5ea6eae4cbe59ea622d9fe65a736cc5d92854aa2db24f7f04a19f53e1067b6d7cddd1e7ddca29bc3d88a526782682126383fd2b930c13aa
   languageName: node
   linkType: hard
 
@@ -5087,12 +5087,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.8.0":
-  version: 24.8.0
-  resolution: "@types/node@npm:24.8.0"
+"@types/node@npm:*, @types/node@npm:^24.8.1":
+  version: 24.8.1
+  resolution: "@types/node@npm:24.8.1"
   dependencies:
     undici-types: "npm:~7.14.0"
-  checksum: 10/55045f74d743956325a6ec64b5d80e81f74b7217f77d0e4bf233ba7cd6ef553752b1e777bb796edf382e1a446c8c9fc1af1dc906b2c5100c9c08ab8be9317aa9
+  checksum: 10/4f944466766ca8cc0d635386e2b9b42b1948723ca0ec7d24624e80513e5816d6e96197db7c05f8f67b544a228a06a1c0598d66a5526aa4c1f5919db0d3c5bf8c
   languageName: node
   linkType: hard
 
@@ -5536,7 +5536,7 @@ __metadata:
     "@types/babel__preset-env": "npm:^7.10.0"
     "@types/jest": "npm:^30.0.0"
     "@types/json-schema": "npm:^7.0.15"
-    "@types/node": "npm:^24.8.0"
+    "@types/node": "npm:^24.8.1"
     "@types/react": "npm:^18.3.26"
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.46.1"
@@ -5582,7 +5582,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=35382f27f855285cb2db497f0b197224431d68fc"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=281cbf753d38a0878b210fd04151691f4d691d73"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
