@@ -2977,7 +2977,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/apputils@npm:^3.0.0 || ^4.0.0, @jupyterlab/apputils@npm:^4.5.10, @jupyterlab/apputils@npm:^4.5.9":
+"@jupyterlab/apputils@npm:^3.0.0 || ^4.0.0, @jupyterlab/apputils@npm:^4.5.10":
   version: 4.5.10
   resolution: "@jupyterlab/apputils@npm:4.5.10"
   dependencies:
@@ -5512,7 +5512,7 @@ __metadata:
     "@jupyter-widgets/base": "npm:^6.0.11"
     "@jupyter-widgets/jupyterlab-manager": "npm:^5.0.15"
     "@jupyterlab/application": "npm:^4.4.10"
-    "@jupyterlab/apputils": "npm:^4.5.9"
+    "@jupyterlab/apputils": "npm:^4.5.10"
     "@jupyterlab/builder": "npm:^4.4.10"
     "@jupyterlab/cells": "npm:^4.4.10"
     "@jupyterlab/codeeditor": "npm:^4.4.10"
@@ -5584,7 +5584,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=f538e6a7a4080ce4d7ab274c8a7e2f785857c3f5"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=01f3b86e4814be761c1553dece125cd3a6910f3a"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
