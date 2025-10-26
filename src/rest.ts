@@ -123,6 +123,27 @@ export const uploadFile = async (file: File) => {
 };
 
 /**
+ * Request the server to gather any state after interrupted run.
+ */
+export const afterInterrupt = async () => {
+    setTimeout(async () => {
+        const settings = ServerConnection.makeSettings();
+        const requestUrl = URLExt.join(settings.baseUrl, "waldiez", "gather");
+        try {
+            await ServerConnection.makeRequest(
+                requestUrl,
+                {
+                    method: "GET",
+                },
+                settings,
+            );
+        } catch (error) {
+            console.warn(error);
+        }
+    }, 2000);
+};
+
+/**
  * Request the server to export the selected files to a specific extension.
  * @param files The list of files to export
  * @param extension The extension to export to

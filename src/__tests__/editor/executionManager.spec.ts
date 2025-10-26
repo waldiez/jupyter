@@ -34,6 +34,7 @@ jest.mock("../../runner", () => ({
 
 jest.mock("../../rest", () => ({
     getWaldiezActualPath: jest.fn().mockResolvedValue("/actual/path/test.waldiez"),
+    afterInterrupt: jest.fn(),
 }));
 
 jest.mock("@waldiez/react", () => ({

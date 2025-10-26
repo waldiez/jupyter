@@ -4,7 +4,7 @@
  */
 import { WALDIEZ_STRINGS } from "../constants";
 import { WaldiezLogger } from "../logger";
-import { getWaldiezActualPath } from "../rest";
+import { afterInterrupt, getWaldiezActualPath } from "../rest";
 import { WaldiezStandardRunner, WaldiezStepRunner } from "../runner";
 import { WaldiezKernelManager } from "./kernelManager";
 import type { IEditorState, IExecutionContext } from "./types";
@@ -262,8 +262,13 @@ export class WaldiezExecutionManager {
             },
             stepByStep: undefined,
         });
-        // noinspection JSIgnoredPromiseFromCall
-        kernelManager.restart();
+        try {
+            // noinspection JSIgnoredPromiseFromCall
+            kernelManager.restart();
+            afterInterrupt();
+        } catch {
+            //
+        }
     }
 
     handleClose(): void {
@@ -273,9 +278,14 @@ export class WaldiezExecutionManager {
             chat: undefined,
             stepByStep: undefined,
         });
-        if (this._kernelManager) {
-            // noinspection JSIgnoredPromiseFromCall
-            this._kernelManager.restart();
+        try {
+            if (this._kernelManager) {
+                // noinspection JSIgnoredPromiseFromCall
+                this._kernelManager.restart();
+                afterInterrupt();
+            }
+        } catch {
+            //
         }
     }
 
@@ -320,6 +330,11 @@ export class WaldiezExecutionManager {
         if (this._kernelManager) {
             // noinspection JSIgnoredPromiseFromCall
             this._kernelManager.restart();
+        }
+        try {
+            afterInterrupt();
+        } catch {
+            //
         }
     }
 
