@@ -5089,12 +5089,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.9.1":
+"@types/node@npm:*":
   version: 24.9.1
   resolution: "@types/node@npm:24.9.1"
   dependencies:
     undici-types: "npm:~7.16.0"
   checksum: 10/eacbd06621616825042428dd6105d0c2f86d67b5f05f99db9fa89fe1cc173d5e65e604a9a61f1ce52ad915d09f2119e7468816ca1a22bb7a3cf5f3c131413c86
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^24.9.2":
+  version: 24.9.2
+  resolution: "@types/node@npm:24.9.2"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10/3e76ad89cca317c0886deedab0245b6b2a04ef6c47362bd3918020296f3e9630334795af9cee8c6633eae774c85d848ff2e6bed5a7c3133fc94968364fc3ee36
   languageName: node
   linkType: hard
 
@@ -5538,7 +5547,7 @@ __metadata:
     "@types/babel__preset-env": "npm:^7.10.0"
     "@types/jest": "npm:^30.0.0"
     "@types/json-schema": "npm:^7.0.15"
-    "@types/node": "npm:^24.9.1"
+    "@types/node": "npm:^24.9.2"
     "@types/react": "npm:^18.3.26"
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.46.2"
@@ -5565,7 +5574,7 @@ __metadata:
     mkdirp: "npm:^3.0.1"
     npm-run-all: "npm:^4.1.5"
     prettier: "npm:^3.6.2"
-    rimraf: "npm:^6.0.1"
+    rimraf: "npm:^6.1.0"
     source-map-loader: "npm:^5.0.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.25.0"
@@ -5584,7 +5593,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=01f3b86e4814be761c1553dece125cd3a6910f3a"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=57f7d4b2647eef5f1e622610c597ded221330606"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5593,11 +5602,11 @@ __metadata:
     "@radix-ui/react-checkbox": "npm:^1.3.3"
     "@radix-ui/react-slider": "npm:^1.3.6"
     "@radix-ui/react-tooltip": "npm:^1.2.8"
-    "@xyflow/react": "npm:^12.9.0"
+    "@xyflow/react": "npm:^12.9.2"
     framer-motion: "npm:^12.23.24"
     highlight.js: "npm:^11.11.1"
     jszip: "npm:^3.10.1"
-    lucide-react: "npm:^0.546.0"
+    lucide-react: "npm:^0.548.0"
     marked: "npm:^16.4.1"
     marked-highlight: "npm:^2.2.2"
     marked-react: "npm:^3.0.2"
@@ -5613,9 +5622,9 @@ __metadata:
     zundo: "npm:^2.3.0"
     zustand: "npm:^5.0.8"
   peerDependencies:
-    react: ^18.3.1 || ^19.1.1
-    react-dom: ^18.3.1 || ^19.1.1
-  checksum: 10/d90dff5f1e5ec46ce61de82ceeb8298e7b3b81e5a2799cfcc0e05cd4f14cc515836206781800b66defd961c8ed6dd4424ba4e5d65c579c7d98bcd2b1a8c6668e
+    react: ^18.3.1 || ^19
+    react-dom: ^18.3.1 || ^19
+  checksum: 10/4e278fd747dfbaa8d0693665c69de4944ce5b5cf8799c8fc329a70f8c07cc1e1200b57db5633557463f10352da44d40bd9955ffb1a072cb249b90f5ba12cfd0d
   languageName: node
   linkType: hard
 
@@ -5817,23 +5826,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xyflow/react@npm:^12.9.0":
-  version: 12.9.0
-  resolution: "@xyflow/react@npm:12.9.0"
+"@xyflow/react@npm:^12.9.2":
+  version: 12.9.2
+  resolution: "@xyflow/react@npm:12.9.2"
   dependencies:
-    "@xyflow/system": "npm:0.0.71"
+    "@xyflow/system": "npm:0.0.72"
     classcat: "npm:^5.0.3"
     zustand: "npm:^4.4.0"
   peerDependencies:
     react: ">=17"
     react-dom: ">=17"
-  checksum: 10/a3ef5639d33dd3d461aecd1dbca30022fa747b2968a9e88fd032d7250a774ed46d1a0c555cd545fe6c890b5a16c937d2ff258c3ed702cc07d75c5d47b8ef6e3f
+  checksum: 10/ffda3dd4bbe218a7989e9b8dafc224144cf16c2b31ba28d8d4446b2806b34e4a8e32434de076cf4a64cb3fe94debcfec7bbf4a2837136da0e83eb3af9087dad7
   languageName: node
   linkType: hard
 
-"@xyflow/system@npm:0.0.71":
-  version: 0.0.71
-  resolution: "@xyflow/system@npm:0.0.71"
+"@xyflow/system@npm:0.0.72":
+  version: 0.0.72
+  resolution: "@xyflow/system@npm:0.0.72"
   dependencies:
     "@types/d3-drag": "npm:^3.0.7"
     "@types/d3-interpolate": "npm:^3.0.4"
@@ -5844,7 +5853,7 @@ __metadata:
     d3-interpolate: "npm:^3.0.1"
     d3-selection: "npm:^3.0.0"
     d3-zoom: "npm:^3.0.0"
-  checksum: 10/57ac49a69b1fc558ab9cde048fb5f63fa99733eb7c11f8cb8b00afc37355da8e7c961ad0124f183816dfe8ebcd4f8814e4a4fd8cef7be4276b680af0e45337e2
+  checksum: 10/0a4f7c1394c09bac90bd4a67ed26dd64297642741e1c8b116ac7822fa346ae7122ae0df67a7cf236ebb2bf972e7f8f0e75c4ba084db98065f1a9af4b753230f1
   languageName: node
   linkType: hard
 
@@ -8633,7 +8642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^11.0.0":
+"glob@npm:^11.0.3":
   version: 11.0.3
   resolution: "glob@npm:11.0.3"
   dependencies:
@@ -9032,9 +9041,9 @@ __metadata:
   linkType: hard
 
 "immer@npm:^10.0.3, immer@npm:^10.1.1":
-  version: 10.1.3
-  resolution: "immer@npm:10.1.3"
-  checksum: 10/672faf5fc84177eecbfb49143ea8f6b5c1f981bd78c57e1562469354f6df658921ed6e0372b9ceed1e07c031e0c6d66863c4df80605928c6c774840b945aef83
+  version: 10.2.0
+  resolution: "immer@npm:10.2.0"
+  checksum: 10/d73e218c8f8ffbb39f9290dfafa478b94af73403dcf26b5672eef35233bb30f09ffe231f8a78a6c9cb442968510edd89e851776ec90a5ddfa82cee6db6b35137
   languageName: node
   linkType: hard
 
@@ -11007,12 +11016,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.546.0":
-  version: 0.546.0
-  resolution: "lucide-react@npm:0.546.0"
+"lucide-react@npm:^0.548.0":
+  version: 0.548.0
+  resolution: "lucide-react@npm:0.548.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/9eccf3b9f7b8d82054bcbcec973bf9d867a6e4ca0c244caa334eab27c9dd747bc9009e9ca30c2a5d49386c9cf6664fc1d8e51df1c71baf294c8a71acb81f7296
+  checksum: 10/70c3065daf44fb997fdec330c539c82cd3309dec6e287ef741c9b616695c92c16776d2fe5709776281b8eab02d30c38d8c7b79af9c65c08128e1cf950fc92f37
   languageName: node
   linkType: hard
 
@@ -11714,7 +11723,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"package-json-from-dist@npm:^1.0.0":
+"package-json-from-dist@npm:^1.0.0, package-json-from-dist@npm:^1.0.1":
   version: 1.0.1
   resolution: "package-json-from-dist@npm:1.0.1"
   checksum: 10/58ee9538f2f762988433da00e26acc788036914d57c71c246bf0be1b60cdbd77dd60b6a3e1a30465f0b248aeb80079e0b34cb6050b1dfa18c06953bb1cbc7602
@@ -12650,15 +12659,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "rimraf@npm:6.0.1"
+"rimraf@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "rimraf@npm:6.1.0"
   dependencies:
-    glob: "npm:^11.0.0"
-    package-json-from-dist: "npm:^1.0.0"
+    glob: "npm:^11.0.3"
+    package-json-from-dist: "npm:^1.0.1"
   bin:
     rimraf: dist/esm/bin.mjs
-  checksum: 10/0eb7edf08aa39017496c99ba675552dda11a20811ba78f8232da2ba945308c91e9cd673f95998b1a8202bc7436d33390831d23ea38ae52751038d56373ad99e2
+  checksum: 10/ce376c041ef4212dce2b30690dff3c09fc34253ec21821dffec77731061241888c04c3baf0b052bc5a1698b9f348c08ef83bddbd6e2553e79bf939bedb1a31a9
   languageName: node
   linkType: hard
 

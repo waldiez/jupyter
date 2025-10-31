@@ -168,6 +168,7 @@ describe("WaldiezExecutionManager", () => {
                 context.kernel,
                 "/actual/path/test.waldiez",
                 undefined,
+                undefined,
             );
         });
 

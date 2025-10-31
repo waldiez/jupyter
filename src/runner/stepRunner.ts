@@ -67,14 +67,19 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
      * @param filePath The path of the waldiez file
      * @memberof WaldiezStepRunner
      */
-    start(kernel: Kernel.IKernelConnection, filePath: string, breakpoints?: (string | WaldiezBreakpoint)[]) {
+    start(
+        kernel: Kernel.IKernelConnection,
+        filePath: string,
+        breakpoints?: (string | WaldiezBreakpoint)[],
+        checkpoint?: string | null,
+    ) {
         this._eventHistory = new Set();
         this._currentEvent = undefined;
         let initialBreakpoints: string[] | undefined = undefined;
         if (breakpoints) {
             initialBreakpoints = breakpoints.map(waldiezBreakpointToString);
         }
-        this.executeFile(kernel, filePath, "debug", initialBreakpoints);
+        this.executeFile(kernel, filePath, "debug", initialBreakpoints, checkpoint);
         this._onUpdate({
             show: true,
             active: true,

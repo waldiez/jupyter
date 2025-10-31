@@ -211,6 +211,7 @@ export class WaldiezExecutionManager {
     async executeStepByStep(
         context: IExecutionContext,
         breakpoints?: (string | WaldiezBreakpoint)[],
+        checkpoint?: string | null,
     ): Promise<void> {
         if (!context.kernel) {
             throw new Error(WALDIEZ_STRINGS.NO_KERNEL);
@@ -220,7 +221,7 @@ export class WaldiezExecutionManager {
 
         try {
             const actualPath = await getWaldiezActualPath(context.filePath);
-            this._stepRunner.start(context.kernel, actualPath, breakpoints);
+            this._stepRunner.start(context.kernel, actualPath, breakpoints, checkpoint);
         } catch (err) {
             this._logger.log({
                 data: (err as Error).message || String(err),

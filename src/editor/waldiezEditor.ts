@@ -4,7 +4,7 @@
  */
 import { PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "../constants";
 import { WaldiezLogger } from "../logger";
-import { handleConvert, uploadFile } from "../rest";
+import { handleConvert, handleGetCheckpoints, handleSubmitCheckpoint, uploadFile } from "../rest";
 import { EditorWidget } from "../widget";
 import { WaldiezExecutionManager } from "./executionManager";
 import { WaldiezKernelManager } from "./kernelManager";
@@ -220,6 +220,10 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             onStepRun: this._onStepRun.bind(this),
             onConvert: this._onConvert.bind(this),
             onUpload: this._onUpload.bind(this),
+            checkpoints: {
+                get: this._onGetCheckpoints.bind(this),
+                submit: this._onSubmitCheckpoint.bind(this),
+            },
         });
     }
 
@@ -276,7 +280,11 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
     }
 
-    private async _onStepRun(contents: string, breakpoints?: (string | WaldiezBreakpoint)[]): Promise<void> {
+    private async _onStepRun(
+        contents: string,
+        breakpoints?: (string | WaldiezBreakpoint)[],
+        checkpoint?: string | null,
+    ): Promise<void> {
         if (!this._kernelManager.kernel) {
             await showErrorMessage(WALDIEZ_STRINGS.NO_KERNEL, WALDIEZ_STRINGS.NO_KERNEL_MESSAGE);
             return;
@@ -291,7 +299,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 filePath: this.context.path,
                 contents,
             };
-            await this._executionManager.executeStepByStep(context, breakpoints);
+            await this._executionManager.executeStepByStep(context, breakpoints, checkpoint);
         } catch (err) {
             const errorMsg = `Error executing flow: ${(err as Error).message || err}`;
             showSnackbar({
@@ -343,6 +351,41 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             });
         } catch {
             //
+        }
+    }
+    private async _onGetCheckpoints(flowName: string): Promise<Record<string, any> | null> {
+        try {
+            return await handleGetCheckpoints(flowName);
+        } catch (err) {
+            const errorMsg = `Error getting checkpoints: ${err}`;
+            showSnackbar({
+                flowId: this.id,
+                message: errorMsg,
+                level: "error",
+            });
+            this._logger.log({
+                data: errorMsg,
+                level: "error",
+                type: "text",
+            });
+            return null;
+        }
+    }
+    private async _onSubmitCheckpoint(flowName: string, checkpoint: Record<string, any>): Promise<void> {
+        try {
+            await handleSubmitCheckpoint(flowName, checkpoint);
+        } catch (err) {
+            const errorMsg = `Error saving checkpoint: ${err}`;
+            showSnackbar({
+                flowId: this.id,
+                message: errorMsg,
+                level: "error",
+            });
+            this._logger.log({
+                data: errorMsg,
+                level: "error",
+                type: "text",
+            });
         }
     }
 }

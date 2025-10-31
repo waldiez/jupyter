@@ -100,6 +100,7 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
         filePath: string,
         executionMode: "standard" | "debug",
         breakpoints?: string[],
+        checkpoint?: string | null,
     ) {
         if (this._running) {
             this._logger.error("A waldiez flow is already running");
@@ -112,7 +113,7 @@ export abstract class WaldiezBaseRunner<TUpdate = any> {
         this._future = undefined;
         this._uploadsRoot = getUploadsRoot(filePath);
 
-        const code = getCodeToExecute(filePath, executionMode, breakpoints);
+        const code = getCodeToExecute(filePath, executionMode, breakpoints, checkpoint);
         this._future = kernel.requestExecute(
             {
                 code,

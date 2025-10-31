@@ -10,6 +10,7 @@ from jupyter_server.serverapp import ServerWebApplication
 from jupyter_server.utils import url_path_join
 from tornado import web
 
+from .checkpoints_handler import CheckpointsHandler
 from .extra_static_files import ensure_extra_static_files
 from .files_handler import FilesHandler
 from .interrupt_handler import InterruptHandler
@@ -35,6 +36,7 @@ def setup_handlers(web_app: ServerWebApplication) -> None:
     files_pattern = url_path_join(base_url, "waldiez", "files")
     upload_pattern = url_path_join(base_url, "waldiez", "upload")
     gather_pattern = url_path_join(base_url, "waldiez", "gather")
+    checkpoints_pattern = url_path_join(base_url, "waldiez", "checkpoints")
     min_maps_pattern = url_path_join(base_url, "min-maps")
     min_maps_path = os.path.join(static_path, "min-maps")
     vs_pattern = url_path_join(base_url, "vs")
@@ -43,6 +45,7 @@ def setup_handlers(web_app: ServerWebApplication) -> None:
         host_pattern,
         [
             (files_pattern, FilesHandler),
+            (checkpoints_pattern, CheckpointsHandler),
             (gather_pattern, InterruptHandler),
             (upload_pattern, UploadHandler),
             (

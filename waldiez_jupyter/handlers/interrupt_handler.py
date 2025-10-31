@@ -11,7 +11,7 @@ from waldiez import WaldiezRunner
 
 
 class InterruptHandler(APIHandler):
-    """Files handler to get or export .waldiez files."""
+    """Interrupt handler to gather any results after interrupt."""
 
     @authenticated
     def data_received(self, chunk: bytes) -> Awaitable[None] | None:
@@ -43,7 +43,7 @@ class InterruptHandler(APIHandler):
         # pylint: disable=broad-exception-caught
         try:
             _, msg = WaldiezRunner.gather()
-            self.log.info(msg)
+            self.log.debug(msg)
         except BaseException as err:  # pragma: no cover
             self.log.error(err)
         await self.finish(json.dumps({"status": "ok"}))

@@ -126,7 +126,7 @@ describe("WaldiezStepRunner", () => {
 
             stepRunner.start(mockKernel, filePath);
 
-            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug", undefined);
+            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug", undefined, undefined);
         });
 
         it("should call executeFile with debug mode and initial breakpoints", () => {
@@ -138,7 +138,13 @@ describe("WaldiezStepRunner", () => {
 
             stepRunner.start(mockKernel, filePath, breakpoints);
 
-            expect(executeFileSpy).toHaveBeenCalledWith(mockKernel, filePath, "debug", ["event:tool_call"]);
+            expect(executeFileSpy).toHaveBeenCalledWith(
+                mockKernel,
+                filePath,
+                "debug",
+                ["event:tool_call"],
+                undefined,
+            );
         });
     });
 

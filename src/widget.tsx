@@ -37,10 +37,18 @@ export interface IWaldiezWidgetProps {
     jsonData: Record<string, any>;
     signal: ISignal<any, { chat: WaldiezChatConfig | undefined; stepByStep: WaldiezStepByStep | undefined }>;
     onRun?: (flow: string) => void;
-    onStepRun?: (flow: string, breakpoints?: (string | WaldiezBreakpoint)[]) => void;
+    onStepRun?: (
+        flow: string,
+        breakpoints?: (string | WaldiezBreakpoint)[],
+        checkpoint?: string | null,
+    ) => void;
     onConvert?: (flow: string, to: "py" | "ipynb") => void;
     onChange?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
+    checkpoints?: {
+        get: (flowName: string) => Promise<Record<string, any> | null>;
+        submit: (flowName: string, checkpoint: Record<string, any>) => Promise<void>;
+    };
 }
 
 /**
@@ -73,6 +81,7 @@ export class EditorWidget extends ReactWidget {
             onStepRun: props.onStepRun,
             onConvert: props.onConvert,
             onUpload: props.onUpload,
+            checkpoints: props.checkpoints,
             monacoVsPath: props.vsPath,
         };
     }

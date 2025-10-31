@@ -30,6 +30,52 @@ export const handleExport = async (fileBrowserFactory: IFileBrowserFactory, exte
 export const handleConvert = async (waldiezFilePath: string, extension: "py" | "ipynb") => {
     await _requestFilesExport([waldiezFilePath], extension);
 };
+
+export const handleGetCheckpoints: (flowName: string) => Promise<Record<string, any> | null> = async (
+    flowName: string,
+) => {
+    const settings = ServerConnection.makeSettings();
+    const requestUrl = URLExt.join(settings.baseUrl, "waldiez", "checkpoints", "?flow=" + flowName);
+    let response: Response;
+    try {
+        response = await ServerConnection.makeRequest(
+            requestUrl,
+            {
+                method: "GET",
+            },
+            settings,
+        );
+    } catch (error) {
+        console.warn(error);
+        return null;
+    }
+    const data: any = await response.text();
+    let jsonData: any;
+    if (data.length > 0) {
+        try {
+            jsonData = JSON.parse(data);
+        } catch (_) {
+            throw new Error("Not a JSON response body.");
+        }
+    }
+
+    /* istanbul ignore if */
+    if (!response.ok) {
+        throw new ServerConnection.ResponseError(response, data.message || data);
+    }
+    if (!jsonData) {
+        throw new Error("No data returned from the server");
+    }
+    return jsonData;
+};
+
+export const handleSubmitCheckpoint: (
+    flowName: string,
+    checkpoint: Record<string, any>,
+) => Promise<void> = async (_flowName: string, _checkpoint: Record<string, any>) => {
+    return;
+};
+
 /**
  * Request server to get the actual path of a file.
  * @param path The relative (to the notebooks path setting) path of the file.
