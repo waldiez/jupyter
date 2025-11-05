@@ -35,9 +35,15 @@ describe("WaldiezLogger", () => {
     beforeEach(() => {
         app = new JupyterLab() as jest.Mocked<JupyterLab>;
         rendermime = new RenderMimeRegistry();
+        if (typeof document.execCommand !== "function") {
+            document.execCommand = jest.fn().mockReturnValue(true);
+        }
+        jest.useFakeTimers();
     });
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.useRealTimers();
+        jest.restoreAllMocks();
+        document.body.innerHTML = "";
     });
     it("should be created", () => {
         const logger = new WaldiezLogger({
@@ -208,5 +214,182 @@ describe("WaldiezLogger", () => {
         jest.spyOn(logger["_logConsole"].node, "querySelectorAll").mockReturnValue(null as any);
 
         logger["_scrollToBottom"]();
+    });
+    it("parses log DOM into entries (timestamp + fallback)", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        // Populate two fake log lines
+        const host = logger["widget"].content.node; // LogConsolePanel node
+        host.innerHTML = `
+      <div class="jp-OutputArea-child">12:34:56 Task started</div>
+      <div class="jp-OutputArea-child">no timestamp here</div>
+    `;
+
+        const entries = logger["_collectLogEntries"]() as any[];
+        expect(entries).toHaveLength(2);
+        expect(entries[0].timestamp).toBe("12:34:56");
+        expect(entries[0].data).toBe("Task started");
+        expect(typeof entries[1].timestamp).toBe("string"); // ISO fallback
+        expect(entries[1].data).toBe("no timestamp here");
+    });
+
+    it("serializes entries to JSONL with trailing newline", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        const jsonl = logger["_entriesToJsonl"]([
+            { timestamp: "00:00:01", data: "a" },
+            { timestamp: "00:00:02", data: "b" },
+        ]);
+        expect(jsonl).toBe('{"timestamp":"00:00:01","data":"a"}\n{"timestamp":"00:00:02","data":"b"}\n');
+    });
+
+    it("makes a timestamped filename", () => {
+        jest.useFakeTimers().setSystemTime(new Date(2025, 10, 5, 9, 30, 15));
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const name = logger["_makeDownloadFilename"]();
+        expect(name).toBe("waldiez-logs-2025-11-05-09-30-15.jsonl");
+    });
+
+    it("scrolls to bottom when logs exist", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const host = logger["widget"].content.node;
+        host.innerHTML = `
+      <div class="jp-OutputArea-child"></div>
+      <div class="jp-OutputArea-child" id="last"></div>
+    `;
+        const last = host.querySelector("#last") as any;
+        last.scrollIntoView = jest.fn();
+
+        logger["_scrollToBottom"]();
+        expect(last.scrollIntoView).toHaveBeenCalled();
+    });
+
+    it("registers commands and executes copy/download/clear", async () => {
+        const copySpy = jest.spyOn(WaldiezLogger.prototype as any, "_copyLogs");
+        const dlSpy = jest.spyOn(WaldiezLogger.prototype as any, "_downloadLogs");
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const host = logger["widget"].content.node;
+        host.innerHTML = '<div class="jp-OutputArea-child">12:00:00 hello</div>';
+
+        const clearSpy = jest.spyOn((logger as any)["_getLogger"](), "clear");
+
+        await app.commands.execute((logger as any)["_copyLogsCommandId"]);
+        await app.commands.execute((logger as any)["_downloadLogsCommandId"]);
+        await app.commands.execute((logger as any)["_logConsoleClearCommandId"]);
+
+        expect(copySpy).toHaveBeenCalled();
+        expect(dlSpy).toHaveBeenCalled();
+        expect(clearSpy).toHaveBeenCalled();
+    });
+
+    it("download: standard anchor + objectURL path", async () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+        const host = logger["widget"].content.node;
+        host.innerHTML = '<div class="jp-OutputArea-child">12:00:00 x</div>';
+
+        const revoke = jest.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+        const create = jest.spyOn(URL, "createObjectURL").mockReturnValue("blob:fake");
+
+        const a = document.createElement("a");
+        const click = jest.fn();
+        Object.defineProperty(a, "click", { value: click });
+        jest.spyOn(document, "createElement").mockReturnValue(a);
+        jest.spyOn(document.body, "appendChild").mockImplementation(() => a);
+        jest.spyOn(a, "remove").mockImplementation(() => {});
+
+        (navigator as any).msSaveOrOpenBlob = undefined;
+
+        await (logger as any)._downloadLogs();
+
+        expect(create).toHaveBeenCalled();
+        expect(click).toHaveBeenCalled();
+        jest.runOnlyPendingTimers();
+
+        const createdUrl = create.mock.results[0].value as string;
+        expect(revoke).toHaveBeenCalledWith(createdUrl);
+
+        jest.useRealTimers();
+        revoke.mockRestore();
+        create.mockRestore();
+    });
+    it("download: IE/Edge msSaveOrOpenBlob path", async () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        const host = logger["widget"].content.node;
+        host.innerHTML = '<div class="jp-OutputArea-child">12:00:00 y</div>';
+
+        const msSave = jest.fn();
+        (navigator as any).msSaveOrOpenBlob = msSave;
+
+        const create = jest.spyOn(URL, "createObjectURL");
+        await (logger as any)._downloadLogs();
+
+        expect(msSave).toHaveBeenCalled();
+        expect(create).not.toHaveBeenCalled();
+
+        create.mockRestore();
+        (navigator as any).msSaveOrOpenBlob = undefined;
+    });
+
+    it("logData strips ANSI sequences before logging", () => {
+        const logger = new WaldiezLogger({
+            commands: app.commands,
+            rendermime,
+            editorId: "editorId",
+            panel: new SplitPanel(),
+        });
+
+        // Replace underlying logger with a spy
+        const fakeLogger = { log: jest.fn(), clear: jest.fn(), level: "info" } as any;
+        jest.spyOn(logger as any, "_getLogger").mockReturnValue(fakeLogger);
+
+        // Send colored text
+        (logger as any)["_logData"]({
+            // cspell: disable-next-line
+            data: "\u001b[31mred\u001b[0m",
+            level: "info",
+            type: "text",
+        });
+
+        expect(fakeLogger.log).toHaveBeenCalledWith({
+            data: "red",
+            level: "info",
+            type: "text",
+        });
     });
 });

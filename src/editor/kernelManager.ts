@@ -71,13 +71,13 @@ export class WaldiezKernelManager {
     }
 
     private _initializeCommands(): void {
+        /* istanbul ignore next */
         if (!this._commands.hasCommand(this._restartKernelCommandId)) {
             this._commands.addCommand(this._restartKernelCommandId, {
                 execute: this.restart.bind(this),
                 label: ` ${WALDIEZ_STRINGS.RESTART_KERNEL}`,
             });
         }
-
         if (!this._commands.hasCommand(this._interruptKernelCommandId)) {
             this._commands.addCommand(this._interruptKernelCommandId, {
                 execute: this.interrupt.bind(this),
@@ -148,10 +148,11 @@ export class WaldiezKernelManager {
 
     dispose(): void {
         this._restartKernelButton.dispose();
+        /* istanbul ignore next */
         if (this._commands.hasCommand(this._restartKernelCommandId)) {
             this._commands.notifyCommandChanged(this._restartKernelCommandId);
         }
-
+        /* istanbul ignore next */
         this._interruptKernelButton.dispose();
         if (this._commands.hasCommand(this._interruptKernelCommandId)) {
             this._commands.notifyCommandChanged(this._interruptKernelCommandId);

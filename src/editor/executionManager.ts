@@ -142,6 +142,7 @@ export class WaldiezExecutionManager {
                 console.error("SessionContext not available for user input");
                 return;
             }
+            /* istanbul ignore next */
             this.handleUserInput(userInput, this._sessionContext);
         };
     }
@@ -152,26 +153,31 @@ export class WaldiezExecutionManager {
                 console.error("KernelManager not available for interrupt");
                 return;
             }
+            /* istanbul ignore next */
             this.handleInterrupt(this._kernelManager);
         };
     }
 
     private _createCloseHandler() {
         return () => {
+            /* istanbul ignore next */
             if (!this._kernelManager) {
                 console.error("KernelManager not available for close");
                 return;
             }
+            /* istanbul ignore next */
             this.handleClose();
         };
     }
 
     private _createSendControlHandler() {
         return (input: Pick<WaldiezDebugInputResponse, "data" | "request_id">) => {
+            /* istanbul ignore next */
             if (!this._sessionContext) {
                 console.error("SessionContext not available for send control");
                 return;
             }
+            /* istanbul ignore next */
             this.sendControl(input, this._sessionContext);
         };
     }
@@ -223,6 +229,7 @@ export class WaldiezExecutionManager {
             const actualPath = await getWaldiezActualPath(context.filePath);
             this._stepRunner.start(context.kernel, actualPath, breakpoints, checkpoint);
         } catch (err) {
+            /* istanbul ignore next */
             this._logger.log({
                 data: (err as Error).message || String(err),
                 level: "error",

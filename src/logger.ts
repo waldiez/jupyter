@@ -21,9 +21,17 @@ import type {
     IInputRequestMsg,
     IStreamMsg,
 } from "@jupyterlab/services/lib/kernel/messages";
-import { CommandToolbarButton, clearIcon, consoleIcon, copyIcon } from "@jupyterlab/ui-components";
+import {
+    CommandToolbarButton,
+    clearIcon,
+    consoleIcon,
+    copyIcon,
+    downloadIcon,
+} from "@jupyterlab/ui-components";
 import { CommandRegistry } from "@lumino/commands";
 import { SplitPanel } from "@lumino/widgets";
+
+type LogEntry = { timestamp: string; data: string };
 
 /**
  * A logger for the Waldiez extension.
@@ -42,11 +50,13 @@ export class WaldiezLogger {
     private readonly _toggleConsoleViewButton: CommandToolbarButton;
     private readonly _copyLogsButton: CommandToolbarButton;
     private readonly _clearLogsButton: CommandToolbarButton;
+    private readonly _downloadLogsButton: CommandToolbarButton;
     private _widgetIsVisible: boolean;
     private readonly _toggleConsoleViewCommandId: string;
     private readonly _logConsoleClearCommandId: string;
     private readonly _copyLogsCommandId: string;
     private readonly _clearLogsCommandId: string;
+    private readonly _downloadLogsCommandId: string;
 
     constructor(options: WaldiezLogger.IOptions) {
         this._id = options.editorId;
@@ -56,6 +66,7 @@ export class WaldiezLogger {
         this._toggleConsoleViewCommandId = `${CommandIDs.toggleLogsView}-${this._id}`;
         this._copyLogsCommandId = `${CommandIDs.copyLogs}-${this._id}`;
         this._clearLogsCommandId = `${CommandIDs.clearLogs}-${this._id}`;
+        this._downloadLogsCommandId = `${CommandIDs.downloadLogs}-${this._id}`;
         this._loggerRegistry = new LoggerRegistry({
             defaultRendermime: this._rendermime,
             maxLength: 2000,
@@ -81,13 +92,19 @@ export class WaldiezLogger {
             commands: this._commands,
             id: this._copyLogsCommandId,
             icon: copyIcon,
-            label: ` ${WALDIEZ_STRINGS.COPY_LOGS}`,
+            label: ` ${WALDIEZ_STRINGS.COPY_LOGS} `,
         });
         this._clearLogsButton = new CommandToolbarButton({
             commands: this._commands,
             id: this._clearLogsCommandId,
             icon: clearIcon,
-            label: ` ${WALDIEZ_STRINGS.CLEAR_LOGS}`,
+            label: ` ${WALDIEZ_STRINGS.CLEAR_LOGS} `,
+        });
+        this._downloadLogsButton = new CommandToolbarButton({
+            commands: this._commands,
+            id: this._downloadLogsCommandId,
+            icon: downloadIcon,
+            label: ` ${WALDIEZ_STRINGS.DOWNLOAD_LOGS} `,
         });
         // the split panel to contain the log console
         this._panel = options.panel;
@@ -250,6 +267,7 @@ export class WaldiezLogger {
     clear(): void {
         this._getLogger().clear();
     }
+
     /**
      * Dispose the logger.
      * @public
@@ -257,7 +275,13 @@ export class WaldiezLogger {
      */
     dispose(): void {
         this._logConsole.dispose();
-        for (const commandId of [this._toggleConsoleViewCommandId, this._logConsoleClearCommandId]) {
+        for (const commandId of [
+            this._toggleConsoleViewCommandId,
+            this._logConsoleClearCommandId,
+            this._clearLogsCommandId,
+            this._copyLogsCommandId,
+            this._downloadLogsCommandId,
+        ]) {
             /* istanbul ignore if */
             if (this._commands.hasCommand(commandId)) {
                 this._commands.notifyCommandChanged(commandId);
@@ -289,7 +313,7 @@ export class WaldiezLogger {
         }
     }
 
-    private async _copyLogs(): Promise<void> {
+    private _collectLogEntries(): LogEntry[] {
         const logs = this._logConsole.node.querySelectorAll(".jp-OutputArea-child");
         const logEntries: { timestamp: string; data: string }[] = [];
 
@@ -313,9 +337,60 @@ export class WaldiezLogger {
             }
         });
 
-        const logText = logEntries.map(e => JSON.stringify(e)).join("\n");
-        await copyToClipboard(logText);
+        return logEntries;
     }
+
+    private _entriesToJsonl(entries: LogEntry[]): string {
+        // JSON Lines (ndjson); trailing newline plays nice with many tools
+        return entries.map(e => JSON.stringify(e)).join("\n") + "\n";
+    }
+
+    private _makeDownloadFilename(prefix = "waldiez-logs", ext = "jsonl"): string {
+        const pad = (n: number) => String(n).padStart(2, "0");
+        const d = new Date();
+        return (
+            `${prefix}-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
+            `-${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}.${ext}`
+        );
+    }
+
+    /**
+     * Copy logs to clipboard
+     * @public
+     * @memberof WaldiezLogger
+     */
+    private async _copyLogs(): Promise<void> {
+        const jsonl = this._entriesToJsonl(this._collectLogEntries());
+        await copyToClipboard(jsonl);
+    }
+
+    /**
+     * Download logs
+     * @public
+     * @memberof WaldiezLogger
+     */
+    private async _downloadLogs(): Promise<void> {
+        const jsonl = this._entriesToJsonl(this._collectLogEntries());
+        const blob = new Blob([jsonl], { type: "application/x-ndjson;charset=utf-8" });
+        const filename = this._makeDownloadFilename();
+
+        const navAny = navigator as any;
+        if (typeof navAny?.msSaveOrOpenBlob === "function") {
+            navAny.msSaveOrOpenBlob(blob, filename);
+            return;
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+    }
+
     /**
      * Get the log console widget.
      * @returns The log console widget
@@ -328,6 +403,7 @@ export class WaldiezLogger {
         });
         logConsoleWidget.toolbar.addItem("clear", this._clearLogsButton);
         logConsoleWidget.toolbar.addItem("copy", this._copyLogsButton);
+        logConsoleWidget.toolbar.addItem("download", this._downloadLogsButton);
         this._setupCommands();
         return logConsoleWidget;
     }
@@ -336,6 +412,7 @@ export class WaldiezLogger {
         this._setupClearCommand();
         this._setupCopyCommand();
         this._setupToggleCommand();
+        this._setupDownloadCommand();
     }
     private _setupClearCommand(): void {
         if (!this._commands.hasCommand(this._logConsoleClearCommandId)) {
@@ -355,6 +432,17 @@ export class WaldiezLogger {
                 isEnabled: () => !!this._logConsole && this._logConsole.source !== null,
                 label: ` ${WALDIEZ_STRINGS.COPY_LOGS}`,
                 icon: copyIcon,
+            });
+        }
+    }
+
+    private _setupDownloadCommand(): void {
+        if (!this._commands.hasCommand(this._downloadLogsCommandId)) {
+            this._commands.addCommand(this._downloadLogsCommandId, {
+                execute: this._downloadLogs.bind(this),
+                isEnabled: () => !!this._logConsole && this._logConsole.source !== null,
+                label: ` ${WALDIEZ_STRINGS.DOWNLOAD_LOGS}`,
+                icon: downloadIcon,
             });
         }
     }

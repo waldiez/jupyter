@@ -2,9 +2,39 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { getWaldiezActualPath, handleConvert, handleExport, uploadFile } from "../rest";
+import {
+    afterInterrupt,
+    getWaldiezActualPath,
+    handleConvert,
+    handleExport,
+    handleGetCheckpoints,
+    uploadFile,
+} from "../rest";
 import { mockFetch } from "./utils";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
+import { ServerConnection } from "@jupyterlab/services";
+
+type MockResp = {
+    ok?: boolean;
+    status?: number;
+    body?: string;
+    reject?: boolean; // simulate network error (reject promise)
+};
+
+const mockServer = (resp: MockResp) => {
+    jest.spyOn(ServerConnection, "makeSettings").mockReturnValue({ baseUrl: "/" } as any);
+
+    jest.spyOn(ServerConnection, "makeRequest").mockImplementation(async () => {
+        if (resp.reject) {
+            throw new Error("error");
+        }
+        return {
+            ok: resp.ok ?? true,
+            status: resp.status ?? 200,
+            text: async () => resp.body ?? "",
+        } as any;
+    });
+};
 
 const patchServerConnection = (responseText: string, error: boolean) => {
     mockFetch(responseText, error);
@@ -21,7 +51,7 @@ const patchServerConnection = (responseText: string, error: boolean) => {
 
 describe("rest module", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.restoreAllMocks();
     });
     describe("handleExport", () => {
         it("should not break if no files are selected", async () => {
@@ -199,5 +229,118 @@ describe("rest module", () => {
     it("should handle handleConvert function", async () => {
         patchServerConnection('{"success": true}', false);
         await handleConvert("path/to/file.waldiez", "py");
+    });
+    it("handleExport posts selected .waldiez files with the extension", async () => {
+        const fileBrowserFactory = {
+            tracker: {
+                currentWidget: {
+                    selectedItems: () => [
+                        { path: "a/file.waldiez", name: "file.waldiez" },
+                        { path: "b/skip.py", name: "skip.py" },
+                        { path: "c/flow.waldiez", name: "flow.waldiez" },
+                    ],
+                    model: { refresh: jest.fn() },
+                },
+            },
+        } as unknown as IFileBrowserFactory;
+
+        const makeRequestSpy = jest
+            .spyOn(ServerConnection, "makeRequest")
+            .mockResolvedValue({ ok: true, text: async () => "" } as any);
+        jest.spyOn(ServerConnection, "makeSettings").mockReturnValue({ baseUrl: "/" } as any);
+
+        await handleExport(fileBrowserFactory, "ipynb");
+
+        // One POST call to /waldiez/files with expected JSON body
+        expect(makeRequestSpy).toHaveBeenCalledTimes(1);
+        const [, init] = makeRequestSpy.mock.calls[0];
+        expect(init?.method).toBe("POST");
+        const sent = JSON.parse(init!.body as string);
+        expect(sent).toEqual({ files: ["a/file.waldiez", "c/flow.waldiez"], extension: "ipynb" });
+
+        expect(fileBrowserFactory.tracker.currentWidget?.model.refresh).toHaveBeenCalled();
+    });
+    it("handleConvert posts a single file with the extension", async () => {
+        const makeRequestSpy = jest
+            .spyOn(ServerConnection, "makeRequest")
+            .mockResolvedValue({ ok: true, text: async () => "" } as any);
+        jest.spyOn(ServerConnection, "makeSettings").mockReturnValue({ baseUrl: "/" } as any);
+
+        await handleConvert("x/one.waldiez", "py");
+
+        expect(makeRequestSpy).toHaveBeenCalledTimes(1);
+        const [, init] = makeRequestSpy.mock.calls[0];
+        const sent = JSON.parse(init!.body as string);
+        expect(sent).toEqual({ files: ["x/one.waldiez"], extension: "py" });
+    });
+    describe("handleGetCheckpoints", () => {
+        it("returns parsed JSON on success", async () => {
+            mockServer({ ok: true, body: '{"foo": "bar"}' });
+            await expect(handleGetCheckpoints("flow-1")).resolves.toEqual({ foo: "bar" });
+        });
+
+        it("returns null on network error and warns", async () => {
+            const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+            mockServer({ reject: true });
+            await expect(handleGetCheckpoints("flow-1")).resolves.toBeNull();
+            expect(warn).toHaveBeenCalled();
+        });
+
+        it("throws on invalid JSON", async () => {
+            mockServer({ ok: true, body: "not-json" });
+            await expect(handleGetCheckpoints("flow-1")).rejects.toThrow("Not a JSON response body.");
+        });
+
+        it("throws ResponseError when !ok", async () => {
+            mockServer({ ok: false, status: 500, body: '{"message":"boom"}' });
+            await expect(handleGetCheckpoints("flow-1")).rejects.toThrow(/boom|ResponseError/);
+        });
+    });
+    it("afterInterrupt schedules a gather request after 2s", async () => {
+        jest.useFakeTimers();
+
+        const makeReq = jest
+            .spyOn(ServerConnection, "makeRequest")
+            .mockResolvedValue({ ok: true, text: async () => "" } as any);
+        jest.spyOn(ServerConnection, "makeSettings").mockReturnValue({ baseUrl: "/" } as any);
+
+        afterInterrupt();
+        expect(makeReq).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(1999);
+        expect(makeReq).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(1);
+        expect(makeReq).toHaveBeenCalledTimes(1);
+        const [url, init] = makeReq.mock.calls[0];
+        expect(String(url)).toBe("/waldiez/gather");
+        expect(init?.method).toBe("GET");
+    });
+    describe("handleGetCheckpoints", () => {
+        it("returns parsed JSON on success", async () => {
+            mockServer({ ok: true, body: '{"foo": "bar"}' });
+            await expect(handleGetCheckpoints("flow-1")).resolves.toEqual({ foo: "bar" });
+        });
+
+        it("returns null on network error and warns", async () => {
+            const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+            mockServer({ reject: true });
+            await expect(handleGetCheckpoints("flow-1")).resolves.toBeNull();
+            expect(warn).toHaveBeenCalled();
+        });
+
+        it("throws on invalid JSON", async () => {
+            mockServer({ ok: true, body: "not-json" });
+            await expect(handleGetCheckpoints("flow-1")).rejects.toThrow("Not a JSON response body.");
+        });
+
+        it("throws ResponseError when !ok", async () => {
+            mockServer({ ok: false, status: 500, body: '{"message":"boom"}' });
+            await expect(handleGetCheckpoints("flow-1")).rejects.toThrow(/boom|ResponseError/);
+        });
+    });
+    it("getWaldiezActualPath returns .path from JSON", async () => {
+        mockServer({ ok: true, body: '{"path":"real/path"}' });
+        await expect(getWaldiezActualPath("rel")).resolves.toBe("real/path");
     });
 });

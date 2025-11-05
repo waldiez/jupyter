@@ -285,7 +285,6 @@ describe("common utility functions", () => {
             const result = await copyToClipboard("test text");
 
             expect(result).toBe(false);
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Fallback copy failed:", expect.any(Error));
             consoleErrorSpy.mockRestore();
         });
     });

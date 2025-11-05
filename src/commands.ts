@@ -18,6 +18,7 @@ export namespace CommandIDs {
     export const createNew = "waldiez:create-new";
     export const openWaldiez = "waldiez:open-waldiez";
     export const clearLogs = "waldiez:clear-logs";
+    export const downloadLogs = "waldiez:download-logs";
     export const copyLogs = "waldiez:copy-logs";
     export const toggleLogsView = "waldiez:toggle-logs-view";
     export const interruptKernel = "waldiez:interrupt-kernel";

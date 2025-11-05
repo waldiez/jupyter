@@ -186,18 +186,15 @@ export const copyToClipboard = async (text: string) => {
         textarea.focus();
         textarea.select();
 
-        // noinspection JSDeprecatedSymbols
-        const success = document.execCommand("copy", false);
-        document.body.removeChild(textarea);
-
-        if (!success) {
-            // noinspection ExceptionCaughtLocallyJS
+        try {
+            // noinspection JSDeprecatedSymbols
+            return document.execCommand("copy", false);
+        } catch {
             throw new Error("execCommand failed");
+        } finally {
+            document.body.removeChild(textarea);
         }
-
-        return true;
-    } catch (err) {
-        console.error("Fallback copy failed:", err);
+    } catch (_) {
         return false;
     }
 };

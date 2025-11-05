@@ -28,7 +28,7 @@ waldiez_jupyter/labextension/*
 !babel.config.js
 !eslint.config.mjs
 !jest.config.js
-!jest.setup.ts
+!jest.setup.js
 !pyproject.toml
 !setup.py
 !tsconfig.json

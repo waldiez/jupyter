@@ -22,6 +22,7 @@ export namespace WALDIEZ_STRINGS {
     export const LOG_CONSOLE = "Log Console";
     export const SHOW_LOGS = "Show logs";
     export const CLEAR_LOGS = "Clear Logs";
+    export const DOWNLOAD_LOGS = "Download Logs";
     export const HIDE_LOGS = "Hide logs";
     export const COPY_LOGS = "Copy logs";
     export const RESTART_KERNEL = "Restart kernel";
