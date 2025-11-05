@@ -222,7 +222,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             onUpload: this._onUpload.bind(this),
             checkpoints: {
                 get: this._onGetCheckpoints.bind(this),
-                submit: this._onSubmitCheckpoint.bind(this),
+                set: this._onSetCheckpoint.bind(this),
             },
         });
     }
@@ -371,7 +371,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             return null;
         }
     }
-    private async _onSubmitCheckpoint(flowName: string, checkpoint: Record<string, any>): Promise<void> {
+    private async _onSetCheckpoint(flowName: string, checkpoint: Record<string, any>): Promise<void> {
         try {
             await handleSubmitCheckpoint(flowName, checkpoint);
         } catch (err) {

@@ -47,7 +47,7 @@ export interface IWaldiezWidgetProps {
     onUpload?: (files: File[]) => Promise<string[]>;
     checkpoints?: {
         get: (flowName: string) => Promise<Record<string, any> | null>;
-        submit: (flowName: string, checkpoint: Record<string, any>) => Promise<void>;
+        set?: (flowName: string, checkpoint: Record<string, any>) => Promise<void>;
     };
 }
 
