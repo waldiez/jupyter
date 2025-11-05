@@ -4628,8 +4628,8 @@ __metadata:
   linkType: hard
 
 "@reduxjs/toolkit@npm:1.x.x || 2.x.x":
-  version: 2.10.0
-  resolution: "@reduxjs/toolkit@npm:2.10.0"
+  version: 2.10.1
+  resolution: "@reduxjs/toolkit@npm:2.10.1"
   dependencies:
     "@standard-schema/spec": "npm:^1.0.0"
     "@standard-schema/utils": "npm:^0.3.0"
@@ -4645,7 +4645,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: 10/3eba116a31129a465465d4786e53dfe43b6ba5e192384f8eaeb4fa16d910540c0ddc8a0fd35a29cff1695f20333009307d22c0f8997c415a1207b2c542eee991
+  checksum: 10/0d444d749d2261103bc1ad8a3eb43700aef5fd0417c21e758005d5c2e67f567248cc18708a336a8d407245642b863cb14a8db90aaa5bc18fd13ca53fe7fb0ab7
   languageName: node
   linkType: hard
 
@@ -5588,7 +5588,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=ee758814c0dc6e4e2be8965a02ddf90969b33c26"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=8809de793400e5850544668897be4a23cb69e166"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5619,7 +5619,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/4d37e1cb602a9346fd197da635b0a8ba575351c143fb5a141847f058998215a53be622ee6cf129f9b5a5400493edb0c445ae1ccf76f8aeeb89b6a9c294d4b597
+  checksum: 10/a091e549fb210b3d6e7f4a9b83a40a04fdcd9c9d5ab307f8a55ca43fd84be28acd67d69ebecd68faa57fb31f71b1f4be2f2418660138e51437ce2e8db8a4cfad
   languageName: node
   linkType: hard
 
