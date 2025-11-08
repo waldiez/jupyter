@@ -42,6 +42,26 @@ dependencies = [
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
+dev = [
+    "autoflake==2.3.1",
+    "bandit==1.8.6",
+    "basedpyright==1.33.0",
+    "black[jupyter]==25.9.0",
+    "flake8==7.3.0",
+    "isort==7.0.0",
+    "jupyterlab==4.4.10",
+    "mypy==1.18.2",
+    "prek==0.2.13",
+    "pydocstyle==6.3.0",
+    "pylint==4.0.2",
+    "basedpyright==1.33.0",
+    "python-dotenv==1.2.1",
+    "ruff==0.14.4",
+    "types-PyYAML==6.0.12.20250915",
+    "toml==0.10.2; python_version <= '3.10'",
+    "types-toml==0.10.8.20240310",
+    "yamllint==1.37.1",
+]
 test = [
     "coverage==7.11.1",
     "filelock==3.20.0",
@@ -55,27 +75,6 @@ test = [
     "pytest-xdist==3.8.0",
     "pytest-jupyter[server]==0.11.0",
 ]
-dev = [
-    "autoflake==2.3.1",
-    "bandit==1.8.6",
-    "basedpyright==1.32.1",
-    "black[jupyter]==25.9.0",
-    "flake8==7.3.0",
-    "isort==7.0.0",
-    "jupyterlab==4.4.10",
-    "mypy==1.18.2",
-    "prek==0.2.13",
-    "pydocstyle==6.3.0",
-    "pylint==4.0.2",
-    "basedpyright==1.32.1",
-    "python-dotenv==1.2.1",
-    "ruff==0.14.4",
-    "types-PyYAML==6.0.12.20250915",
-    "toml==0.10.2; python_version <= '3.10'",
-    "types-toml==0.10.8.20240310",
-    "yamllint==1.37.1",
-]
-
 [tool.hatch.version]
 source = "nodejs"
 
