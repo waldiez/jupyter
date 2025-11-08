@@ -159,10 +159,6 @@ COPY --chown=waldiez:waldiez . /home/waldiez/app
 
 WORKDIR /home/waldiez/app
 
-# enable yarn (after a package.json is present)
-RUN corepack enable && \
-    yarn set version stable
-
 ARG REACT_BRANCH=main
 ARG PYTHON_BRANCH=main
 # api.waldiez.io
