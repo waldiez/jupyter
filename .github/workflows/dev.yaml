@@ -16,8 +16,7 @@ on:
 jobs:
   build-waldiez:
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.waldiez-cache.outputs.cache-hit }}
+
     steps:
       - name: Get waldiez dev branch commit
         id: waldiez-commit
@@ -25,19 +24,10 @@ jobs:
           COMMIT=$(curl -s https://api.github.com/repos/waldiez/waldiez/commits/dev | jq -r '.sha[0:7]')
           echo "commit=$COMMIT" >> $GITHUB_OUTPUT
 
-      - name: Cache waldiez build
-        id: waldiez-cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: ./.local/waldiez-react.tgz
-          key: waldiez-react-${{ steps.waldiez-commit.outputs.commit }}
-
       - name: Setup bun
-        if: steps.waldiez-cache.outputs.cache-hit != 'true'
         uses: oven-sh/setup-bun@v2.0.2
 
       - name: Build waldiez
-        if: steps.waldiez-cache.outputs.cache-hit != 'true'
         run: |
           mkdir -p ./.local
           git clone --depth 1 --branch dev https://github.com/waldiez/waldiez.git
@@ -48,7 +38,7 @@ jobs:
           cp out/archive/waldiez-react-*.tgz ../.local/waldiez-react.tgz
 
       - name: Upload waldiez artifact
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v5.0.0
         with:
           name: waldiez-react
           path: ./.local/waldiez-react.tgz
@@ -63,26 +53,12 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~/.cache/pip
-          key: pip-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
-          restore-keys: |
-            pip-${{ runner.os }}-
-
-      - name: Cache waldiez install
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~/.cache/pip-waldiez
-          key: waldiez-pip-${{ hashFiles('.github/workflows/*.yml') }}
-
       - name: Install dependencies
         run: |
-          python -m pip install --cache-dir ~/.cache/pip -r requirements/main.txt
-          python -m pip install --cache-dir ~/.cache/pip -r requirements/dev.txt
-          python -m pip install --cache-dir ~/.cache/pip -r requirements/test.txt
-          python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
+          python -m pip install -r requirements/main.txt
+          python -m pip install -r requirements/dev.txt
+          python -m pip install -r requirements/test.txt
+          python -m pip install git+https://github.com/waldiez/waldiez.git@dev
 
       - name: pylint
         run: pylint --rcfile=pyproject.toml .
@@ -123,26 +99,8 @@ jobs:
           corepack enable
           yarn set version stable
 
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4.3.0
-        with:
-          path: |
-            .yarn/cache
-            .yarn/install-state.gz
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
-
-      - name: Cache pip dependencies
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~/.cache/pip
-          key: pip-lint-js-${{ runner.os }}-${{ hashFiles('requirements/*.txt') }}
-          restore-keys: |
-            pip-lint-js-${{ runner.os }}-
-
       - name: Download waldiez artifact
-        uses: actions/download-artifact@v5.0.0
+        uses: actions/download-artifact@v6.0.0
         with:
           name: waldiez-react
           path: .local
@@ -179,31 +137,12 @@ jobs:
       - uses: actions/setup-python@v6.0.0
         with:
           python-version: 3.12
-      - name: Cache pip dependencies
-        uses: actions/cache@v4.3.0
-        with:
-          path: |
-            ~/.cache/pip
-            ~/AppData/Local/pip/Cache
-            ~/Library/Caches/pip
-          key: pip-test-${{ matrix.os }}-${{ hashFiles('requirements/*.txt') }}
-          restore-keys: |
-            pip-test-${{ matrix.os }}-
-
-      - name: Cache waldiez install
-        uses: actions/cache@v4.3.0
-        with:
-          path: |
-            ~/.cache/pip-waldiez
-            ~/AppData/Local/pip-waldiez/Cache
-            ~/Library/Caches/pip-waldiez
-          key: waldiez-pip-test-${{ matrix.os }}-${{ hashFiles('.github/workflows/*.yml') }}
 
       - name: Install py dependencies
         run: |
-          python -m pip install --cache-dir ~/.cache/pip -r requirements/main.txt
-          python -m pip install --cache-dir ~/.cache/pip -r requirements/test.txt
-          python -m pip install --cache-dir ~/.cache/pip-waldiez git+https://github.com/waldiez/waldiez.git@dev
+          python -m pip install -r requirements/main.txt
+          python -m pip install -r requirements/test.txt
+          python -m pip install git+https://github.com/waldiez/waldiez.git@dev
 
       - uses: actions/setup-node@v6.0.0
         with:
@@ -215,18 +154,8 @@ jobs:
           corepack enable
           yarn set version stable
 
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4.3.0
-        with:
-          path: |
-            .yarn/cache
-            .yarn/install-state.gz
-          key: yarn-test-${{ matrix.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
-          restore-keys: |
-            yarn-test-js-${{ matrix.os }}-
-
       - name: Download waldiez artifact
-        uses: actions/download-artifact@v5.0.0
+        uses: actions/download-artifact@v6.0.0
         with:
           name: waldiez-react
           path: .local
