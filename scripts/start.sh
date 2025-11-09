@@ -181,8 +181,8 @@ start_jupyter() {
     fi
     # let's try to handle: 'IOPub data rate exceeded'.
     # defaults:
-    # ServerApp.iopub_data_rate_limit=1000000.0 (bytes/sec)
-    # ServerApp.rate_limit_window=3.0 (secs)
+    # ZMQChannelsWebsocketConnection.iopub_data_rate_limit=1000000.0 (bytes/sec)
+    # ZMQChannelsWebsocketConnection.rate_limit_window=3.0 (secs)
     jupyter lab \
         --no-browser \
         --ip="*" \
@@ -192,8 +192,8 @@ start_jupyter() {
         --IdentityProvider.password_required="${JUPYTER_PASSWORD_REQUIRED}" \
         --ServerApp.allow_origin="${allowed_origins}" \
         --ServerApp.disable_check_xsrf="${disable_check_xsrf}" \
-        --ServerApp.iopub_data_rate_limit=2000000 \
-        --ServerApp.rate_limit_window=2
+        --ZMQChannelsWebsocketConnection.iopub_data_rate_limit=2000000 \
+        --ZMQChannelsWebsocketConnection.rate_limit_window=2
 }
 
 # Cleanup function for graceful shutdown

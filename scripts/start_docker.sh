@@ -2,8 +2,9 @@
 
 set -e -o pipefail
 
+# <project>/scripts
 HERE="$(dirname "$(readlink -f "$0")")"
-ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+ROOT_DIR="$(dirname "${HERE}")"
 cd "${ROOT_DIR}" || {
     log_error "Failed to change to root directory: $ROOT_DIR"
     exit 1
@@ -15,7 +16,7 @@ if [  -f "${ROOT_DIR}/.env" ]; then
 fi
 
 WALDIEZ_VERSION=${WALDIEZ_VERSION:-latest}
-JUPYTER_PASSWORD=${JUPYTER_PASSWORD:-REPLACE_ME}
+JUPYTER_PASSWORD=${JUPYTER_PASSWORD:-}
 
 mkdir -p examples || || {
     log_error "Failed to create examples folder"
