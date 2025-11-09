@@ -2,6 +2,9 @@
 # Build Step
 # Build the frontend and backend parts of the extension
 #####################################################################################
+
+# cspell:disable
+
 FROM python:3.12-slim AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -159,11 +162,11 @@ RUN ARCH=$(uname -m) && \
     echo "deb https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list && \
     apt-get update && \
     apt-get install -y firefox && \
-    FIREFOX_VERSION=$(firefox --version | grep -oP '\d+\.\d+') && \
+    FIREFOX_VERSION="$(dpkg-query -W -f='${Version}\n' firefox | sed 's/~.*//; s/-.*//')"; \
     echo "Firefox version: $FIREFOX_VERSION" && \
     GECKO_VERSION=""; \
     for i in 1 2 3; do \
-    GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name'); \
+    GECKO_VERSION=$(curl -sL -o /dev/null -w '%{url_effective}' https://github.com/mozilla/geckodriver/releases/latest | awk -F/ '{print $NF}'); \
     if [ "$GECKO_VERSION" != "null" ] && [ -n "$GECKO_VERSION" ]; then break; fi; \
     echo "Retrying fetch of GeckoDriver version... ($i)"; \
     sleep 2; \
