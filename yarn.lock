@@ -5554,7 +5554,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.46.3"
     "@typescript-eslint/parser": "npm:^8.46.3"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+    "@waldiez/react": "npm:0.6.2"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.2.0"
     copyfiles: "npm:^2.4.1"
@@ -5594,9 +5594,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
-  version: 0.6.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=cfc72bb272bf3283ab86713ce69234def48ff80c"
+"@waldiez/react@npm:0.6.2":
+  version: 0.6.2
+  resolution: "@waldiez/react@npm:0.6.2"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5627,7 +5627,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/6375819bf1f755be51d9458e5d581725f1a1aea776a405d1f83f5084e7b2a243aa9bd64a98a7b628fb1223d7a38fbfb38fcd8f06dbb53eab2648a472c3bf8ec9
+  checksum: 10/d816d2f464c8a914fe84800e7358e5b2349102e237eabce9ec4ab5bbf59c78df6c32dd168fa46e494935109e0a0288abfb683259a299a5114e2cd2cadbc79c10
   languageName: node
   linkType: hard
 
@@ -12397,8 +12397,8 @@ __metadata:
   linkType: hard
 
 "recharts@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "recharts@npm:3.3.0"
+  version: 3.4.1
+  resolution: "recharts@npm:3.4.1"
   dependencies:
     "@reduxjs/toolkit": "npm:1.x.x || 2.x.x"
     clsx: "npm:^2.1.1"
@@ -12415,7 +12415,7 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-is: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/9842fb31627343e461b468f4bbb80c1ca47c478f0cdf72e8ccad6f547bdfdc561580bf5b7530799a8676c08d33a88eb1ee5852c2e9beae461e7aa65c593ae7d6
+  checksum: 10/f05d69d54c9c44ed7ee513d30a05b04708c0ccd07780e3a1cc8283a7239bddb8719e6bff7981b96a71a967ce6ba910c5fb05ffac93f49a75354230e8d04f6958
   languageName: node
   linkType: hard
 

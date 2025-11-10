@@ -3,7 +3,7 @@ autoflake==2.3.1
 bandit==1.8.6
 basedpyright==1.33.0
 basedpyright==1.33.0
-black[jupyter]==25.9.0
+black[jupyter]==25.11.0
 flake8==7.3.0
 isort==7.0.0
 jupyterlab==4.4.10
