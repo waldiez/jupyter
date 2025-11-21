@@ -11,7 +11,6 @@ import { JupyterLab } from "@jupyterlab/application";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { IRenderMimeRegistry, RenderMimeRegistry } from "@jupyterlab/rendermime";
-import { ISettingRegistry, SettingRegistry } from "@jupyterlab/settingregistry";
 import { CommandRegistry } from "@lumino/commands";
 
 jest.mock("@jupyterlab/application", () => {
@@ -75,16 +74,12 @@ jest.mock("@jupyterlab/codeeditor");
 
 describe("WaldiezEditor", () => {
     let app: jest.Mocked<JupyterLab>;
-    let settingRegistry: ISettingRegistry;
     let rendermime: IRenderMimeRegistry;
     let editorServices: IEditorServices;
     let fileBrowserFactory: IFileBrowserFactory;
 
     beforeEach(() => {
         app = new JupyterLab() as jest.Mocked<JupyterLab>;
-        settingRegistry = new SettingRegistry({
-            connector: null as any,
-        }) as ISettingRegistry;
         rendermime = new RenderMimeRegistry();
         editorServices = {} as IEditorServices;
         fileBrowserFactory = {
@@ -108,7 +103,6 @@ describe("WaldiezEditor", () => {
             rendermime,
             fileBrowserFactory,
             editorServices,
-            settingRegistry,
             name: FACTORY_NAME,
             fileTypes: [WALDIEZ_FILE_TYPE],
         });
@@ -319,39 +313,6 @@ describe("WaldiezEditor", () => {
         );
         editor.dispose();
     });
-
-    it("should handle serve monaco setting", async () => {
-        const editor = await getEditor();
-        const result = await editor["_getServeMonacoSetting"]();
-        expect(result).not.toBeNull();
-        expect(result).toBe("/static/vs");
-
-        editor.dispose();
-    });
-
-    it("should handle serve monaco setting disabled", async () => {
-        const mockSettingsRegistry = {
-            get: jest.fn().mockResolvedValue({ composite: false }),
-        };
-
-        const factory = new WaldiezEditorFactory({
-            commands: app.commands,
-            rendermime,
-            fileBrowserFactory,
-            editorServices,
-            settingRegistry: mockSettingsRegistry as any,
-            name: FACTORY_NAME,
-            fileTypes: [WALDIEZ_FILE_TYPE],
-        });
-        const editor = factory.createNew(editorContext);
-        await editor.revealed;
-
-        const result = await editor["_getServeMonacoSetting"]();
-        expect(result).toBe(null);
-
-        editor.dispose();
-    });
-
     it("should handle convert operation", async () => {
         patchServerConnection('{"success": true}', false);
         const editor = await getEditor();

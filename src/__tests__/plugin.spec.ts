@@ -9,7 +9,6 @@ import { JupyterLab } from "@jupyterlab/application";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { IMainMenu, MainMenu } from "@jupyterlab/mainmenu";
 import { RenderMimeRegistry } from "@jupyterlab/rendermime";
-import { ISettingRegistry, SettingRegistry } from "@jupyterlab/settingregistry";
 
 jest.mock("../commands", () => ({
     ...jest.requireActual("../commands"),
@@ -19,7 +18,6 @@ jest.mock("../commands", () => ({
 describe("Waldiez Plugin", () => {
     let app: jest.Mocked<JupyterLab>;
     let rendermime: RenderMimeRegistry;
-    let settingRegistry: jest.Mocked<ISettingRegistry>;
     let editorServices: jest.Mocked<IEditorServices>;
     let mainMenu: IMainMenu;
 
@@ -38,9 +36,6 @@ describe("Waldiez Plugin", () => {
             addWidgetFactory: jest.fn(),
         } as any;
         rendermime = new RenderMimeRegistry();
-        settingRegistry = new SettingRegistry({
-            connector: null as any,
-        }) as any;
         editorServices = {} as jest.Mocked<IEditorServices>;
         mainMenu = new MainMenu(app.commands);
     });
@@ -72,7 +67,6 @@ describe("Waldiez Plugin", () => {
             rendermime,
             editorServices,
             mockFileBrowserFactory,
-            settingRegistry,
             mockRestorer,
             mockLauncher,
             mockPalette,
@@ -87,13 +81,7 @@ describe("Waldiez Plugin", () => {
 
         const mockFileBrowserFactory = {};
 
-        const result = await plugin.activate(
-            app,
-            rendermime,
-            editorServices,
-            mockFileBrowserFactory,
-            settingRegistry,
-        );
+        const result = await plugin.activate(app, rendermime, editorServices, mockFileBrowserFactory);
 
         expect(result).toBeDefined();
         expect(consoleLogSpy).toHaveBeenCalledWith("JupyterLab extension waldiez is activated!");
@@ -105,7 +93,7 @@ describe("Waldiez Plugin", () => {
     it("should register file type correctly", async () => {
         const mockFileBrowserFactory = {};
 
-        await plugin.activate(app, rendermime, editorServices, mockFileBrowserFactory, settingRegistry);
+        await plugin.activate(app, rendermime, editorServices, mockFileBrowserFactory);
 
         expect(app.docRegistry.addFileType).toHaveBeenCalledWith({
             name: WALDIEZ_FILE_TYPE,
@@ -128,7 +116,6 @@ describe("Waldiez Plugin", () => {
             rendermime,
             editorServices,
             mockFileBrowserFactory,
-            settingRegistry,
             undefined, // restorer
             undefined, // launcher
             undefined, // palette
@@ -168,7 +155,6 @@ describe("Waldiez Plugin", () => {
             rendermime,
             editorServices,
             mockFileBrowserFactory,
-            settingRegistry,
             mockRestorer,
             mockLauncher,
             mockPalette,

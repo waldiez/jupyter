@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * Copyright 2024 - 2025 Waldiez & contributors
  */
-import { PLUGIN_ID, SERVE_MONACO, WALDIEZ_STRINGS } from "../constants";
+import { WALDIEZ_STRINGS } from "../constants";
 import { WaldiezLogger } from "../logger";
 import { handleConvert, handleGetCheckpoints, handleSubmitCheckpoint, uploadFile } from "../rest";
 import { EditorWidget } from "../widget";
@@ -16,7 +16,6 @@ import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import type { ILogPayload } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import { ServerConnection } from "@jupyterlab/services";
-import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { CommandRegistry } from "@lumino/commands";
 import { Signal } from "@lumino/signaling";
 import { SplitPanel } from "@lumino/widgets";
@@ -36,7 +35,6 @@ import {
  */
 export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     private readonly _commands: CommandRegistry;
-    private readonly _settingsRegistry: ISettingRegistry;
     private readonly _fileBrowserFactory: IFileBrowserFactory;
     private readonly _signal: Signal<
         this,
@@ -54,7 +52,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
     constructor(options: WaldiezEditor.IOptions) {
         super(options);
         this._commands = options.commands;
-        this._settingsRegistry = options.settingregistry;
         this._fileBrowserFactory = options.fileBrowserFactory;
         this._serverSettings = ServerConnection.makeSettings();
 
@@ -113,8 +110,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
 
     private async _onContextReady(): Promise<void> {
         try {
-            const vsPath = await this._getServeMonacoSetting();
-            const waldiezWidget = this._getWaldiezWidget(vsPath || undefined);
+            const waldiezWidget = this._getWaldiezWidget();
             this.content.addWidget(waldiezWidget);
 
             const payload: ILogPayload = {
@@ -142,24 +138,6 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
                 await this.context.save();
                 this.context.model.dirty = false;
             }
-        }
-    }
-
-    private async _getServeMonacoSetting(): Promise<string | null> {
-        try {
-            const setting = await this._settingsRegistry.get(PLUGIN_ID, SERVE_MONACO);
-            const doServe = (setting.composite as boolean) || false;
-            if (doServe) {
-                const fullUrl = this._serverSettings.baseUrl;
-                let withOutHost = fullUrl.replace(/https?:\/\/[^/]+/, "");
-                if (!withOutHost.endsWith("/")) {
-                    withOutHost += "/";
-                }
-                return `${withOutHost}static/vs`;
-            }
-            return null;
-        } catch {
-            return null;
         }
     }
 
@@ -201,7 +179,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         return `${err}`;
     }
 
-    private _getWaldiezWidget(vsPath?: string): EditorWidget {
+    private _getWaldiezWidget(): EditorWidget {
         const fileContents = this.context.model.toString();
         let jsonData = {};
         try {
@@ -213,7 +191,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         return new EditorWidget({
             flowId: this.id,
             jsonData,
-            vsPath,
+            vsPath: undefined,
             signal: this._signal,
             onChange: this._onContentChanged.bind(this),
             onRun: this._onRun.bind(this),
@@ -394,7 +372,6 @@ export namespace WaldiezEditor {
     export interface IOptions extends DocumentWidget.IOptions<SplitPanel, DocumentModel> {
         rendermime: IRenderMimeRegistry;
         editorServices: IEditorServices;
-        settingregistry: ISettingRegistry;
         commands: CommandRegistry;
         fileBrowserFactory: IFileBrowserFactory;
     }

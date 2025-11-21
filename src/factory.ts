@@ -8,7 +8,6 @@ import { IEditorServices } from "@jupyterlab/codeeditor";
 import { ABCWidgetFactory, DocumentModel, DocumentRegistry } from "@jupyterlab/docregistry";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
-import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { ITranslator } from "@jupyterlab/translation";
 import { CommandRegistry } from "@lumino/commands";
 import { SplitPanel } from "@lumino/widgets";
@@ -26,7 +25,6 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
     private readonly _commands: CommandRegistry;
     private readonly _rendermime: IRenderMimeRegistry;
     private readonly _editorServices: IEditorServices;
-    private readonly _settingRegistry: ISettingRegistry;
     private readonly _fileBrowserFactory: IFileBrowserFactory;
 
     /**
@@ -41,7 +39,6 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
         this._commands = options.commands;
         this._rendermime = options.rendermime;
         this._editorServices = options.editorServices;
-        this._settingRegistry = options.settingRegistry;
         this._fileBrowserFactory = options.fileBrowserFactory;
     }
 
@@ -76,7 +73,6 @@ export class WaldiezEditorFactory extends ABCWidgetFactory<WaldiezEditor, Docume
             context,
             rendermime: this._rendermime,
             editorServices: this._editorServices,
-            settingregistry: this._settingRegistry,
             content: panel,
             commands: this._commands,
             fileBrowserFactory: this._fileBrowserFactory,
@@ -95,7 +91,6 @@ export namespace WaldiezEditorFactory {
         translator?: ITranslator;
         rendermime: IRenderMimeRegistry;
         editorServices: IEditorServices;
-        settingRegistry: ISettingRegistry;
         fileBrowserFactory: IFileBrowserFactory;
         commands: CommandRegistry;
     }

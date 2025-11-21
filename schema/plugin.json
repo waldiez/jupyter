@@ -15,14 +15,6 @@
             }
         ]
     },
-    "properties": {
-        "serve_monaco": {
-            "type": "boolean",
-            "title": "Serve monaco",
-            "description": "Serve monaco editor loader static files.",
-            "default": true
-        }
-    },
     "additionalProperties": false,
     "type": "object"
 }

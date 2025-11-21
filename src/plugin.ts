@@ -14,7 +14,6 @@ import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { ILauncher } from "@jupyterlab/launcher";
 import { IMainMenu } from "@jupyterlab/mainmenu";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
-import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { ITranslator } from "@jupyterlab/translation";
 
 /**
@@ -34,14 +33,13 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
     id: PLUGIN_ID,
     description: WALDIEZ_STRINGS.PLUGIN_DESCRIPTION,
     autoStart: true,
-    requires: [IRenderMimeRegistry, IEditorServices, IFileBrowserFactory, ISettingRegistry],
+    requires: [IRenderMimeRegistry, IEditorServices, IFileBrowserFactory],
     optional: [ILayoutRestorer, ILauncher, ICommandPalette, IMainMenu, ITranslator],
     activate: async (
         app: JupyterFrontEnd,
         rendermime: IRenderMimeRegistry,
         editorServices: IEditorServices,
         fileBrowserFactory: IFileBrowserFactory,
-        settingRegistry: ISettingRegistry,
         restorer?: ILayoutRestorer,
         launcher?: ILauncher,
         palette?: ICommandPalette,
@@ -63,7 +61,6 @@ const plugin: JupyterFrontEndPlugin<WaldiezEditorFactory> = {
             translator,
             rendermime,
             editorServices,
-            settingRegistry,
             fileBrowserFactory,
         });
         if (launcher) {
