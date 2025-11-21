@@ -26,9 +26,7 @@ from packaging import version
 REGISTRY_BASE_URL = "https://registry.npmjs.org"
 PACKAGE_NAME = "monaco-editor"
 DETAILS_JSON = "monaco_details.json"
-# 0.53.0 does not seem to play well with @monaco-editor/react
-# let's check periodically and change it to None when we are good.
-PINNED_VERSION: str | None = "0.54.0"
+PINNED_VERSION: str | None = "0.55.1"
 
 LOG = logging.getLogger(__name__)
 

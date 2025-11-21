@@ -11,6 +11,7 @@ import { JupyterLab } from "@jupyterlab/application";
 import { IEditorServices } from "@jupyterlab/codeeditor";
 import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import { IRenderMimeRegistry, RenderMimeRegistry } from "@jupyterlab/rendermime";
+import { ISettingRegistry, SettingRegistry } from "@jupyterlab/settingregistry";
 import { CommandRegistry } from "@lumino/commands";
 
 jest.mock("@jupyterlab/application", () => {
@@ -74,12 +75,16 @@ jest.mock("@jupyterlab/codeeditor");
 
 describe("WaldiezEditor", () => {
     let app: jest.Mocked<JupyterLab>;
+    let settingRegistry: ISettingRegistry;
     let rendermime: IRenderMimeRegistry;
     let editorServices: IEditorServices;
     let fileBrowserFactory: IFileBrowserFactory;
 
     beforeEach(() => {
         app = new JupyterLab() as jest.Mocked<JupyterLab>;
+        settingRegistry = new SettingRegistry({
+            connector: null as any,
+        }) as ISettingRegistry;
         rendermime = new RenderMimeRegistry();
         editorServices = {} as IEditorServices;
         fileBrowserFactory = {
@@ -103,6 +108,7 @@ describe("WaldiezEditor", () => {
             rendermime,
             fileBrowserFactory,
             editorServices,
+            settingRegistry,
             name: FACTORY_NAME,
             fileTypes: [WALDIEZ_FILE_TYPE],
         });

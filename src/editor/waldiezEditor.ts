@@ -16,6 +16,7 @@ import { IFileBrowserFactory } from "@jupyterlab/filebrowser";
 import type { ILogPayload } from "@jupyterlab/logconsole";
 import { IRenderMimeRegistry } from "@jupyterlab/rendermime";
 import { ServerConnection } from "@jupyterlab/services";
+import { ISettingRegistry } from "@jupyterlab/settingregistry";
 import { CommandRegistry } from "@lumino/commands";
 import { Signal } from "@lumino/signaling";
 import { SplitPanel } from "@lumino/widgets";
@@ -110,7 +111,13 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
 
     private async _onContextReady(): Promise<void> {
         try {
-            const waldiezWidget = this._getWaldiezWidget();
+            const url = new URL(this._serverSettings.baseUrl);
+            let basePath = url.pathname;
+            if (!basePath.endsWith("/")) {
+                basePath += "/";
+            }
+            const vsPath = `${basePath}static/vs`;
+            const waldiezWidget = this._getWaldiezWidget(vsPath);
             this.content.addWidget(waldiezWidget);
 
             const payload: ILogPayload = {
@@ -179,7 +186,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         return `${err}`;
     }
 
-    private _getWaldiezWidget(): EditorWidget {
+    private _getWaldiezWidget(vsPath?: string): EditorWidget {
         const fileContents = this.context.model.toString();
         let jsonData = {};
         try {
@@ -191,7 +198,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         return new EditorWidget({
             flowId: this.id,
             jsonData,
-            vsPath: undefined,
+            vsPath,
             signal: this._signal,
             onChange: this._onContentChanged.bind(this),
             onRun: this._onRun.bind(this),
@@ -372,6 +379,7 @@ export namespace WaldiezEditor {
     export interface IOptions extends DocumentWidget.IOptions<SplitPanel, DocumentModel> {
         rendermime: IRenderMimeRegistry;
         editorServices: IEditorServices;
+        settingRegistry: ISettingRegistry;
         commands: CommandRegistry;
         fileBrowserFactory: IFileBrowserFactory;
     }
