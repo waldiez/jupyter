@@ -1,6 +1,6 @@
 {
     "name": "waldiez-ui-tests",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "description": "JupyterLab waldiez Integration Tests",
     "private": true,
     "scripts": {
