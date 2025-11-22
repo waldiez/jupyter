@@ -13,7 +13,9 @@
         "@playwright/test": "^1.56.1",
         "brace-expansion": "^4.0.1",
         "tar": "^7.5.2",
+        "vega": "6.2.0",
         "vega-dataflow": "^6.1.0",
+        "vega-expression": "^6.1.0",
         "vega-scale": "^8.1.0",
         "vega-scenegraph": "^5.1.0",
         "vega-selections": "^6.1.1",
@@ -22,6 +24,8 @@
     },
     "resolutions": {
         "brace-expansion": "^4.0.1",
+        "vega": "6.2.0",
+        "vega-expression": "^6.1.0",
         "vega-dataflow": "^6.1.0",
         "vega-selections": "^6.1.1",
         "vega-scale": "^8.1.0",
