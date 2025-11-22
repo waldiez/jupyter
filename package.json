@@ -148,7 +148,7 @@
         "rimraf": "^6.1.2",
         "source-map-loader": "^5.0.0",
         "style-loader": "^4.0.0",
-        "stylelint": "^16.25.0",
+        "stylelint": "^16.26.0",
         "stylelint-config-recommended": "^17.0.0",
         "stylelint-config-standard": "^39.0.1",
         "stylelint-prettier": "^5.0.3",
@@ -160,6 +160,11 @@
         "typescript-eslint": "^8.47.0",
         "yarn-deduplicate": "^6.0.2",
         "yjs": "^13.6.27"
+    },
+    "resolutions": {
+        "form-data": "^4.0.5",
+        "tmp": "^0.2.5",
+        "tar": "^7.5.2"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx,json,css,md,yml,yaml}": [
@@ -253,11 +258,6 @@
             "selector-no-vendor-prefix": null,
             "value-no-vendor-prefix": null
         }
-    },
-    "resolutions": {
-        "form-data": "^4.0.5",
-        "tmp": "^0.2.5",
-        "tar": "^7.5.2"
     },
     "packageManager": "yarn@4.11.0"
 }
