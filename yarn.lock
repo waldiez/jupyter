@@ -5867,7 +5867,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.47.0"
     "@typescript-eslint/parser": "npm:^8.47.0"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+    "@waldiez/react": "npm:^0.6.3"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.2.0"
     copyfiles: "npm:^2.4.1"
@@ -5907,9 +5907,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
+"@waldiez/react@npm:^0.6.3":
   version: 0.6.3
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=89f7f7ac220dabfed69fe27faac5dda4163d30f5"
+  resolution: "@waldiez/react@npm:0.6.3"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5940,7 +5940,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/5de4be7ed186b7f3f04413aededed0328f2409b20673765e3e31a067301a6af892e0521c7f4be8b0e94f7c107fb33cf7e471061679d2df334b11015ec93ecc15
+  checksum: 10/27bef81f1ac98ea6c9bdee300d7b38f425553f22930f1e3d0d195201e843f20327417867d1c28dfbbc991290c2bbfbfdc5ae447fe86632ed0cee9f25da59430f
   languageName: node
   linkType: hard
 
