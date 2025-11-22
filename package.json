@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
