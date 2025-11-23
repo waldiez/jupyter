@@ -5612,13 +5612,13 @@ __metadata:
   linkType: hard
 
 "vega-selections@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "vega-selections@npm:6.1.1"
+  version: 6.1.2
+  resolution: "vega-selections@npm:6.1.2"
   dependencies:
     d3-array: "npm:3.2.4"
     vega-expression: "npm:^6.1.0"
     vega-util: "npm:^2.1.0"
-  checksum: 10/e6bdc8aab63da8a29f9acc4de601b690134ece50be4d9f5986b0593fcb4c40c6cd5bde89c8b756f79dbfc40565746bd6a740eacf138e8edadd23c9cef14ffd0f
+  checksum: 10/7ec150b8323dde7dac041f28f9e23b9c3ab9d80c072db3d8ffc8103e26957dbc06e553e9340a8d713f317ed57f9cfbf1321c125c9c2ea0db1daae5525600e406
   languageName: node
   linkType: hard
 

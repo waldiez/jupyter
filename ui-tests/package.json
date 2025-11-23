@@ -1,6 +1,6 @@
 {
     "name": "waldiez-ui-tests",
-    "version": "0.6.4",
+    "version": "0.6.5",
     "description": "JupyterLab waldiez Integration Tests",
     "private": true,
     "scripts": {
@@ -34,5 +34,5 @@
         "vega-util": "^2.1.0",
         "tar": "^7.5.2"
     },
-    "packageManager": "yarn@4.11.0"
+    "packageManager": "yarn@4.12.0"
 }
