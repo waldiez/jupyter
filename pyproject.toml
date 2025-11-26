@@ -51,7 +51,7 @@ dev = [
     "isort==7.0.0",
     "jupyterlab==4.5.0",
     "mypy==1.18.2",
-    "prek==0.2.18",
+    "prek==0.2.19",
     "pydocstyle==6.3.0",
     "pylint==4.0.3",
     "python-dotenv==1.2.1",
