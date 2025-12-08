@@ -138,11 +138,11 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
      * @memberof WaldiezStandardRunner
      */
     protected processMessage(rawMessage: string) {
-        const isDone = this._workflow_is_done(rawMessage);
-        if (isDone) {
-            this._running = false;
-            this._onEnd();
-        }
+        // const isDone = this._workflow_is_done(rawMessage);
+        // if (isDone) {
+        //     this._running = false;
+        //     this._onEnd();
+        // }
         // Check if the runner is running
         if (!this._running) {
             return;
@@ -226,36 +226,24 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
             // Notify about the new message
             this._onUpdate({ messages: this._messages, activeRequest: undefined });
         }
-        // Handle workflow end
-        /* istanbul ignore if */
-        if (result.isWorkflowEnd) {
-            if (
-                this._timelineData !== undefined ||
-                rawMessage.includes("<Waldiez> - Done running the flow.")
-            ) {
-                this._running = false;
-                this._onEnd();
-                this._logger.log("Workflow finished");
-            }
-        }
     }
-    private _workflow_is_done(rawMessage: string): WaldiezChatMessage | null {
-        // Check if the raw message indicates that the flow has finished running
-        if (rawMessage.includes("<Waldiez> - Done running the flow.")) {
-            return {
-                type: "system",
-                id: "flow-done",
-                timestamp: new Date().toISOString(),
-                content: [
-                    {
-                        type: "text",
-                        text: "<Waldiez> - Done running the flow.",
-                    },
-                ],
-            };
-        }
-        return null;
-    }
+    // private _workflow_is_done(rawMessage: string): WaldiezChatMessage | null {
+    //     // Check if the raw message indicates that the flow has finished running
+    //     if (rawMessage.includes("<Waldiez> - Done running the flow.")) {
+    //         return {
+    //             type: "system",
+    //             id: "flow-done",
+    //             timestamp: new Date().toISOString(),
+    //             content: [
+    //                 {
+    //                     type: "text",
+    //                     text: "<Waldiez> - Done running the flow.",
+    //                 },
+    //             ],
+    //         };
+    //     }
+    //     return null;
+    // }
     /**
      * Check if the raw message has an ending.
      * @param rawMessage The raw message to check

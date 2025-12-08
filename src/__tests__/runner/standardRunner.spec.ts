@@ -344,24 +344,6 @@ describe("WaldiezStandardRunner", () => {
         expect(runner.getUserParticipants()).toEqual(["user1", "user2"]);
     });
 
-    it("should handle workflow done message", () => {
-        const runner = getRunner(logger);
-        runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
-
-        const doneMessage = "<Waldiez> - Done running the flow.";
-        const streamMsg = {
-            ...iopubMessage,
-            content: {
-                name: "stdout" as const,
-                text: doneMessage,
-            },
-        };
-
-        runner["_future"]!.onIOPub(streamMsg);
-        expect(runner.running).toBe(false);
-        expect(onEnd).toHaveBeenCalled();
-    });
-
     it("should handle input request messages", () => {
         const runner = getRunner(logger);
         runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
@@ -438,32 +420,6 @@ describe("WaldiezStandardRunner", () => {
         runner["_future"]!.onIOPub(streamMsg);
         // expect(onTimelineData).toHaveBeenCalledWith(timelineMsg.content);
         expect(runner["_expectingUserInput"]).toBe(false);
-    });
-
-    it("should handle workflow ending messages", () => {
-        const runner = getRunner(logger);
-        runner.run(mockKernelConnectionSuccess, "path/to/file.waldiez");
-        const data = {
-            content: {
-                timeline: [] as any[],
-                cost_timeline: [] as any[],
-                summary: {} as any,
-                metadata: {} as any,
-                agents: [] as any[],
-            },
-        };
-        runner.setTimelineData(data.content);
-        const endingMessage = "<Waldiez> - Workflow finished";
-        const streamMsg = {
-            ...iopubMessage,
-            content: {
-                name: "stdout" as const,
-                text: endingMessage,
-            },
-        };
-        runner["_future"]!.onIOPub(streamMsg);
-        expect(runner.running).toBe(false);
-        expect(onEnd).toHaveBeenCalled();
     });
 
     it("should handle workflow execution failed message with JSON format", () => {
