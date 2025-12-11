@@ -1,5 +1,5 @@
 ---
-name: Build and push container images
+name: Image 🐳
 # yamllint disable rule:truthy
 on:
   push:
@@ -20,9 +20,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.1
         with:
           submodules: "recursive"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.7.0
 
@@ -45,14 +46,26 @@ jobs:
       - name: Determine Docker Tag
         id: docker_tag
         run: |
-          if  [[ "${{github.event_name}}" == 'push' ]]; then
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
             tag="${{ github.ref_name }}"
+            latest="true"
           else
             tag="${{ github.event.inputs.version_tag }}"
+            latest="false"
           fi
           echo "docker_tag=$tag" >> $GITHUB_OUTPUT
+          echo "latest=$latest" >> $GITHUB_OUTPUT
 
-      - name: Build and push waldiez/jupyter
+      - name: Build tag list
+        id: tag_list
+        run: |
+          TAGS="waldiez/jupyter:${{ steps.docker_tag.outputs.docker_tag }},quay.io/waldiez/jupyter:${{ steps.docker_tag.outputs.docker_tag }}"
+          if [[ "${{ steps.docker_tag.outputs.latest }}" == "true" ]]; then
+            TAGS="$TAGS,waldiez/jupyter:latest,quay.io/waldiez/jupyter:latest"
+          fi
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
+      - name: Build and push waldiez image
         uses: docker/build-push-action@v6.18.0
         with:
           platforms: |
@@ -61,6 +74,4 @@ jobs:
           file: Containerfile
           context: .
           push: true
-          tags: |
-            waldiez/jupyter:${{ steps.docker_tag.outputs.docker_tag }}
-            quay.io/waldiez/jupyter:${{ steps.docker_tag.outputs.docker_tag }}
+          tags: ${{ steps.tag_list.outputs.tags }}
