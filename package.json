@@ -1,6 +1,6 @@
 {
     "name": "@waldiez/jupyter",
-    "version": "0.6.10",
+    "version": "0.6.11",
     "description": "A Waldiez JupyterLab extension.",
     "keywords": [
         "waldiez",
@@ -123,7 +123,7 @@
         "@types/react-addons-linked-state-mixin": "^0.14.27",
         "@typescript-eslint/eslint-plugin": "^8.49.0",
         "@typescript-eslint/parser": "^8.49.0",
-        "@waldiez/react": "^0.6.10",
+        "@waldiez/react": "^0.6.11",
         "all-contributors-cli": "^6.26.1",
         "babel-jest": "^30.2.0",
         "copyfiles": "^2.4.1",

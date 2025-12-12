@@ -327,14 +327,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0, @codemirror/view@npm:^6.38.1":
-  version: 6.39.3
-  resolution: "@codemirror/view@npm:6.39.3"
+  version: 6.39.4
+  resolution: "@codemirror/view@npm:6.39.4"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10/a726abd34c57169ae8529d287ffcdcef14a4bf0668a56ce6da04d735ed297d0690b3c3c82e25c2ea48e262eb9ac91fbc5d813cadc97abb35cde15487040d4950
+  checksum: 10/8fa1122f2c1dec38eb3a68cd7173c77ea21625bcf2164374bef482213b35222a7811bcc74f221c932c165f8d0a13a17b57456bed6fbae2b12cb9b8355664995a
   languageName: node
   linkType: hard
 
@@ -2389,11 +2389,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 25.0.0
-  resolution: "@types/node@npm:25.0.0"
+  version: 25.0.1
+  resolution: "@types/node@npm:25.0.1"
   dependencies:
     undici-types: "npm:~7.16.0"
-  checksum: 10/ea56dfde037d8c832ba0246066fcd0fb56204d35fc09b8eb2ae8b8a26cb16724f824a47557090b1b51a2c466964c5af700dd6897dd037c1868667cd96afecbd7
+  checksum: 10/a00ac3fc23fb94a06c23f4c9e422ad8f911cb31e4a51e72b7dc7349565b2142df6231f45ebdc4f856e1519f661d8b13074f05855f4b68ce050ac81173dbcbe0f
   languageName: node
   linkType: hard
 
