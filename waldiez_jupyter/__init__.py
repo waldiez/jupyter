@@ -4,7 +4,7 @@
 # type: ignore
 # pylint: disable=import-error
 # pyright: reportMissingImports=false,reportUnusedFunction=false
-# pyright: reportUnknownVariableType=false
+# pyright: reportUnknownVariableType=false,reportAttributeAccessIssue=false
 
 """Jupyter server extension for Waldiez."""
 
