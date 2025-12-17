@@ -45,7 +45,7 @@ describe("EditorWidget", () => {
         vsPath: undefined,
         jsonData: waldiezFlow,
         signal: signal!,
-        onChange: jest.fn(),
+        onSave: jest.fn(),
         onRun: jest.fn(),
         onStepRun: jest.fn(),
     };

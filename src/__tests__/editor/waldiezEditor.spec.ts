@@ -180,7 +180,7 @@ describe("WaldiezEditor", () => {
         editor.dispose();
     });
 
-    it("should handle content change", async () => {
+    it("should handle save", async () => {
         const editor = await getEditor();
         const { context } = editor;
         const model = {
@@ -189,9 +189,11 @@ describe("WaldiezEditor", () => {
         };
         Object.assign(editor.context.model, model);
         const fromStringSpy = jest.spyOn(model, "fromString");
+        const saveSpy = jest.spyOn(editor.context, "save");
 
-        await editor["_onContentChanged"]("new content");
+        await editor["_onSave"]("new content");
         expect(fromStringSpy).toHaveBeenCalledWith("new content");
+        expect(saveSpy).toHaveBeenCalled();
 
         editor.dispose();
     });
@@ -413,14 +415,16 @@ describe("WaldiezEditor", () => {
         editor.dispose();
     });
 
-    it("should not change content when unchanged", async () => {
+    it("should not save content when unchanged", async () => {
         const editor = await getEditor();
         const fromStringSpy = jest.spyOn(editor.context.model, "fromString");
+        const saveSpy = jest.spyOn(editor.context, "save");
         const currentContent = editor.context.model.toString();
 
-        await editor["_onContentChanged"](currentContent);
+        await editor["_onSave"](currentContent);
 
         expect(fromStringSpy).not.toHaveBeenCalled();
+        expect(saveSpy).not.toHaveBeenCalled();
 
         editor.dispose();
     });

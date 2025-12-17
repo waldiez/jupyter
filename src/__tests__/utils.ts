@@ -125,6 +125,7 @@ export const editorContext = {
     localPath: "test-local-path",
     addSibling: jest.fn(),
     dispose: jest.fn(),
+    save: jest.fn(),
     isDisposed: false,
     sessionContext: {
         ready: Promise.resolve(),

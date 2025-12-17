@@ -43,7 +43,7 @@ export interface IWaldiezWidgetProps {
         checkpoint?: string | null,
     ) => void;
     onConvert?: (flow: string, to: "py" | "ipynb") => void;
-    onChange?: (content: string) => void;
+    onSave?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
     checkpoints?: {
         get: (flowName: string) => Promise<Record<string, any> | null>;
@@ -76,7 +76,7 @@ export class EditorWidget extends ReactWidget {
             ...flow,
             flowId: props.flowId,
             storageId: flow.storageId ?? /* istanbul ignore next */ props.flowId,
-            onChange: props.onChange,
+            onSave: props.onSave,
             onRun: props.onRun,
             onStepRun: props.onStepRun,
             onConvert: props.onConvert,

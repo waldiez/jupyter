@@ -135,16 +135,12 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
     }
 
-    private async _onContentChanged(contents: string, markDirty: boolean = true): Promise<void> {
+    private async _onSave(contents: string): Promise<void> {
         const currentContents = this.context.model.toString();
         if (contents !== currentContents) {
             this.context.model.fromString(contents);
-            if (markDirty) {
-                this.context.model.dirty = true;
-            } else {
-                await this.context.save();
-                this.context.model.dirty = false;
-            }
+            await this.context.save();
+            this.context.model.dirty = false;
         }
     }
 
@@ -200,7 +196,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             jsonData,
             vsPath,
             signal: this._signal,
-            onChange: this._onContentChanged.bind(this),
+            onSave: this._onSave.bind(this),
             onRun: this._onRun.bind(this),
             onStepRun: this._onStepRun.bind(this),
             onConvert: this._onConvert.bind(this),
@@ -214,7 +210,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
 
     private async _preRun(contents: string): Promise<boolean> {
         try {
-            await this._onContentChanged(contents, false);
+            await this._onSave(contents);
             return true;
         } catch (err) {
             const errorMsg = `Error saving content: ${err}`;
