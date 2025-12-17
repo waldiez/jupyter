@@ -296,7 +296,8 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         }
     }
 
-    private async _onConvert(_flow: string, to: "py" | "ipynb"): Promise<void> {
+    private async _onConvert(flow: string, to: "py" | "ipynb"): Promise<void> {
+        await this._onSave(flow);
         const waldiezFilePath = this.context.path;
         try {
             await handleConvert(waldiezFilePath, to);
