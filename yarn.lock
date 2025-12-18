@@ -5897,13 +5897,13 @@ __metadata:
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.50.0"
     yarn-deduplicate: "npm:^6.0.2"
-    yjs: "npm:^13.6.27"
+    yjs: "npm:^13.6.28"
   languageName: unknown
   linkType: soft
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.11
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=777357568d11d306e167ef177c71e46c1cef8d51"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=77749b3ee9f974d7ed439168be220ff0c9a3440f"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5934,7 +5934,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/65ece2b4ab4a7b163772c2f9e7df24c593a9a21fbf5d3b2fd5307efe7e3d5269a4595d2d29241a9abb6e2753055c11c66a7dcd8ac7632b6b67237f6763f2b0de
+  checksum: 10/982f93d6b494ebc524df14eebe797b03c6ddded687a67b0f5e4f10a1aa6244ed3fab0b7ecd839f5835625fb09a6047a438bc420040b69fa1b79d99b50569fbcb
   languageName: node
   linkType: hard
 
@@ -15901,7 +15901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yjs@npm:^13.5.40, yjs@npm:^13.6.27":
+"yjs@npm:^13.5.40, yjs@npm:^13.6.28":
   version: 13.6.28
   resolution: "yjs@npm:13.6.28"
   dependencies:
