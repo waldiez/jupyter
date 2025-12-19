@@ -5903,7 +5903,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.6.11
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=77749b3ee9f974d7ed439168be220ff0c9a3440f"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=0c0c71da7cb491312e5533e4e531433ab585afb6"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5917,7 +5917,7 @@ __metadata:
     framer-motion: "npm:^12.23.26"
     highlight.js: "npm:^11.11.1"
     jszip: "npm:^3.10.1"
-    lucide-react: "npm:^0.561.0"
+    lucide-react: "npm:^0.562.0"
     marked: "npm:^17.0.1"
     marked-highlight: "npm:^2.2.3"
     microdiff: "npm:^1.5.0"
@@ -5934,7 +5934,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/982f93d6b494ebc524df14eebe797b03c6ddded687a67b0f5e4f10a1aa6244ed3fab0b7ecd839f5835625fb09a6047a438bc420040b69fa1b79d99b50569fbcb
+  checksum: 10/576de56262837e4ca970fcd18ec658fc4f6a51f231b7ee24e2a32df9aba53606ea6935095df5ecd35a0c37b70a866f4d0787d9a75eb214b8c03e575ca34712cc
   languageName: node
   linkType: hard
 
@@ -11738,12 +11738,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.561.0":
-  version: 0.561.0
-  resolution: "lucide-react@npm:0.561.0"
+"lucide-react@npm:^0.562.0":
+  version: 0.562.0
+  resolution: "lucide-react@npm:0.562.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/fb305e06527849c2d475b245c524ac56c6554afe648ce1d0ede9d5105366ce296c0f2fa2cbf5c57ef0c14449462a2ec30f35db2656626e9fcf2c96fd124738d0
+  checksum: 10/db75efaadd63fef38d3f4c79cadd26c4773d1a462749385a74dc6ffc1ab6684d20a7c1126faca49dc735f2edd2aae7c3af5e946a9299b1ff50f26d5c3670dab0
   languageName: node
   linkType: hard
 
