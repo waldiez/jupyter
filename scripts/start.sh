@@ -153,7 +153,7 @@ configure_jupyter_auth() {
 
 # Set up environment
 setup_environment() {
-    export SHELL=/bin/bash
+    export SHELL="$(which bash)"
     export TERM=xterm-256color
     export PYTHONUNBUFFERED=1
     export JUPYTER_ENABLE_LAB=yes

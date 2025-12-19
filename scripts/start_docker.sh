@@ -18,7 +18,7 @@ fi
 WALDIEZ_VERSION=${WALDIEZ_VERSION:-latest}
 JUPYTER_PASSWORD=${JUPYTER_PASSWORD:-}
 
-mkdir -p examples || || {
+mkdir -p examples || {
     log_error "Failed to create examples folder"
     exit 1
 }
