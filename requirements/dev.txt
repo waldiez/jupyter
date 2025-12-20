@@ -7,7 +7,7 @@ flake8==7.3.0
 isort==7.0.0
 jupyterlab==4.5.1
 mypy==1.19.1
-prek==0.2.22
+prek==0.2.23
 pydocstyle==6.3.0
 pylint==4.0.4
 python-dotenv==1.2.1
