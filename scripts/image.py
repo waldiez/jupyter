@@ -342,19 +342,29 @@ def _get_build_args(args: argparse.Namespace) -> list[str]:
     build_args: list[str] = args.build_args or []
     if args.dev is True:
         react_branch = os.environ.get("REACT_BRANCH", "main")
+        react_commit = os.environ.get("REACT_COMMIT", "")
         python_branch = os.environ.get("PYTHON_BRANCH", "main")
+        python_commit = os.environ.get("PYTHON_COMMIT", "main")
         api_url_base = os.environ.get("API_URL_BASE", "api")
         for arg in build_args:
             if arg.startswith("REACT_BRANCH="):
                 react_branch = arg.split("=")[1]
-            elif arg.startswith("PYTHON_BRANCH="):
-                python_branch = arg.split("=")[1]
+            elif arg.startswith("REACT_COMMIT="):
+                react_commit = arg.split("=")[1]
+            if arg.startswith("PYTHON_BRANCH="):
+                react_branch = arg.split("=")[1]
+            elif arg.startswith("PYTHON_COMMIT="):
+                python_commit = arg.split("=")[1]
             elif arg.startswith("API_URL_BASE="):
                 api_url_base = arg.split("=")[1]
 
         build_args.append(f"REACT_BRANCH={react_branch}")
         build_args.append(f"PYTHON_BRANCH={python_branch}")
         build_args.append(f"API_URL_BASE={api_url_base}")
+        if react_commit:
+            build_args.append(f"REACT_COMMIT={react_commit}")
+        if python_commit:
+            build_args.append(f"PYTHON_COMMIT={python_commit}")
         build_args = list(set(build_args))  # remove duplicates
     return build_args
 

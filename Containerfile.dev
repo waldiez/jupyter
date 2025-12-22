@@ -162,19 +162,25 @@ COPY --chown=waldiez:waldiez . /home/waldiez/app
 WORKDIR /home/waldiez/app
 
 ARG REACT_BRANCH=main
+ARG REACT_COMMIT=
 ARG PYTHON_BRANCH=main
+ARG PYTHON_COMMIT=
 # api.waldiez.io
 ARG API_URL_BASE="api"
 
 ENV REACT_BRANCH=${REACT_BRANCH}
+ENV REACT_COMMIT=${REACT_COMMIT}
 ENV PYTHON_BRANCH=${PYTHON_BRANCH}
+ENV PYTHON_COMMIT=${PYTHON_COMMIT}
 ENV API_URL_BASE=${API_URL_BASE}
 RUN echo "Building waldiez/jupyter with the following parameters:" \
     && echo "REACT_BRANCH=${REACT_BRANCH}" \
+    && echo "REACT_COMMIT=${REACT_COMMIT}" \
     && echo "PYTHON_BRANCH=${PYTHON_BRANCH}" \
+    && echo "PYTHON_COMMIT=${PYTHON_COMMIT}" \
     && echo "API_URL_BASE=${API_URL_BASE}"
 # build the application
-RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch ${REACT_BRANCH} --python-branch ${PYTHON_BRANCH} --api-url-base ${API_URL_BASE} && \
+RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch "${REACT_BRANCH}" --react-commit "${REACT_COMMIT}" --python-commit "${PYTHON_COMMIT}" --python-branch "${PYTHON_BRANCH}" --api-url-base "${API_URL_BASE}" && \
     rm -rf /home/waldiez/app
 COPY --chown=waldiez:waldiez scripts/start.sh /home/waldiez/app/start.sh
 RUN chmod +x /home/waldiez/app/start.sh

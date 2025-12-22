@@ -1,15 +1,23 @@
 #!/usr/bin/env sh
 # shellcheck disable=SC2086
 
+set -ex
+
 HERE="$(dirname "$(readlink -f "$0")")"
 ROOT_DIR="$(dirname "$HERE")"
 DOT_LOCAL="${ROOT_DIR}/.local"
 
+if [ -f "${ROOT_DIR}/.venv/bin/activate" ]; then
+    # shellcheck disable=SC1091
+    . "${ROOT_DIR}/.venv/bin/activate"
+fi
 PY_GIT_REPO="https://github.com/waldiez/waldiez.git"
 REACT_GIT_REPO="https://github.com/waldiez/waldiez.git"
 
 react_branch="dev"
 python_branch="dev"
+react_commit="${REACT_COMMIT:-}"
+python_commit="${PYTHON_COMMIT:-}"
 dry_run="false"
 api_url_base="api"
 react_build=""
@@ -53,10 +61,20 @@ while [ $# -gt 0 ]; do
             shift
             api_url_base="$1"
         ;;
+        --react-commit)
+            shift
+            react_commit="$1"
+        ;;
+        --python-commit)
+            shift
+            python_commit="$1"
+        ;;
         --help)
             echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
             echo "  --react-branch <branch>   Specify the react branch to use (default: main)"
             echo "  --python-branch <branch>  Specify the python branch to use (default: main)"
+            echo "  --react-commit <commit>  Specify the react commit to use (default: '')"
+            echo "  --python-commit <commit>  Specify the python commit to use (default: '')"
             echo "  --dry-run                 Do not install anything, just show what would be done"
             exit 0
         ;;
@@ -175,11 +193,18 @@ use_react_from_git() {
     if [ -f "${DOT_LOCAL}/waldiez.tgz" ]; then
         rm -f "${DOT_LOCAL}/waldiez.tgz"
     fi
-    git clone "${REACT_GIT_REPO}" -b "$react_branch" "${DOT_LOCAL}/waldiez-react"
+    git clone "${REACT_GIT_REPO}" "${DOT_LOCAL}/waldiez-react"
     cd "${DOT_LOCAL}/waldiez-react" || exit 1
-    echo "Using React branch: $react_branch"
+    if [ -z "${react_commit}" ]; then
+        echo "Using React branch: $react_branch"
+        git checkout -b "${react_branch}"
+    else
+        echo "Using React commit: $react_commit"
+        git checkout "${react_commit}"
+    fi
     echo "Using API URL base: $api_url_base"
     echo "HUB_API_URL=${api_url_base}" > .env
+    # shellcheck disable=SC1091
     . ./.env
     bun install
     bun run archive
@@ -244,8 +269,15 @@ use_python_from_git() {
     if [ -d "${DOT_LOCAL}/waldiez-py" ]; then
         rm -rf "${DOT_LOCAL}/waldiez-py"
     fi
-    git clone "${PY_GIT_REPO}" -b "$python_branch" "${DOT_LOCAL}/waldiez-py"
+    git clone "${PY_GIT_REPO}" "${DOT_LOCAL}/waldiez-py"
     cd "${DOT_LOCAL}/waldiez-py" || exit 1
+    if [ -z "${python_commit}" ]; then
+        echo "Using Python branch: ${python_branch}"
+        git checkout -b "${python_branch}"
+    else
+        echo "Using Python commit: ${python_commit}"
+        git checkout "${python_commit}"
+    fi
     python3 -m pip install --upgrade ${extra_pip_args} pip setuptools wheel build
     python3 -m pip install ${extra_pip_args} -r requirements/main.txt
     python3 -m build --wheel .
