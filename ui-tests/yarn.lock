@@ -5954,10 +5954,10 @@ __metadata:
   linkType: hard
 
 "yjs@npm:^13.5.40":
-  version: 13.6.27
-  resolution: "yjs@npm:13.6.27"
+  version: 13.6.28
+  resolution: "yjs@npm:13.6.28"
   dependencies:
     lib0: "npm:^0.2.99"
-  checksum: 10/f5e65230bb6746d981946083c20364e5a6084f8ebff76a0af7cc94fc7a8359f17ea9232eff5882c114cb2cff7a91d83030e7510c951b828fb7a60a9bb67409a7
+  checksum: 10/99922f223ba4ec61b9290a734b19bce9003ba359a7b086e9e1c15bae89793d1b1d4ffb756909060fb7092f2958c605ad6d1b945536244739fedc0df41a53bd6a
   languageName: node
   linkType: hard

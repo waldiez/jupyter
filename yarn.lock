@@ -1717,9 +1717,9 @@ __metadata:
   linkType: hard
 
 "@csstools/css-syntax-patches-for-csstree@npm:^1.0.19":
-  version: 1.0.21
-  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.0.21"
-  checksum: 10/1bd1338f60eaff43837cf31d717b09879850814527d1e4ee30cf4baf278adae55c267335742906ff334688fb5686fe7a0af7997315f96518fb9243750cfd1e66
+  version: 1.0.22
+  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.0.22"
+  checksum: 10/3fa886d931646ba331979c35fcabc196013533becf777b5d61925ed262c07b9e818eccfadddad47ec659d9d97374ae9d5d66b3639078853ddfda3d21ceaa7bd4
   languageName: node
   linkType: hard
 
@@ -5861,7 +5861,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.50.0"
     "@typescript-eslint/parser": "npm:^8.50.0"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+    "@waldiez/react": "npm:0.7.0"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.2.0"
     copyfiles: "npm:^2.4.1"
@@ -5901,9 +5901,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
-  version: 0.6.11
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=24eb9e6a3f24dec9437bb1bf428750616b3ddf0b"
+"@waldiez/react@npm:0.7.0":
+  version: 0.7.0
+  resolution: "@waldiez/react@npm:0.7.0"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5934,7 +5934,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/21b95ef03fd2e8f8920fc5fefd217b475dc7a01a391b67d1244cf1e64941afa141eea55a4905b7b094679bfb8d562540f24646b45207bfcef1f1fc3a3ed0353b
+  checksum: 10/c62f532da4402d8564ccdc47e8ea8be500ceb916fc3fe95e3d058b62fb097bd285c6d328397f52ef5b849289de3fcafa5d15fffe072b101b9200140548fcc337
   languageName: node
   linkType: hard
 
@@ -6706,11 +6706,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.9.0":
-  version: 2.9.10
-  resolution: "baseline-browser-mapping@npm:2.9.10"
+  version: 2.9.11
+  resolution: "baseline-browser-mapping@npm:2.9.11"
   bin:
     baseline-browser-mapping: dist/cli.js
-  checksum: 10/e73b5b3cb9cef459f7c4d0d318f11f0f461fd0c7da390e2aa0279d497f4f7dfb8625b97d1e73a06a40e9e9070d4038b1cb77abeab9e1c3784c0f64c48c018468
+  checksum: 10/d71fe6693f999ee0bf1fcd72b31c01390f2bfac40d179175817f24cdb11b19d14a102227a8fa28e0a4733a17c780458c17384c75f2227e45b0e8a0080caf6532
   languageName: node
   linkType: hard
 
