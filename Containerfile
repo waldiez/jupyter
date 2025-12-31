@@ -5,7 +5,7 @@
 
 # cspell:disable
 
-FROM python:3.12-slim AS builder
+FROM python:3.13-slim AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -55,7 +55,7 @@ RUN touch yarn.lock && \
 #####################################################################################
 # Final image
 #####################################################################################
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 LABEL maintainer="waldiez <development@waldiez.io>"
 LABEL org.opencontainers.image.source="quay.io/waldiez/jupyter"
