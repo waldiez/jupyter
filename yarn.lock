@@ -5897,13 +5897,13 @@ __metadata:
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.51.0"
     yarn-deduplicate: "npm:^6.0.2"
-    yjs: "npm:^13.6.28"
+    yjs: "npm:^13.6.29"
   languageName: unknown
   linkType: soft
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.7.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=5dd676100e3eda9a8ee8c7bc4b60d4a6fdf91097"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=15a3fde5a3c43d2c3a259194fb1e737dabf09476"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5914,7 +5914,7 @@ __metadata:
     "@radix-ui/react-tooltip": "npm:^1.2.8"
     "@xyflow/react": "npm:^12.10.0"
     dompurify: "npm:^3.3.1"
-    framer-motion: "npm:^12.23.26"
+    framer-motion: "npm:^12.23.27"
     highlight.js: "npm:^11.11.1"
     jszip: "npm:^3.10.1"
     lucide-react: "npm:^0.562.0"
@@ -5922,7 +5922,7 @@ __metadata:
     marked-highlight: "npm:^2.2.3"
     microdiff: "npm:^1.5.0"
     nanoid: "npm:^5.1.6"
-    react-error-boundary: "npm:^6.0.1"
+    react-error-boundary: "npm:^6.0.2"
     react-fast-compare: "npm:^3.2.2"
     react-hotkeys-hook: "npm:^5.2.1"
     react-icons: "npm:^5.5.0"
@@ -5934,7 +5934,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/3183b264b282c27a7b170e4cf9a2b116ab62492dda09c75e60c244862a9442a8176afb0ff3264583bf2bb43394b403e0c960cbc2be284ddcee517f3e363041d4
+  checksum: 10/3af25127a8b07c35ef9bc71d1e51707ce434a07604005f5ce99f39d59d77326adb5033e84bc0751d568c0c3c5ca98ddef5950a6fda60aba3fe742bc2d6097d0b
   languageName: node
   linkType: hard
 
@@ -9048,9 +9048,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^12.23.26":
-  version: 12.23.26
-  resolution: "framer-motion@npm:12.23.26"
+"framer-motion@npm:^12.23.27":
+  version: 12.23.27
+  resolution: "framer-motion@npm:12.23.27"
   dependencies:
     motion-dom: "npm:^12.23.23"
     motion-utils: "npm:^12.23.6"
@@ -9066,7 +9066,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/29d51ac57ce8c2599664bf706d7a83c2aba4fe1dee1c0c7d75d5c45c120b1c2ca5d257c3ff608992b26bf8e9cf258cacf231b0873d7b16f01c5eeb42b9831f78
+  checksum: 10/537eed61dc97b27d8f9d0f188816ba7b4625a347adca6f67b67d3356adc9fd2a2c39e23ccfdae46941eacaae0f266602b5445ddb27457c32617597b7939787ed
   languageName: node
   linkType: hard
 
@@ -13069,13 +13069,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-error-boundary@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "react-error-boundary@npm:6.0.1"
+"react-error-boundary@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "react-error-boundary@npm:6.0.2"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
-  checksum: 10/cd7713cf9d83f6391c497c6e4729f7b447c05af91107f16762978dd22373f1a6626f18efa77ad4b8def5481d68af6016990e90b69296e954becbab6dfa1ce06b
+  checksum: 10/726b696885ecef594dcaa45d7d6cf70ee100594f9b317c829f294507a06a78c11ec3efb2e1466292035426955704e77d9f91a87cd0fee2f47192ddcc0d1866f4
   languageName: node
   linkType: hard
 
@@ -15900,12 +15900,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yjs@npm:^13.5.40, yjs@npm:^13.6.28":
+"yjs@npm:^13.5.40":
   version: 13.6.28
   resolution: "yjs@npm:13.6.28"
   dependencies:
     lib0: "npm:^0.2.99"
   checksum: 10/99922f223ba4ec61b9290a734b19bce9003ba359a7b086e9e1c15bae89793d1b1d4ffb756909060fb7092f2958c605ad6d1b945536244739fedc0df41a53bd6a
+  languageName: node
+  linkType: hard
+
+"yjs@npm:^13.6.29":
+  version: 13.6.29
+  resolution: "yjs@npm:13.6.29"
+  dependencies:
+    lib0: "npm:^0.2.99"
+  checksum: 10/4fcba2974913c522c9b2b767a22f9d50617ffbddeb229a8eb5dd740df03d3145a757aff7a039b1546d5c62b3fda1af2b2e9ca2dba23af3a1df2158db21f3c516
   languageName: node
   linkType: hard
 

@@ -46,7 +46,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 dev = [
     "autoflake==2.3.1",
     "bandit==1.9.2",
-    "basedpyright==1.36.2",
+    "basedpyright==1.37.0",
     "black[jupyter]==25.12.0",
     "flake8==7.3.0",
     "isort==7.0.0",
