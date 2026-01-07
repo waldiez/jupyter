@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC2086
+# shellcheck disable=SC2086,SC1091
 
 set -ex
 
@@ -8,7 +8,6 @@ ROOT_DIR="$(dirname "$HERE")"
 DOT_LOCAL="${ROOT_DIR}/.local"
 
 if [ -f "${ROOT_DIR}/.venv/bin/activate" ]; then
-    # shellcheck disable=SC1091
     . "${ROOT_DIR}/.venv/bin/activate"
 fi
 PY_GIT_REPO="https://github.com/waldiez/waldiez.git"

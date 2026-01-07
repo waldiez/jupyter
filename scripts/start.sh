@@ -153,6 +153,7 @@ configure_jupyter_auth() {
 
 # Set up environment
 setup_environment() {
+    # shellcheck disable=SC2155
     export SHELL="$(which bash)"
     export TERM=xterm-256color
     export PYTHONUNBUFFERED=1
