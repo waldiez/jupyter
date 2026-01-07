@@ -42,7 +42,9 @@ describe("common utility functions", () => {
             expect(result).toContain("from waldiez import WaldiezRunner");
             expect(result).toContain(`file_path = Path(r"${filePath}").as_posix()`);
             expect(result).toContain('uploads_root = Path(file_path).parent / "uploads"');
-            expect(result).toContain(`runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}")`);
+            expect(result).toContain(
+                `runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}", structured_io=True)`,
+            );
             expect(result).toContain("runner.run(uploads_root=uploads_root, structured_io=True");
         });
 
@@ -52,7 +54,9 @@ describe("common utility functions", () => {
 
             const result = getCodeToExecute(filePath, mode);
 
-            expect(result).toContain(`runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}")`);
+            expect(result).toContain(
+                `runner = WaldiezRunner.load(waldiez_file=file_path, mode="${mode}", structured_io=True)`,
+            );
             expect(result).toContain("structured_io=True");
         });
 

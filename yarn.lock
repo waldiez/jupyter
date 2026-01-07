@@ -5910,7 +5910,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.7.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=c3768f626c611e5422222c7e43c6dc89689bdb8b"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=0c9cad58350cf39b568222aee59293c6d77650c8"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -9056,11 +9056,11 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^12.24.7":
-  version: 12.24.7
-  resolution: "framer-motion@npm:12.24.7"
+  version: 12.24.10
+  resolution: "framer-motion@npm:12.24.10"
   dependencies:
-    motion-dom: "npm:^12.24.3"
-    motion-utils: "npm:^12.23.28"
+    motion-dom: "npm:^12.24.10"
+    motion-utils: "npm:^12.24.10"
     tslib: "npm:^2.4.0"
   peerDependencies:
     "@emotion/is-prop-valid": "*"
@@ -9073,7 +9073,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/8062f24f872b47c468eb7776afbf94ccbc2ad6cc4ae4f92202270f0d7a522ed89db971dd1c7c59adb9dc644210f1a13ae565f21dcf312ee7cb23293324977d35
+  checksum: 10/a42347a5875178dc6d8f258124f16ce942d68337b98f5512ce2621ffcdaf5df8a1d1d293a27ed312b36b0e4135f7655c10bb73f4abd90b83f9966196f5c01560
   languageName: node
   linkType: hard
 
@@ -12149,19 +12149,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^12.24.3":
-  version: 12.24.3
-  resolution: "motion-dom@npm:12.24.3"
+"motion-dom@npm:^12.24.10":
+  version: 12.24.10
+  resolution: "motion-dom@npm:12.24.10"
   dependencies:
-    motion-utils: "npm:^12.23.28"
-  checksum: 10/6de28bef1326e8e10cdabf4528df0287453cd7e78c8c28a6f474ab03e65922a73863845c3683c639c75a8570d2f5aa54c693e28a26067197e35111bb5e7285a5
+    motion-utils: "npm:^12.24.10"
+  checksum: 10/f6603a628ebd4723a86f835cbaac9930378c92d0c5b1054a56d16999fabef46aa9929bd5d1d03983cb84c5f8cc0219c0bc0c8697347bc637e1cc0a631ee2383d
   languageName: node
   linkType: hard
 
-"motion-utils@npm:^12.23.28":
-  version: 12.23.28
-  resolution: "motion-utils@npm:12.23.28"
-  checksum: 10/2d481eb26134f282019e0117abae7b5788e89504a88113d7f53e94c5a6aae34e552d3b14a804ebc5d46596946839190963a3fb8189c55b5b38cf82fb16069a77
+"motion-utils@npm:^12.24.10":
+  version: 12.24.10
+  resolution: "motion-utils@npm:12.24.10"
+  checksum: 10/b023223fe617a32d2ade933b6a505caa11252eb2094f0ea65eda6db35d463a7b3cc766708141a7828405ab8d5c3651bb71fbf6e8e63769ef7d36e7d77b755b58
   languageName: node
   linkType: hard
 

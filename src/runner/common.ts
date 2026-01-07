@@ -37,7 +37,7 @@ export const getCodeToExecute = (
         'uploads_root = Path(file_path).parent / "uploads"\n' +
         'dot_env_path = Path(file_path).parent / ".env"\n' +
         'cwd_dot_env_path = Path.cwd() / ".env"\n' +
-        `runner = WaldiezRunner.load(waldiez_file=file_path,${breakpointsArg}${checkpointArg} mode="${mode}")\n` +
+        `runner = WaldiezRunner.load(waldiez_file=file_path,${breakpointsArg}${checkpointArg} mode="${mode}", structured_io=True)\n` +
         "if dot_env_path.exists():\n" +
         "    runner.run(uploads_root=uploads_root, structured_io=True, dot_env=dot_env_path.resolve())\n" +
         "elif cwd_dot_env_path.exists():\n" +

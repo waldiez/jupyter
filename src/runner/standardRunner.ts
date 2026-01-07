@@ -138,11 +138,6 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
      * @memberof WaldiezStandardRunner
      */
     protected processMessage(rawMessage: string) {
-        // const isDone = this._workflow_is_done(rawMessage);
-        // if (isDone) {
-        //     this._running = false;
-        //     this._onEnd();
-        // }
         // Check if the runner is running
         if (!this._running) {
             return;
@@ -159,6 +154,7 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
         }
         // If the result is undefined, it means the message was not processed
         if (!result) {
+            // console.debug(rawMessage);
             const endMessage = this._raw_has_ending(rawMessage);
             /* istanbul ignore if */
             if (endMessage) {
@@ -227,23 +223,6 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
             this._onUpdate({ messages: this._messages, activeRequest: undefined });
         }
     }
-    // private _workflow_is_done(rawMessage: string): WaldiezChatMessage | null {
-    //     // Check if the raw message indicates that the flow has finished running
-    //     if (rawMessage.includes("<Waldiez> - Done running the flow.")) {
-    //         return {
-    //             type: "system",
-    //             id: "flow-done",
-    //             timestamp: new Date().toISOString(),
-    //             content: [
-    //                 {
-    //                     type: "text",
-    //                     text: "<Waldiez> - Done running the flow.",
-    //                 },
-    //             ],
-    //         };
-    //     }
-    //     return null;
-    // }
     /**
      * Check if the raw message has an ending.
      * @param rawMessage The raw message to check
