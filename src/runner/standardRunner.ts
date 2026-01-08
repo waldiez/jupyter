@@ -12,6 +12,7 @@ import {
     type WaldiezChatConfig,
     type WaldiezChatMessage,
     WaldiezChatMessageProcessor,
+    type WaldiezChatParticipant,
     type WaldiezTimelineData,
 } from "@waldiez/react";
 
@@ -22,7 +23,7 @@ import {
 export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChatConfig>> {
     private _messages: WaldiezChatMessage[] = [];
     private _timelineData: WaldiezTimelineData | undefined = undefined;
-    private _userParticipants: string[] = [];
+    private _userParticipants: WaldiezChatParticipant[] = [];
     readonly _onUpdate: (updateData: Partial<WaldiezChatConfig>) => void;
 
     constructor({ logger, onStdin, baseUrl, onUpdate, onEnd }: WaldiezStandardRunner.IOptions) {
@@ -182,15 +183,16 @@ export class WaldiezStandardRunner extends WaldiezBaseRunner<Partial<WaldiezChat
         if (result.participants && result.participants.length > 0) {
             // Update user participants
             this._timelineData = undefined;
-            this._userParticipants = Array.from(
-                new Set([
-                    ...this._userParticipants,
-                    ...result.participants
-                        .filter(p => p.isUser)
-                        .map(p => p.name)
-                        .filter(Boolean),
-                ]),
-            );
+            const incoming = result.participants
+                .filter((p): p is { id: string; name: string; isUser: boolean } => !!p && p.isUser)
+                .map(p => ({ id: p.id, name: p.name, isUser: true }));
+
+            const byId = new Map(this._userParticipants.map(p => [p.id, p]));
+            for (const p of incoming) {
+                byId.set(p.id, p);
+            }
+
+            this._userParticipants = [...byId.values()];
             this._onUpdate({
                 userParticipants: this._userParticipants,
                 timeline: undefined,

@@ -12,6 +12,7 @@ import {
     type WaldiezBreakpoint,
     type WaldiezChatMessageProcessingResult,
     WaldiezChatMessageProcessor,
+    type WaldiezChatParticipant,
     type WaldiezStepByStep,
     type WaldiezStepByStepProcessingResult,
     WaldiezStepByStepProcessor,
@@ -39,6 +40,7 @@ const waldiezBreakpointToString: (breakpoint: WaldiezBreakpoint | string) => str
 export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepByStep>> {
     private _eventHistory: Set<Record<string, any>>;
     private _currentEvent: Record<string, any> | undefined;
+    private _participants: WaldiezChatParticipant[] = [];
     constructor({ logger, onStdin, baseUrl, onUpdate, onEnd }: WaldiezStepRunner.IOptions) {
         super({
             logger,
@@ -74,6 +76,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
         checkpoint?: string | null,
     ) {
         this._eventHistory = new Set();
+        this._participants = [];
         this._currentEvent = undefined;
         let initialBreakpoints: string[] | undefined = undefined;
         if (breakpoints) {
@@ -85,6 +88,9 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             active: true,
             eventHistory: [],
             currentEvent: undefined,
+            pendingControlInput: undefined,
+            activeRequest: undefined,
+            participants: [],
             breakpoints,
         });
     }
@@ -104,6 +110,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
      */
     reset() {
         super.reset();
+        this._participants = [];
         this._eventHistory = new Set();
         this._currentEvent = undefined;
     }
@@ -187,9 +194,7 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             }
         }
         if (result.stateUpdate?.participants) {
-            this._onUpdate({
-                participants: result.stateUpdate.participants,
-            });
+            this._updateParticipants(result.stateUpdate.participants);
             return;
         }
         if (result.stateUpdate?.timeline) {
@@ -217,6 +222,19 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             eventHistory: Array.from(this._eventHistory).reverse(),
             currentEvent: typeof this._currentEvent?.type === "string" ? this._currentEvent : undefined,
             lastError,
+        });
+    }
+
+    private _updateParticipants(participants: WaldiezChatParticipant[]) {
+        const currentIds = this._participants.map(p => p.id);
+        for (const participant of participants) {
+            if (!currentIds.includes(participant.id)) {
+                this._participants.push(participant);
+                currentIds.push(participant.id);
+            }
+        }
+        this._onUpdate({
+            participants: this._participants,
         });
     }
 
@@ -272,9 +290,16 @@ export class WaldiezStepRunner extends WaldiezBaseRunner<Partial<WaldiezStepBySt
             };
         }
         if (chatResult.participants) {
+            const currentIds = this._participants.map(p => p.id);
+            for (const participant of chatResult.participants) {
+                if (!currentIds.includes(participant.id)) {
+                    this._participants.push(participant);
+                    currentIds.push(participant.id);
+                }
+            }
             return {
                 stateUpdate: {
-                    participants: chatResult.participants,
+                    participants: this._participants,
                 },
             };
         }

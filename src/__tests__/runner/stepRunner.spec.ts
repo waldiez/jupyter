@@ -37,6 +37,7 @@ describe("WaldiezStepRunner", () => {
     let mockKernel: jest.Mocked<Kernel.IKernelConnection>;
     let mockFuture: any;
 
+    // cspell: disable-next-line
     const CONTROL_PROMPT = "[Step] (c)ontinue, (r)un, (q)uit, (i)nfo, (h)elp, (st)ats: ";
     const END_MARKER = "<Waldiez> - Done running the flow.";
 

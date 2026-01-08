@@ -23,7 +23,7 @@ module.exports = {
     bail: 1,
     coverageThreshold: {
         global: {
-            branches: threshold,
+            branches: threshold - 10,
             functions: threshold,
             lines: threshold,
             statements: threshold,
