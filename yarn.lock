@@ -1676,13 +1676,13 @@ __metadata:
   linkType: hard
 
 "@codemirror/search@npm:^6.5.10":
-  version: 6.5.11
-  resolution: "@codemirror/search@npm:6.5.11"
+  version: 6.6.0
+  resolution: "@codemirror/search@npm:6.6.0"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.37.0"
     crelt: "npm:^1.0.5"
-  checksum: 10/d057f37cb369460b25625d7eb72f40636bf78ecd140608da53010cf3660f982a9e613826e38d85d87c9c2ff11e45c9482429987bfd4f29cbbd192f1ee3fd2695
+  checksum: 10/2947341cf06bde4a682250c245007f70854b7660f7aa29cec2c5cd177fa70deacaadf37c4aa323f669379d32f9912cb958448c93da3dc90b8af5c466ea1cddaf
   languageName: node
   linkType: hard
 
@@ -1695,15 +1695,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0, @codemirror/view@npm:^6.38.1":
-  version: 6.39.9
-  resolution: "@codemirror/view@npm:6.39.9"
+"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0, @codemirror/view@npm:^6.37.0, @codemirror/view@npm:^6.38.1":
+  version: 6.39.10
+  resolution: "@codemirror/view@npm:6.39.10"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10/9e86b35f31fd4f8b4c2fe608fa6116ddc71261acd842c405de41de1f752268c47ea8e0c400818b4d0481a629e1f773dda9e6f0d24d38ed6a9f6b3d58b2dff669
+  checksum: 10/6fcfb45876c4ba5b25beecd55b55bdc4331a76193f66bfbc1f8793d0f308d7864430a75c6357d6b336862fbc5bcb29f387fb9cde8e2ac2ed513c5607a4d66b0b
   languageName: node
   linkType: hard
 
@@ -5861,7 +5861,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": "npm:^0.14.27"
     "@typescript-eslint/eslint-plugin": "npm:^8.53.0"
     "@typescript-eslint/parser": "npm:^8.53.0"
-    "@waldiez/react": "git+https://github.com/waldiez/waldiez.git#dev"
+    "@waldiez/react": "npm:^0.7.1"
     all-contributors-cli: "npm:^6.26.1"
     babel-jest: "npm:^30.2.0"
     copyfiles: "npm:^2.4.1"
@@ -5901,9 +5901,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
-  version: 0.7.0
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=f024c5305c990aae91b031746468474ccfecbba8"
+"@waldiez/react@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "@waldiez/react@npm:0.7.1"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5934,7 +5934,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/0127b9b0eefd47ec60af80554a039a34f1b21b30d864a3109b46655e535fcc91b6abff132089d74118da0d70225864f188c7e9f3c9539cafde7b1cdf55b53f65
+  checksum: 10/8cec788c8f26d7fe602c835456bad8f9679a6b3d145f4030174ed211616d6002f4103e07db470a7212f09b9fa8d197b47e89151a107ed2582f1052fd13a7eef4
   languageName: node
   linkType: hard
 
@@ -9067,10 +9067,10 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^12.26.1":
-  version: 12.26.1
-  resolution: "framer-motion@npm:12.26.1"
+  version: 12.26.2
+  resolution: "framer-motion@npm:12.26.2"
   dependencies:
-    motion-dom: "npm:^12.24.11"
+    motion-dom: "npm:^12.26.2"
     motion-utils: "npm:^12.24.10"
     tslib: "npm:^2.4.0"
   peerDependencies:
@@ -9084,7 +9084,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/f5e71de5c7cd13c1151cbbd8578ed95a4a92225a96757eae36f3131325ac6337a75fd21d58d984fc835d0e197d4abd5943151828653813d32a0f025e8d6af0f6
+  checksum: 10/80d43806c4d3b1208b3ef4766e332f738fcf1fdd1c2b90f1601ff78072865a20fb41f67a495702be95c5d41b4ca54657e94dc81d02f97fdc4bee6271ef39cf14
   languageName: node
   linkType: hard
 
@@ -12160,12 +12160,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^12.24.11":
-  version: 12.24.11
-  resolution: "motion-dom@npm:12.24.11"
+"motion-dom@npm:^12.26.2":
+  version: 12.26.2
+  resolution: "motion-dom@npm:12.26.2"
   dependencies:
     motion-utils: "npm:^12.24.10"
-  checksum: 10/08a56090ddf5dfc295649073b6a9f90bd71ca3f4608c60d224d561a403a02dc22dd07c4a212980a59437f65e0381ddc05238593cc282ce0c98e4a88b3f0cc458
+  checksum: 10/a24f7df17673433ab32820e508a475d681830b2edbd1a92f9ca64604a02a5ffb53e8bfec317344c34c65a601f2332d0486f038eed0c7db13b8dbc5c750f0063f
   languageName: node
   linkType: hard
 
