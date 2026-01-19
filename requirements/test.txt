@@ -3,7 +3,7 @@ coverage==7.13.1
 filelock==3.20.3
 pytest-cov==7.0.0
 pytest-datadir==1.8.0
-pytest-html==4.1.1
+pytest-html==4.2.0
 pytest-jupyter[server]==0.11.0
 pytest-sugar==1.1.1
 pytest-timeout==2.4.0
