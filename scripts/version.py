@@ -2,6 +2,7 @@
 # Copyright (c) 2024 - 2026 Waldiez and contributors.
 
 """Handle the version of the package."""
+
 # > - `scripts/version.py`: the script to update the version
 # >    The script should expect the arguments `--set` or `--get`
 # >    and it should either return `x.y.z` or set the version to `x.y.z`.

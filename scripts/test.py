@@ -2,6 +2,7 @@
 # Copyright (c) 2024 - 2026 Waldiez and contributors.
 
 """Run tests in the my_package package."""
+
 # Requirement:
 # The (final) coverage report must be in the `coverage` directory.
 # It must be in the `lcov` format. (file `coverage/lcov.info`)
