@@ -5912,7 +5912,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.7.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=59d7327aa21909a4257e6db0b5ae419c9e2504c5"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=88006f446246eef18cfd1d64156e9b9fde95a802"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
@@ -5923,7 +5923,7 @@ __metadata:
     "@radix-ui/react-tooltip": "npm:^1.2.8"
     "@xyflow/react": "npm:^12.10.0"
     dompurify: "npm:^3.3.1"
-    framer-motion: "npm:^12.27.0"
+    framer-motion: "npm:^12.27.2"
     highlight.js: "npm:^11.11.1"
     jszip: "npm:^3.10.1"
     lucide-react: "npm:^0.562.0"
@@ -5943,7 +5943,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1 || ^19
     react-dom: ^18.3.1 || ^19
-  checksum: 10/a1d450d9a69d8e5096bbef08b5ab0293ae9e53978836c1dd70b61efb00776cc2f3e2037cfa8e4b4c1094f2041846f15f475c6a6aff9468154016a37f1c599788
+  checksum: 10/b8f8494a9eee7cf1d25e405ac9e34e87570f6950b5aaab2c70ce3b1ff106578b7ebd1ad5eec9390616a1e4cd77be764ed8f9bd5591f3b45c744f52f2d17f8c3c
   languageName: node
   linkType: hard
 
@@ -9059,12 +9059,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^12.27.0":
-  version: 12.27.1
-  resolution: "framer-motion@npm:12.27.1"
+"framer-motion@npm:^12.27.2":
+  version: 12.28.1
+  resolution: "framer-motion@npm:12.28.1"
   dependencies:
-    motion-dom: "npm:^12.27.1"
-    motion-utils: "npm:^12.24.10"
+    motion-dom: "npm:^12.28.1"
+    motion-utils: "npm:^12.27.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
     "@emotion/is-prop-valid": "*"
@@ -9077,7 +9077,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/16b5e2656100cea951d4bb04350f2e03ec48a87eb7a041294058390b5d6cce5f0982dcf0e1b46c311218031648f353c84da0fcb2674e1035a6fd391e72d5b81d
+  checksum: 10/f8101df55b9e2c9ca7eb362aaff250ba2f77ef01770cbf3d27bc9c2103504d247936b4e62f2a4059bc1a0a878f558d32407db9b182976fdd48b2549d0631be54
   languageName: node
   linkType: hard
 
@@ -12174,19 +12174,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"motion-dom@npm:^12.27.1":
-  version: 12.27.1
-  resolution: "motion-dom@npm:12.27.1"
+"motion-dom@npm:^12.28.1":
+  version: 12.28.1
+  resolution: "motion-dom@npm:12.28.1"
   dependencies:
-    motion-utils: "npm:^12.24.10"
-  checksum: 10/b51f37160593f5b01a3fbfa848ae8a20974d508eceed37d67eb375e67bd4fe583ce810c626eff75eb5f1cbdc1ed47c6d26e4723497589326d6ae8ab9cca00704
+    motion-utils: "npm:^12.27.2"
+  checksum: 10/a0ba8bbd137d4b21df4fe517c2a9e02c891270974f212909929aadcc3043a3655bb28d2eceeb58152ee0ce25381fe0dd1a06c3b1e48ba15a5b13ec20938b42b0
   languageName: node
   linkType: hard
 
-"motion-utils@npm:^12.24.10":
-  version: 12.24.10
-  resolution: "motion-utils@npm:12.24.10"
-  checksum: 10/b023223fe617a32d2ade933b6a505caa11252eb2094f0ea65eda6db35d463a7b3cc766708141a7828405ab8d5c3651bb71fbf6e8e63769ef7d36e7d77b755b58
+"motion-utils@npm:^12.27.2":
+  version: 12.27.2
+  resolution: "motion-utils@npm:12.27.2"
+  checksum: 10/e4c4724b1bf11d5c6dca17e8c2fd42dc7270f03ca1fd1669908e3b8bb2cd528669c7aab8df134fedbc94806edb2f9e0e9f84c66cbe77d0cb923733417b5f9f79
   languageName: node
   linkType: hard
 
@@ -13245,8 +13245,8 @@ __metadata:
   linkType: hard
 
 "recharts@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "recharts@npm:3.6.0"
+  version: 3.7.0
+  resolution: "recharts@npm:3.7.0"
   dependencies:
     "@reduxjs/toolkit": "npm:1.x.x || 2.x.x"
     clsx: "npm:^2.1.1"
@@ -13263,7 +13263,7 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-is: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/3a03a24a0b573a76f219a2eea18a4e0afc6395fc3eec097f47bc9d9492c88428f10754e5f4d47b406de4dae31a16634da433db0e4268618689f90395bfe50c1a
+  checksum: 10/717d8d1886980fca6c6fd79c28abd5a12e2e8979cab30aa663035c8548010a3aef63d6fdc750e4834c9df99efabe61b3f0827b88020933586f90df8d1d083f3c
   languageName: node
   linkType: hard
 
