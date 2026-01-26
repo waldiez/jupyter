@@ -52,30 +52,52 @@ usage() {
     echo "  --dry-run                 Do not install anything, just show what would be done"
 }
 
+need_value_allow_empty() {
+  opt="$1"
+  val="$2"
+
+  # require that a value token EXISTS (can be empty)
+  [ $# -lt 2 ] && { echo "Error: $opt expects a value (can be empty: $opt \"\")"; exit 1; }
+
+  # reject when the “value” looks like another option
+  case "$val" in
+    --*|-*)
+      echo "Error: $opt got another option as its value: $val"
+      echo "Tip: if you intended empty, pass: $opt \"\""
+      exit 1
+      ;;
+  esac
+}
+
 while [ $# -gt 0 ]; do
   case "$1" in
     --react-branch)
-      [ $# -lt 2 ] && { echo "Error: --react-branch expects a value (can be empty)"; exit 1; }
+      [ $# -lt 2 ] && { echo "Error: --react-branch expects a value"; exit 1; }
+      need_value_allow_empty "$1" "$2"
       react_branch="$2"
       shift 2
       ;;
     --python-branch)
-      [ $# -lt 2 ] && { echo "Error: --python-branch expects a value (can be empty)"; exit 1; }
+      [ $# -lt 2 ] && { echo "Error: --python-branch expects a value"; exit 1; }
+      need_value_allow_empty "$1" "$2"
       python_branch="$2"
       shift 2
       ;;
     --react-commit)
-      [ $# -lt 2 ] && { echo "Error: --react-commit expects a value (can be empty)"; exit 1; }
+      [ $# -lt 2 ] && { echo "Error: --react-commit expects a value"; exit 1; }
+      need_value_allow_empty "$1" "$2"
       react_commit="$2"
       shift 2
       ;;
     --python-commit)
-      [ $# -lt 2 ] && { echo "Error: --python-commit expects a value (can be empty)"; exit 1; }
+      [ $# -lt 2 ] && { echo "Error: --python-commit expects a value"; exit 1; }
+      need_value_allow_empty "$1" "$2"
       python_commit="$2"
       shift 2
       ;;
     --api-url-base)
-      [ $# -lt 2 ] && { echo "Error: --api-url-base expects a value (can be empty)"; exit 1; }
+      [ $# -lt 2 ] && { echo "Error: --api-url-base expects a value"; exit 1; }
+      need_value_allow_empty "$1" "$2"
       api_url_base="$2"
       shift 2
       ;;
