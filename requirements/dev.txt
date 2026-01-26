@@ -1,17 +1,17 @@
 -r main.txt
 autoflake==2.3.1
 bandit==1.9.3
-basedpyright==1.37.1
+basedpyright==1.37.2
 black[jupyter]==26.1.0
 flake8==7.3.0
 isort==7.0.0
-jupyterlab==4.5.2
+jupyterlab==4.5.3
 mypy==1.19.1
-prek==0.2.30
+prek==0.3.0
 pydocstyle==6.3.0
 pylint==4.0.4
 python-dotenv==1.2.1
-ruff==0.14.13
+ruff==0.14.14
 toml==0.10.2; python_version <= '3.10'
 types-PyYAML==6.0.12.20250915
 types-toml==0.10.8.20240310
