@@ -40,7 +40,7 @@ const isPyGte310lte314 = (pyCmd: string) => {
     }
     const version = pythonVersion.split(" ")[1];
     const [major, minor] = version.split(".").map(x => parseInt(x, 10));
-    return !(major !== 3 || minor < 10 || minor >= 14);
+    return !(major !== 3 || minor < 10 || minor > 14);
 };
 
 /**
@@ -73,7 +73,7 @@ const getCompatiblePythonExecutable = (): { path: string | null; virtualEnv: boo
     let pythonExec: string | null = null;
     for (const pyCmd of possiblePys) {
         try {
-            execSync(`${pyCmd} --version`);
+            execSync(`${pyCmd} --version`, { encoding: "utf-8", stdio: ["pipe", "pipe", "ignore"] });
             if (isPyGte310lte314(pyCmd)) {
                 pythonExec = pyCmd;
                 break;

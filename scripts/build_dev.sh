@@ -43,47 +43,56 @@ ensure_yarn() {
 }
 ensure_yarn
 
+usage() {
+    echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
+    echo "  --react-branch <branch>   Specify the react branch to use (default: main)"
+    echo "  --python-branch <branch>  Specify the python branch to use (default: main)"
+    echo "  --react-commit <commit>  Specify the react commit to use (default: '')"
+    echo "  --python-commit <commit>  Specify the python commit to use (default: '')"
+    echo "  --dry-run                 Do not install anything, just show what would be done"
+}
+
 while [ $# -gt 0 ]; do
-    case "$1" in
-        --react-branch)
-            shift
-            react_branch="$1"
-        ;;
-        --python-branch)
-            shift
-            python_branch="$1"
-        ;;
-        --dry-run)
-            dry_run="true"
-        ;;
-        --api-url-base)
-            shift
-            api_url_base="$1"
-        ;;
-        --react-commit)
-            shift
-            react_commit="$1"
-        ;;
-        --python-commit)
-            shift
-            python_commit="$1"
-        ;;
-        --help)
-            echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
-            echo "  --react-branch <branch>   Specify the react branch to use (default: main)"
-            echo "  --python-branch <branch>  Specify the python branch to use (default: main)"
-            echo "  --react-commit <commit>  Specify the react commit to use (default: '')"
-            echo "  --python-commit <commit>  Specify the python commit to use (default: '')"
-            echo "  --dry-run                 Do not install anything, just show what would be done"
-            exit 0
-        ;;
-        *)
-            echo "Unknown option: $1"
-            echo "Usage: $0 [--react-branch <branch>] [--python-branch <branch>] [--dry-run]"
-            exit 1
-        ;;
-    esac
-    shift
+  case "$1" in
+    --react-branch)
+      [ $# -lt 2 ] && { echo "Error: --react-branch expects a value (can be empty)"; exit 1; }
+      react_branch="$2"
+      shift 2
+      ;;
+    --python-branch)
+      [ $# -lt 2 ] && { echo "Error: --python-branch expects a value (can be empty)"; exit 1; }
+      python_branch="$2"
+      shift 2
+      ;;
+    --react-commit)
+      [ $# -lt 2 ] && { echo "Error: --react-commit expects a value (can be empty)"; exit 1; }
+      react_commit="$2"
+      shift 2
+      ;;
+    --python-commit)
+      [ $# -lt 2 ] && { echo "Error: --python-commit expects a value (can be empty)"; exit 1; }
+      python_commit="$2"
+      shift 2
+      ;;
+    --api-url-base)
+      [ $# -lt 2 ] && { echo "Error: --api-url-base expects a value (can be empty)"; exit 1; }
+      api_url_base="$2"
+      shift 2
+      ;;
+    --dry-run)
+      dry_run="true"
+      shift
+      ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 1
+      ;;
+  esac
 done
 
 api_url_base="https://${api_url_base%/}.waldiez.io"

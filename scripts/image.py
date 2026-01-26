@@ -339,12 +339,13 @@ def _get_build_args(args: argparse.Namespace) -> list[str]:
     List[str]
         The build arguments.
     """
+    # --build-args REACT_BRANCH=dev --build-args PYTHON_BRANCH=dev
     build_args: list[str] = args.build_args or []
     if args.dev is True:
         react_branch = os.environ.get("REACT_BRANCH", "main")
         react_commit = os.environ.get("REACT_COMMIT", "")
         python_branch = os.environ.get("PYTHON_BRANCH", "main")
-        python_commit = os.environ.get("PYTHON_COMMIT", "main")
+        python_commit = os.environ.get("PYTHON_COMMIT", "")
         api_url_base = os.environ.get("API_URL_BASE", "api")
         for arg in build_args:
             if arg.startswith("REACT_BRANCH="):

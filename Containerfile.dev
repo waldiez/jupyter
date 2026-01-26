@@ -180,7 +180,7 @@ RUN echo "Building waldiez/jupyter with the following parameters:" \
     && echo "PYTHON_COMMIT=${PYTHON_COMMIT}" \
     && echo "API_URL_BASE=${API_URL_BASE}"
 # build the application
-RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch "${REACT_BRANCH}" --react-commit "${REACT_COMMIT}" --python-commit "${PYTHON_COMMIT}" --python-branch "${PYTHON_BRANCH}" --api-url-base "${API_URL_BASE}" && \
+RUN sh /home/waldiez/app/scripts/build_dev.sh --react-branch "${REACT_BRANCH}" --python-branch "${PYTHON_BRANCH}" --api-url-base "${API_URL_BASE}" --react-commit "${REACT_COMMIT}" --python-commit "${PYTHON_COMMIT}" && \
     rm -rf /home/waldiez/app
 COPY --chown=waldiez:waldiez scripts/start.sh /home/waldiez/app/start.sh
 RUN chmod +x /home/waldiez/app/start.sh

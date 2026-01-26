@@ -2,6 +2,8 @@
 **/*.md
 **/lib
 **/.venv/
+**/.hatch/
+**/.nox/
 **/dist/
 **/.local/
 **/package.json
