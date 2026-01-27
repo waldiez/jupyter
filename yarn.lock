@@ -5912,7 +5912,7 @@ __metadata:
 
 "@waldiez/react@git+https://github.com/waldiez/waldiez.git#dev":
   version: 0.7.1
-  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=0ae21a069ea82aed5dab8803cc9c1edc1c290e55"
+  resolution: "@waldiez/react@https://github.com/waldiez/waldiez.git#commit=aab82199a2333466c454f96069f725a976202c82"
   dependencies:
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@fontsource/fredoka": "npm:^5.2.10"
