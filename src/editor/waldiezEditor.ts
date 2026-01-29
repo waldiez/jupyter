@@ -200,6 +200,7 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
             onRun: this._onRun.bind(this),
             onStepRun: this._onStepRun.bind(this),
             onConvert: this._onConvert.bind(this),
+            onBenchmark: this._onBenchmark.bind(this),
             onUpload: this._onUpload.bind(this),
             checkpoints: {
                 get: this._onGetCheckpoints.bind(this),
@@ -334,6 +335,14 @@ export class WaldiezEditor extends DocumentWidget<SplitPanel, DocumentModel> {
         } catch {
             //
         }
+    }
+    private async _onBenchmark(_flow: string, _path?: string | null) {
+        showSnackbar({
+            flowId: this.id,
+            message: "Not yet :(",
+            level: "warning",
+            duration: 5000,
+        });
     }
     private async _onGetCheckpoints(flowName: string): Promise<Record<string, any> | null> {
         try {

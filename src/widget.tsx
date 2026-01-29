@@ -43,6 +43,7 @@ export interface IWaldiezWidgetProps {
         checkpoint?: string | null,
     ) => void;
     onConvert?: (flow: string, to: "py" | "ipynb") => void;
+    onBenchmark?: (flow: string, path?: string | null) => void;
     onSave?: (content: string) => void;
     onUpload?: (files: File[]) => Promise<string[]>;
     checkpoints?: {
@@ -81,6 +82,7 @@ export class EditorWidget extends ReactWidget {
             onStepRun: props.onStepRun,
             onConvert: props.onConvert,
             onUpload: props.onUpload,
+            onBenchmark: props.onBenchmark,
             checkpoints: props.checkpoints,
             monacoVsPath: props.vsPath,
         };
